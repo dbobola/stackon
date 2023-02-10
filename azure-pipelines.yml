@@ -57,7 +57,7 @@ stages:
         pool:
           vmImage: "ubuntu-latest"
         variables:
-          - group: One2oneVariableGroup
+          - group: Stackon
         steps:
           - script: |
               set -e
