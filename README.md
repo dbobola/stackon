@@ -1,7 +1,7 @@
-##Project Date:
+## Project Date:
 February, 2021
 
-##Project Infrastructure
+## Project Infrastructure
 Stackon is an AI that can decipher the future price of NFTS. Stackon was provisioned by Terraform, containerized to ACR and orchestrated by Kubernetes. In full, Stackon is a multi-conainer application deployed using Azure DevOps, Azure Kubernetes Service, Azure Container Registry and Azure SQL Server.
 
 ## Inspiration
