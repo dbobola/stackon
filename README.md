@@ -2,7 +2,7 @@
 February, 2021
 
 ## Project Infrastructure
-Stackon is an AI that can decipher the future price of NFTS. Stackon was provisioned by Terraform, containerized to ACR and orchestrated by Kubernetes. In full, Stackon is a multi-conainer application deployed using Azure DevOps, Azure Kubernetes Service, Azure Container Registry and Azure SQL Server.
+Stackon is an AI that can decipher the future price of NFTS using sentimental data pulled from the internet. Stackon was provisioned by Terraform, containerized to ACR and orchestrated by Kubernetes. In full, Stackon is a multi-container application deployed using Azure DevOps, Azure Kubernetes Service, Azure Container Registry and Azure SQL Server.
 
 ## Inspiration
 The lack of use of sentimental data in the world of DeFi. Where as Fundamental and Sentimental data is the driver of NFT price action. With Stackon, users can make calculated decisons about their digital assets using predictions from Stackon model.
