@@ -632,9 +632,7 @@
         })
         .then(response => response.json())
         .then(data => {
-        // 'data' variable contains the feature_dict dictionary
-        console.log(data);
-        // Perform further operations with the dictionary
+
         updateDropdownOptions(data);
         updateDropdownOptions2(data);
         updateDropdownOptions3(data);
@@ -768,7 +766,7 @@
                 var solana = $('#solana').val();
                 var theta = $('#theta').val();
                 var ethereum = $('#ethereum').val();   
-                console.log(ethereum)
+    
 
                 saveSelectedOptions();
                 
@@ -820,7 +818,7 @@
                 },
                 success: function(response) {
                     // Handle success response from Django
-                    console.log('Data sent successfully');
+       
                     window.location.href = '/stacks';
                     
                     
@@ -885,11 +883,6 @@
 
                 // Perform further actions with the streaming options (e.g., start streaming)
 
-                // // Example: Log the streaming options
-                // console.log('Streaming Platform:', streamingPlatform);
-                // console.log('Stream Title:', streamTitle);
-                // console.log('Stream Description:', streamDescription);
-                // console.log('Stream Category:', streamCategory);
             });
         });
 
@@ -921,43 +914,7 @@
       });
     </script>
 
-    <script>
-      window.ethereum.on('accountsChanged', function(accounts) {
-        // Check if Metamask is available
-        if (typeof window.ethereum !== 'undefined') {
-              // Request the user's permission to connect the wallet
-              // Get the previous accounts length from local storage
-              var previousAccountsLength = localStorage.getItem('metamaskAccountsLength');
-              window.ethereum.request({ method: 'eth_accounts' })
-                  .then(function(accounts) {
-                      // Retrieve the selected account (wallet address)
-                      var walletAddress = accounts[0];
-                      console.log("PREVIOUS")
-                      console.log(previousAccountsLength);
-                      var currentAccountsLength = accounts.length;
-                      console.log("NOW")
-                      console.log(currentAccountsLength);
 
-
-                      if (previousAccountsLength > 0 && currentAccountsLength === 0) {
-                        // Wallet was disconnected
-                        window.location.href = "{% url 'disconnect' %}";
-                      }
-
-                       // Store the current accounts length in local storage
-                      localStorage.setItem('metamaskAccountsLength', currentAccountsLength);
-                    })
-                  .catch(function(error) {
-                      // Handle connection error
-                      console.log(error);
-                  });
-          } else {
-              // Metamask is not available
-              console.log('Metamask is not installed');
-          }
-      });
-
-    </script>
 
     <script>
       $(document).ready(function() {

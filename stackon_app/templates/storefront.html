@@ -437,20 +437,20 @@
     </script>
 
     <script>
-      // // Get all the buttons with the class "overlay-buy-now-btn"
-      const buttons = document.querySelectorAll('.overlay-buy-now-btn');
+      // // // Get all the buttons with the class "overlay-buy-now-btn"
+      // const buttons = document.querySelectorAll('.overlay-buy-now-btn');
 
-      // // Iterate over the buttons and add an event listener
-      buttons.forEach(button => {
-        button.addEventListener('click', () => {
-           // Perform the desired action for each button
-           console.log('Button clicked:', button.id);
-           // You can access other attributes or data associated with the button here
-         });
-       });
+      // // // Iterate over the buttons and add an event listener
+      // buttons.forEach(button => {
+      //   button.addEventListener('click', () => {
+      //      // Perform the desired action for each button
+      //      console.log('Button clicked:', button.id);
+      //      // You can access other attributes or data associated with the button here
+      //    });
+      //  });
 
       document.addEventListener('DOMContentLoaded', function() {
-        console.log('ThetaJS library is imported successfully.');
+  
         if (typeof window.ThetaJS !== 'undefined') {
           const overlay1 = document.querySelector('.wallet-overlay-1');
           const twitterMint = document.getElementById('overlay-buy-now-btn-13');
@@ -501,7 +501,7 @@
             balance.then((value) => {
               const balanceValue = value.toString();
             if (balanceValue > 0) {
-              console.log('TWITTER MOD OWNER');
+           
               $.ajax({
                 url: 'add_features',
                 method: 'POST',
@@ -509,16 +509,15 @@
                   'True': feature, 
                    },
                 success: function(response) {
-                  console.log(`${feature} Feature Authentication Successful`);
+                 
                   // You can update the asset value in the DOM with the edited value here
                 },
                 error: function(xhr, status, error) {
-                  // Handle errors
-                  console.log(`${feature} Feature Authentication Failed`);
+            
                 }
               });
             } else {
-              console.log('NOT AN OWNER')
+  
             }
             
           });
@@ -534,7 +533,7 @@
               balance.then((value) => {
                 const balanceValue = value.toString();
               if (balanceValue > 0) {
-                console.log('YOU ALREADY MINTED THIS COLLECTION');
+
                 txStatus.innerHTML = 'Duplicate Transaction'
                 txError.style.display = 'block'
                 txError.style.backgroundColor = 'red'
@@ -546,7 +545,7 @@
                 const minted = stackonContract.mint()
                 minted.then((transaction) => {
                   loadingContainer.style.display = 'none'
-                    console.log("Mint successful");
+           
                     checkBalance(contractAddress, feature)
                     txError.style.display = 'block'
                     txError.style.backgroundColor = 'green'
@@ -558,7 +557,7 @@
                   
                 
               }).catch((error) => {
-                console.log("Error occurred while minting:", error);
+   
                 txStatus.innerHTML = 'FAILED'
                 txError.style.display = 'block'
                 txError.style.backgroundColor = 'red'
@@ -644,7 +643,6 @@
           mintBtn.addEventListener('click', () => {
             // Send an AJAX request to the Django view
             const password = passwordInput.value;
-            console.log(password)
             $.ajax({
               url: 'check_password_correct',
               method: 'POST',
@@ -652,8 +650,6 @@
               success: function(response) {
                 // Handle the response from the server
                 if (response.is_password_correct) {
-                  // Password is correct
-                  console.log('Password is correct');
                   if (txName.innerHTML == "twitterModCollection Vol. 1") {
                     mint(twitterContractAddress, 'Twitter');
                   } else if (txName.innerHTML == "telegramModCollection Vol. 1") {
@@ -680,7 +676,7 @@
                   // Perform the minting process or any other action
                 } else {
                   // Password is incorrect
-                  console.log('Password is incorrect');
+ 
                   txError.style.display = 'block'
                   txError.style.backgroundColor = 'red'
                   txError.innerHTML = 'Password is Incorrect'
@@ -689,7 +685,7 @@
               },
               error: function(xhr, status, error) {
                 // Handle any error that occurred during the AJAX request
-                console.log('Error:', error);
+       
                 txError.style.display = 'block'
                 txError.style.backgroundColor = 'red'
                 txError.innerHTML = 'Error signing transaction, please try again. '
@@ -712,7 +708,7 @@
           checkBalance(tezosContractAddress, 'Tezos');
   
           } else {
-            console.log('ThetaJS library is not imported or encountered an error.');
+        
           }
         });
     </script>
@@ -774,88 +770,6 @@
       });
     </script>
     
-    <script>
-      window.ethereum.on('accountsChanged', function(accounts) {
-        // Check if Metamask is available
-        if (typeof window.ethereum !== 'undefined') {
-              // Request the user's permission to connect the wallet
-              // Get the previous accounts length from local storage
-              var previousAccountsLength = localStorage.getItem('metamaskAccountsLength');
-              window.ethereum.request({ method: 'eth_accounts' })
-                  .then(function(accounts) {
-                      // Retrieve the selected account (wallet address)
-                      var walletAddress = accounts[0];
-                      console.log("PREVIOUS")
-                      console.log(previousAccountsLength);
-                      var currentAccountsLength = accounts.length;
-                      console.log("NOW")
-                      console.log(currentAccountsLength);
-
-
-                      if (previousAccountsLength > 0 && currentAccountsLength === 0) {
-                        // Wallet was disconnected
-                        window.location.href = "{% url 'disconnect' %}";
-                      }
-
-                       // Store the current accounts length in local storage
-                      localStorage.setItem('metamaskAccountsLength', currentAccountsLength);
-                    })
-                  .catch(function(error) {
-                      // Handle connection error
-                      console.log(error);
-                  });
-          } else {
-              // Metamask is not available
-              console.log('Metamask is not installed');
-          }
-      });
-
-    </script>
-
-    <script>
-      document.addEventListener('DOMContentLoaded', function() {
-        // Get the connect button element
-        var connectButton = document.getElementById('auth-button');
-
-        // Attach a click event listener to the connect button
-        connectButton.addEventListener('click', function() {
-            // Check if Metamask is available
-            if (typeof window.ethereum !== 'undefined') {
-                // Request the user's permission to connect the wallet
-                window.ethereum.request({ method: 'eth_requestAccounts' })
-                    .then(function(accounts) {
-                        // Retrieve the selected account (wallet address)
-                        var walletAddress = accounts[0];
-
-                        // Submit the form with the wallet address
-                        var form = document.createElement('form');
-                        form.method = 'POST';
-                        form.action = '{% url "connect" %}';
-
-                        var input = document.createElement('input');
-                        input.type = 'hidden';
-                        input.name = 'wallet_address';
-                        input.value = walletAddress;
-
-                        form.appendChild(input);
-                        document.body.appendChild(form);
-
-                        form.submit();
-                        var currentAccountsLength = accounts.length;
-                        localStorage.setItem('metamaskAccountsLength', currentAccountsLength);
-                    })
-                    .catch(function(error) {
-                        // Handle connection error
-                        console.log(error);
-                    });
-            } else {
-                // Metamask is not available
-                console.log('Metamask is not installed');
-            }
-        });
-  });
-
-    </script>
 
     <script>
       const toggleButton = document.querySelector(".small-screen-toggle");

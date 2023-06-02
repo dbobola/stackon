@@ -872,9 +872,7 @@
           })
           .then(response => response.json())
           .then(data => {
-          // 'data' variable contains the feature_dict dictionary
-          console.log(data);
-          // Perform further operations with the dictionary
+
           updateDropdownOptions3(data);
 
           })
@@ -900,7 +898,6 @@
         });
         
         if (typeof window.ThetaJS !== 'undefined') {
-          console.log('ThetaJS library is imported successfully.');
           // You can proceed with using ThetaJS functions and objects here
           const chainId = window.ThetaJS.networks.ChainIds.Testnet;
           const provider = new window.ThetaJS.providers.HttpProvider(chainId);
@@ -913,8 +910,7 @@
 
           var userAddress = "{{ profile.user }}"
           const userAccount = provider.getAccount(userAddress);
-          console.log(userAddress)
-          console.log(userAccount)
+
 
           userAccount.then((balance) => {
             const thetaBalance = balance.coins.thetawei/1000000000000000000;
@@ -923,8 +919,6 @@
             valueTFUEL.innerHTML = tfuelBalance.toFixed(2);
             valueUSD.innerHTML = "= $" + (tfuelBalance*0.04).toFixed(2)
 
-            console.log("Theta balance:", thetaBalance);
-            console.log("TFUEL balance:", tfuelBalance);
 
             // You can now use the balances in your code as needed
           }).catch((error) => {

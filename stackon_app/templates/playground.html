@@ -152,13 +152,6 @@
 
             toggleStreamButton.addEventListener('change', function() {
                 
-                if (toggleStreamButton.checked) {
-                // Handle stream start
-                console.log('Streaming started');
-                } else {
-                // Handle stream stop
-                console.log('Streaming stopped');
-                }
             });
 
             cancelButton.addEventListener('click', function() {
@@ -189,11 +182,7 @@
 
                 // Perform further actions with the streaming options (e.g., start streaming)
 
-                // Example: Log the streaming options
-                console.log('Streaming Platform:', streamingPlatform);
-                console.log('Stream Title:', streamTitle);
-                console.log('Stream Description:', streamDescription);
-                console.log('Stream Category:', streamCategory);
+   
             });
 
             // Call the startStreaming function to simulate a successful stream start
@@ -260,7 +249,6 @@
             });
 
             this._target = fbx;
-            console.log(this._target.position )
             // this._target.matrixAutoUpdate = false;
             this._params.scene.add(this._target);
 
@@ -366,7 +354,7 @@
             controlObject.position.add(sideways);
 
             this._position.copy(controlObject.position);
-            // console.log(controlObject.position)
+ 
 
             
             
@@ -893,88 +881,7 @@
         });
 
     </script>
-    <script>
-        window.ethereum.on('accountsChanged', function(accounts) {
-            // Check if Metamask is available
-            if (typeof window.ethereum !== 'undefined') {
-                // Request the user's permission to connect the wallet
-                // Get the previous accounts length from local storage
-                var previousAccountsLength = localStorage.getItem('metamaskAccountsLength');
-                window.ethereum.request({ method: 'eth_accounts' })
-                    .then(function(accounts) {
-                        // Retrieve the selected account (wallet address)
-                        var walletAddress = accounts[0];
-                        console.log("PREVIOUS")
-                        console.log(previousAccountsLength);
-                        var currentAccountsLength = accounts.length;
-                        console.log("NOW")
-                        console.log(currentAccountsLength);
-    
-    
-                        if (previousAccountsLength > 0 && currentAccountsLength === 0) {
-                            // Wallet was disconnected
-                            window.location.href = "{% url 'disconnect_playground' %}";
-                        }
-    
-                            // Store the current accounts length in local storage
-                        localStorage.setItem('metamaskAccountsLength', currentAccountsLength);
-                        })
-                    .catch(function(error) {
-                        // Handle connection error
-                        console.log(error);
-                    });
-                    
-            } else {
-                // Metamask is not available
-                console.log('Metamask is not installed');
-            }
-        });
-    
-    </script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-        // Get the connect button element
-        var connectButton = document.getElementById('connect-button');
-    
-        // Attach a click event listener to the connect button
-        connectButton.addEventListener('click', function() {
-            // Check if Metamask is available
-            if (typeof window.ethereum !== 'undefined') {
-                // Request the user's permission to connect the wallet
-                window.ethereum.request({ method: 'eth_requestAccounts' })
-                    .then(function(accounts) {
-                        // Retrieve the selected account (wallet address)
-                        var walletAddress = accounts[0];
-    
-                        // Submit the form with the wallet address
-                        var form = document.createElement('form');
-                        form.method = 'POST';
-                        form.action = '{% url "connect_playground" %}';
-    
-                        var input = document.createElement('input');
-                        input.type = 'hidden';
-                        input.name = 'wallet_address';
-                        input.value = walletAddress;
-    
-                        form.appendChild(input);
-                        document.body.appendChild(form);
-    
-                        form.submit();
-                        var currentAccountsLength = accounts.length;
-                        localStorage.setItem('metamaskAccountsLength', currentAccountsLength);
-                    })
-                    .catch(function(error) {
-                        // Handle connection error
-                        console.log(error);
-                    });
-            } else {
-                // Metamask is not available
-                console.log('Metamask is not installed');
-            }
-        });
-    });
-    
-    </script>
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
           var toggleCheckbox = document.getElementById('toggle-checkbox');

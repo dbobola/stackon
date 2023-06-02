@@ -63,12 +63,9 @@ def playground(request):
     try: 
         if request.user.is_authenticated:
             current_user = User.objects.get(username=request.user)
-            print(current_user)
-            print("WORKED")
             profile = Accounts.objects.get(user=current_user)
             user_short = str(profile.wallet_address)
             user_short = user_short[:20]
-            print(user_short)
 
         context = {
             'profile': profile,
@@ -76,7 +73,6 @@ def playground(request):
         }
         return render(request, 'playground.html', context=context)
     except:
-        print("FAILED")
         return render(request, 'playground.html')
 
 @csrf_exempt
@@ -155,7 +151,7 @@ def generate_text(filtered_values):
 
     sentence = "None"
     if sentence_parts != []:
-        print(sentence_parts)
+
         sentence = "These are all available NFTs that " + ", ".join(sentence_parts) + "."
     
     return sentence 
@@ -265,10 +261,6 @@ def add_features(request):
                     features.append(feature.id)
                 except Feature.DoesNotExist:
                     pass
-                
-        print('ADDED FEATURE')
-        print(features)
-
          # Add each feature individually to the stack
         for feature in features:
             profile.stack.add(feature)
@@ -298,7 +290,6 @@ def stacks_view(request):
     
     except Exception as e: 
         print(str(e))
-        print("FAILED")
         return render(request, 'stacks.html')
     context = {
                 'profile': profile,
@@ -480,7 +471,7 @@ def stacks(request):
                 if allDiscord != 'none':
                     filter_conditions['overall_discord'] = allDiscord
 
-                print(filter_conditions)
+       
                 new_text = generate_text(filter_conditions)
 
                 # Query the Assets model using the filter conditions
@@ -499,7 +490,7 @@ def stacks(request):
        
     except Exception as e: 
         print(str(e))
-        print("FAILED")
+  
         return render(request, 'stacks.html')
     
     # context = {
@@ -597,8 +588,7 @@ def start_stream(request):
         stream_description = request.POST.get('streamDescription')
         stream_api_key = request.POST.get('streamAPIKey')
         stream_secret_key = request.POST.get('streamSecretKey')
-        print(stream_title)
-        print(stream_description)
+
 
 
          # Set the start_time to the current time
@@ -671,7 +661,7 @@ def storefront(request):
     profile.update_free_mint()
     profile.save()
     free_mint = 3 - profile.free_mint 
-    print(free_mint)
+
     contract = Contract.objects.first()
     user_short = str(profile.wallet_address)
     user_short = user_short[:12]
@@ -736,10 +726,6 @@ def connect(request):
             password = request.POST.get('password')
             
             privateKey = request.POST.get('privateKey')
-            
-            
-            print(password)
-            print(username)
 
             user_exists = User.objects.filter(username=username).exists()
             if user_exists:
@@ -768,8 +754,6 @@ def connect_playground(request):
         try:
             username = request.POST.get('wallet_address')
             user_exists = User.objects.filter(username=username).exists()
-            print(username)
-            print(user_exists)
             if user_exists:
                 authenticated_user = authenticate(request, username=username) 
                 if authenticated_user is not None:
