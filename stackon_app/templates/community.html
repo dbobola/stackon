@@ -1,0 +1,529 @@
+{% block content %}
+{% load static %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Stackon Pro</title>
+    <!---===============  FAVICON =======================  -->
+    <link rel="shortcut icon" href="{% static '/images/logo.ico' %}" type="image/x-icon" />
+    <!--- ============== CUSTOM CSS LINK ==================  -->
+    <link rel="stylesheet" href="{% static 'css/community.css' %}" />
+    
+    <!-- =============== SWIPER CSS LINK =================== -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css"
+    />
+    <!--=============== BOXICONS ===============-->
+    <link
+      href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+      rel="stylesheet"
+    />
+    <!--- =============== GOOGLE FONT LINK ================== -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="https://unpkg.com/isotope-layout@3/dist/isotope.pkgd.js"></script>
+    <!-- or -->
+    <script src="https://unpkg.com/isotope-layout@3/dist/isotope.pkgd.min.js"></script>
+    <script src="{% static 'js/isotope.pkgd.js' %}"></script>
+    <script src="{% static 'js/isotope.pkgd.min.js' %}"></script>
+    <script>
+      if (window.history.replaceState) {
+        window.history.replaceState(null, null, window.location.href);
+      }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/@metamask/detect-provider"></script>
+    
+  </head>
+  <body id="top">
+<!-- =================== HEADER ===================================== -->
+  <header class="header" id="header">
+    <div class="banner">
+      <div class="banner-container">
+        {% for asset in assets %}
+        <h5 class="banner_asset">{{asset.name }}:</h5>
+        {% if asset.trend_percent >= 0.0 %}
+        <h5 class="banner_asset_increase pos">+{{ asset.trend_percent }}%</h5>
+        {% elif asset.trend_percent <= 0.0 %}
+        <h5 class="banner_asset_increase neg">{{ asset.trend_percent }}%</h5>
+        {% else %}
+        <h5 class="banner_asset_increase neu">{{ asset.trend_percent }}%</h5>
+        {% endif %}    
+        {%endfor%}
+      </div>
+    </div>
+    <div class="nav">
+      <div class="header-left">
+        <a href="/" class="logo header-item">
+          <img src="{% static 'images/stackon-logo.png' %}" alt="Stackon logo" />
+        </a>
+        <div class="header-menu">
+          <a href="/" class="header-menu-item">Dashboard</a>
+          <a href="/stacks" class="header-menu-item">My Stack</a>
+          <a href="/storefront" class="header-menu-item">Storefront</a>
+          <a href="/livestream" class="header-menu-item">Geek TV</a>
+          <a href="/community" class="header-menu-item active">Community</a>
+          <a href="/playground"  id="playground" class="header-menu-item" style="display: none;">Playground</a>
+        </div>
+        </div>
+
+      
+      <div class="header-right">
+        <div class="switch">
+          <div>Stackon Pro</div>
+          <label class="toggle-container">
+              <input type="checkbox" id="toggle-checkbox" disabled>
+              <span class="toggle-slider"></span>
+          </label>
+        </div>
+        {% if not user.is_authenticated %}
+        
+        <button id="auth-button" class="btn btn-secondary header-item">Connect Wallet</button>
+  
+        <div class="header-others">
+          <i class='bx bx-search searchicon header-item'></i>
+          <i class="bx bx-moon change-theme header-item" id="theme-button"></i>
+          <span class="english">English<i class='bx bxs-down-arrow' ></i></span>
+          <span class="usd_format">
+            <i class='bx bxs-badge-dollar header-item'>USD<i class='bx bxs-down-arrow' ></i></i>          
+          </span>
+        </div>
+        
+        {% else %}
+        <div class="profile-picture">
+          <img src="{% static 'images/' %}{{ profile.wallet_avatar }}" alt="Avatar">
+        </div>
+        <div class="wallet-id">
+          <label for="wallet-id">Wallet ID:</label>
+          <p id="wallet-id">{{ user_short }}...</p>
+        </div>
+        <div class="header-others">
+          <i class='bx bx-search searchicon header-item'></i>
+          <i class="bx bx-moon change-theme header-item" id="theme-button"></i>
+          <span class="english">English<i class='bx bxs-down-arrow' ></i></span>
+          <span class="usd_format">
+            <i class='bx bxs-badge-dollar header-item'>USD<i class='bx bxs-down-arrow' ></i></i>          
+          </span>
+        </div>   
+        {% endif %}
+      </div>
+      
+      <div class="small-screen-toggle">
+        <i class='bx bx-menu'></i>
+      </div>
+      <div class="small-screen-menu">
+        <div class="small-screen-toggle remove-menu-bar" >
+          <i class='bx bx-x' ></i>
+        </div>
+        {% if user.is_authenticated %}
+        <div class="profile-picture-small-menu profile-picture">
+          <img src="{% static 'images/' %}{{ profile.wallet_avatar }}" alt="Profile Picture">
+          <div class="wallet-id">
+          
+            <label for="wallet-id">Wallet ID:</label>
+            <p id="wallet-id">{{profile.wallet_id}}</p>
+          </div>
+        </div>
+        
+        {% endif %}
+        <div class="header-others">
+          
+          <i class="bx bx-moon change-theme header-item" id="theme-button"></i>
+          <span class="english">English<i class='bx bxs-down-arrow' ></i></span>
+          <span class="usd_format">
+            <i class='bx bxs-badge-dollar header-item'>USD<i class='bx bxs-down-arrow' ></i></i>          
+          </span>
+        </div>
+        <div class="header-menu-small">
+          <h3 href="/stacks" class="header-menu-item-small">My Stack</h3>
+          <h3 href="/storefront" class="header-menu-item-small">Storefront</h3>
+          <h3 href="/assets" class="header-menu-item-small">My Assets</h3>
+          <h3 href="/lives" class="header-menu-item-small">Geek TV</h3>
+          <h3 href="/community" class="header-menu-item-small">Community</h3>
+          
+        </div>
+
+      </div>
+      
+      
+    </div>
+    <!-- Theme Change Button-->
+  </header>
+
+<!-- ================== MAIN SECTION ================================ -->
+  <main>
+    <!-- ===================== HERO CAROUSEL SECTION ============== -->
+    <section class="hero-carousel section" id="hero-carousel">           
+            <div class="tweet-container">
+              <div class="">
+                {% for post in posts %}
+                <div class="tweet-card">
+                  <div class="avatar">
+                    
+                    {% if post.social_media == "Twitter" %}
+                    <span class="social_media"><i class='bx bxl-twitter'></i></span>
+                    {% elif post.social_media == "Telegram" %}
+                    <span class="social_media"><i class='bx bxl-telegram' ></i></span>
+                    {% elif post.social_media == "Discord" %}
+                    <span class="social_media"><i class='bx bxl-discord-alt'></i></span>
+                    {% elif post.social_media == "Reddit" %}
+                    <span class="social_media"><i class='bx bxl-reddit'></i></span>
+                    {% else %}
+                    <span class="social_media"><i class='bx bxl-google'></i></span>
+                    {% endif %}  
+                  </div>
+                  <div class="tweet-content">
+                    <div class="tweet-header">
+                        <img src="{% static 'images/' %}{{ post.avatar }}" alt="Avatar" />
+                      <h3 class="name">{{ post.display_name }}</h3>
+                      <span class="username">{{ post.user_name }}e</span>
+                      <span class="separator">·</span>
+                      <span class="timestamp">{{ post.timestamp }}</span>
+                    </div>
+                    <div class="tweet-body">
+                      <p>
+                        {{ post.post }}
+                      </p>
+                    </div>
+                    <div class="tweet-footer">
+                      <button class="reply-button">
+                        <i class="fa fa-reply"></i>
+                        <span class="button-label">Reply</span>
+                      </button>
+                      
+                      <button class="like-button">
+                        <i class="fa fa-heart"></i>
+                        <span class="button-label">Like</span>
+                      </button>
+                      <button class="share-button">
+                        <i class="fa fa-share"></i>
+                        <span class="button-label">Share</span>
+                      </button>
+                    </div>
+                  </div>   
+                </div>
+                {% endfor %}
+              </div>
+              <div class="swiper-pagination"></div>
+              
+            </div>
+          </div>
+
+      
+    </section>
+
+    
+  </main>
+
+
+    <!--- ======================== CUSTOM JS LINK========================== -->
+    <script src="{% static 'js/script.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mixitup/3.3.1/mixitup.min.js" integrity="sha512-nKZDK+ztK6Ug+2B6DZx+QtgeyAmo9YThZob8O3xgjqhw2IVQdAITFasl/jqbyDwclMkLXFOZRiytnUrXk/PM6A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="{% static 'js/typeahead.bundle.js' %}"></script>
+    <!--=============== MIXITUP FILTER ===============-->
+    <script src="{% static 'js/mixitup.min.js' %}"></script>
+    <!-- <script src="{% static 'js/isotope-docs.min.js' %}"></script> -->
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.4.0/dist/web3.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@metamask/detect-provider@2.0.0/dist/index.min.js"></script>
+    <!---======================= ICON LINK ========================= -->
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mixitup/3.3.1/mixitup.min.js" integrity="sha512-nKZDK+ztK6Ug+2B6DZx+QtgeyAmo9YThZob8O3xgjqhw2IVQdAITFasl/jqbyDwclMkLXFOZRiytnUrXk/PM6A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    
+    <script>
+    
+
+      function updateDropdownOptions3(dropdownValues) {
+          const dropdownIdTheta = 'theta'; // ID of the dropdown related to 'theta'
+          const containerIdToHide = 'playground'; // ID of the container to hide
+          const disableStackonPro = 'toggle-checkbox'
+
+          const thetaEnabled = dropdownValues[dropdownIdTheta];
+          const containerToHide = document.getElementById(containerIdToHide);
+
+          if (containerToHide) {
+              containerToHide.style.display = thetaEnabled ? 'block' : 'none';
+              containerToHide.disabled = True
+
+          }
+
+          // Rest of the function code...
+      }
+
+
+      // Example dictionary with values indicating whether a dropdown option should be enabled
+      fetch('features_dict', {
+          method: 'GET',
+          headers: {
+              'Content-Type': 'application/json'
+          }
+          })
+          .then(response => response.json())
+          .then(data => {
+          // 'data' variable contains the feature_dict dictionary
+          console.log(data);
+          // Perform further operations with the dictionary
+          updateDropdownOptions3(data);
+
+          })
+          .catch(error => {
+          console.error('Error:', error);
+          });
+
+      
+      
+          // Function to update the dropdown options based on the dictionary values
+
+
+      // Call the function initially to set the dropdown options based on the dictionary values
+      
+
+    </script>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        var toggleCheckbox = document.getElementById('toggle-checkbox');
+
+        if (window.location.href('/playground')) {
+          toggleCheckbox.checked = false;
+        } else {
+          toggleCheckbox.checked = true;
+        }
+
+  
+        toggleCheckbox.addEventListener('change', function() {
+          if (!toggleCheckbox.checked) {
+            // Redirect to the /playground URL
+            window.location.href = '/playground';
+          } else {
+            // Do nothing (stay on the current URL)
+          }
+        });
+  
+        // Optionally, you can check the current URL and update the toggle state accordingly
+        if (window.location.href.includes('/pro')) {
+          toggleCheckbox.checked = true;
+        }
+
+        if (window.location.href.includes('/playground')) {
+          toggleCheckbox.checked = false;
+        }
+      });
+    </script>
+    
+    <script>
+      window.ethereum.on('accountsChanged', function(accounts) {
+        // Check if Metamask is available
+        if (typeof window.ethereum !== 'undefined') {
+              // Request the user's permission to connect the wallet
+              // Get the previous accounts length from local storage
+              var previousAccountsLength = localStorage.getItem('metamaskAccountsLength');
+              window.ethereum.request({ method: 'eth_accounts' })
+                  .then(function(accounts) {
+                      // Retrieve the selected account (wallet address)
+                      var walletAddress = accounts[0];
+                      console.log("PREVIOUS")
+                      console.log(previousAccountsLength);
+                      var currentAccountsLength = accounts.length;
+                      console.log("NOW")
+                      console.log(currentAccountsLength);
+
+
+                      if (previousAccountsLength > 0 && currentAccountsLength === 0) {
+                        // Wallet was disconnected
+                        window.location.href = "{% url 'disconnect' %}";
+                      }
+
+                       // Store the current accounts length in local storage
+                      localStorage.setItem('metamaskAccountsLength', currentAccountsLength);
+                    })
+                  .catch(function(error) {
+                      // Handle connection error
+                      console.log(error);
+                  });
+          } else {
+              // Metamask is not available
+              console.log('Metamask is not installed');
+          }
+      });
+
+    </script>
+
+    <script>
+      const toggleButton = document.querySelector(".small-screen-toggle");
+      const menuBar = document.querySelector(".small-screen-menu");
+      const removeMenuBar = document.querySelector(".remove-menu-bar");
+
+      toggleButton.addEventListener("click", function () {
+        if (menuBar.classList.contains("active")) {
+          menuBar.classList.remove("active");
+        } else {
+          menuBar.classList.add("active");
+        }
+      });
+
+      
+      removeMenuBar.addEventListener("click", function () {
+        menuBar.classList.remove("active");
+      });
+
+    </script>
+
+    <script>
+      $(document).ready(function() {
+      $('.edit-asset-btn').on('click', function() {
+        var assetId = $(this).data('asset-id');
+        var assetValueElement = $('.asset-value[data-asset-id="' + assetId + '"]');
+        var saveButton = $('.save-asset-btn[data-asset-id="' + assetId + '"]');
+        var editButton = $('.edit-asset-btn[data-asset-id="' + assetId + '"]');
+
+        assetValueElement.attr('contenteditable', true);
+        assetValueElement.css('background-color', 'white');
+        assetValueElement.css('color', 'black');
+        assetValueElement.css('border', 'none');
+        saveButton.show();
+        editButton.hide();
+      });
+
+      $('.save-asset-btn').on('click', function() {
+        var assetId = $(this).data('asset-id');
+        var saveButton = $('.save-asset-btn[data-asset-id="' + assetId + '"]');
+        var editButton = $('.edit-asset-btn[data-asset-id="' + assetId + '"]');
+        var assetValueElement = $('.asset-value[data-asset-id="' + assetId + '"]');
+        assetValueElement.css('background-color', '');
+        assetValueElement.css('color', '');
+        assetValueElement.css('border', '');
+        saveButton.hide();
+        editButton.show();
+        var assetId = $(this).data('asset-id');
+        var assetValueElement = $('.asset-value[data-asset-id="' + assetId + '"]');
+        var editedValue = assetValueElement.text().trim();
+        var originalValue = assetValueElement.data('original-value');
+
+        if (editedValue !== originalValue) {
+          $.ajax({
+            url: 'update_asset_value',
+            method: 'POST',
+            data: { asset_id: assetId, asset_value: editedValue },
+            success: function(response) {
+              assetValueElement.attr('contenteditable', false);
+              $('.save-asset-btn[data-asset-id="' + assetId + '"]').hide();
+              // You can update the asset value in the DOM with the edited value here
+            },
+            error: function(xhr, status, error) {
+              // Handle errors
+            }
+          });
+        }
+      });
+
+      $('.delete-asset-btn').on('click', function() {
+        var assetId = $(this).data('asset-id');
+        var assetDelete = $('.delete-asset-btn[data-asset-id="' + assetId + '"]');
+        $.ajax({
+            url: 'delete_asset',
+            method: 'POST',
+            data: { asset_id: assetId},
+            success: function(response) {
+              $('.delete-asset-btn[data-asset-id="' + assetId + '"]').hide();
+              location.reload();
+              // You can update the asset value in the DOM with the edited value here
+            },
+            error: function(xhr, status, error) {
+              // Handle errors
+            }
+          });
+    });
+  });
+
+    </script>
+      
+    <script>
+      const filterButtons = document.querySelectorAll('.filter-button');
+      // Get the active button value from local storage or set it to null if it doesn't exist
+      let activeButton = localStorage.getItem('activeButton') || null;
+      // Set the active class on the appropriate button based on the stored value
+      let scrollPosition = 0; // initialize scroll position
+      if (activeButton) {
+          filterButtons.forEach(button => {
+              if (button.value === activeButton) {
+                  button.classList.add('active');
+                  
+              }
+          });
+      }
+
+      // Add event listener to each filter button
+      filterButtons.forEach(button => {
+          button.addEventListener('click', () => {
+              // Set the active class on the clicked button and remove it from all other buttons
+              filterButtons.forEach(button => {
+                  button.classList.remove('active');
+              });
+              button.classList.add('active');
+              // Update the stored active button value
+              activeButton = button.value;
+              localStorage.setItem('activeButton', activeButton);
+              // Submit the form and reload the page
+              // Get the current scroll position before the page reloads
+              // scrollPosition = window.scrollY;
+              button.form.submit();
+              // location.reload()
+          });
+      });
+
+      // Set the scroll position after the page reloads
+      window.onload = function() {
+        window.scrollTo(0, scrollPosition);
+      };
+
+
+    </script>
+
+    <script>
+      var swiper = new Swiper(".mySwiper", {
+        spaceBetween: 30,
+        centeredSlides: true,
+        autoplay: {
+          delay: 2500,
+          disableOnInteraction: false,
+        },
+        pagination: {
+          el: ".swiper-pagination",
+          clickable: true,
+        },
+
+      });
+
+     
+      var allswiper = new Swiper(".allSwiper", {
+        spaceBetween: 30,
+        centeredSlides: true,
+        pagination: {
+          el: ".swiper-pagination",
+          clickable: true,
+        },
+        navigation: {
+          nextEl: ".swiper-button-next",
+          prevEl: ".swiper-button-prev",
+        },
+      });
+        
+    </script>
+
+</body>
+</html>
+{% endblock content %}

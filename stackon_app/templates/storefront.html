@@ -1,0 +1,1025 @@
+{% block content %}
+{% load static %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Stackon Pro</title>
+    <!---===============  FAVICON =======================  -->
+    <link rel="shortcut icon" href="{% static '/images/logo.ico' %}" type="image/x-icon" />
+    <!--- ============== CUSTOM CSS LINK ==================  -->
+    <link rel="stylesheet" href="{% static 'css/storefront.css' %}" />
+    
+    <!-- =============== SWIPER CSS LINK =================== -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css"
+    />
+    <!--=============== BOXICONS ===============-->
+    <link
+      href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+      rel="stylesheet"
+    />
+    <!--- =============== GOOGLE FONT LINK ================== -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />   
+
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="https://unpkg.com/isotope-layout@3/dist/isotope.pkgd.js"></script>
+    <!-- or -->
+    <script src="https://unpkg.com/isotope-layout@3/dist/isotope.pkgd.min.js"></script>
+    <script src="{% static 'js/isotope.pkgd.js' %}"></script>
+    <script src="{% static 'js/isotope.pkgd.min.js' %}"></script>
+    <script src="{% static 'js/thetajs.browser.js' %}"></script>
+    <script>
+      if (window.history.replaceState) {
+        window.history.replaceState(null, null, window.location.href);
+      }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/@metamask/detect-provider"></script>
+    
+  </head>
+  <body id="top">
+<!-- =================== HEADER ===================================== -->
+<header class="header" id="header">
+    <div class="banner">
+      <div class="banner-container">
+        {% for asset in assets%}
+        <h5 class="banner_asset">{{asset.name }}:</h5>
+        {% if asset.next_1d_percent >= 0.0 %}
+        <h5 class="banner_asset_increase pos">+{{ asset.next_1d_percent }}%</h5>
+        {% elif asset.next_1d_percent <= 0.0 %}
+        <h5 class="banner_asset_increase neg">{{ asset.next_1d_percent }}%</h5>
+        {% else %}
+        <h5 class="banner_asset_increase neu">{{ asset.next_1d_percent }}%</h5>
+        {% endif %}    
+        {%endfor%}
+      </div>
+    </div>
+    <div class="nav">
+      <div class="header-left">
+        <a href="/" class="logo header-item">
+          <img src="{% static 'images/stackon-logo.png' %}" alt="Stackon logo" />
+        </a>
+        <div class="header-menu">
+          <a href="/" class="header-menu-item">Dashboard</a>
+          <a href="/stacks" class="header-menu-item">My Stack</a>
+          <a href="/storefront" class="header-menu-item active">Storefront</a>
+          <a href="/livestream" class="header-menu-item">Geek TV</a>
+          <a href="/community" class="header-menu-item">Community</a>
+          <a href="/playground"  id="playground" class="header-menu-item" style="display: none;">Playground</a>
+        </div>
+        </div>
+      
+      <div class="header-right">
+        <div class="switch">
+          <div>Stackon Pro</div>
+          <label class="toggle-container">
+              <input type="checkbox" id="toggle-checkbox">
+              <span class="toggle-slider" id="toggle-slider"></span>
+          </label>
+        </div>
+        {% if not user.is_authenticated %}
+        
+        <button id="auth-button" class="btn btn-secondary header-item">Connect Wallet</button>
+        <div class="header-others">
+          <i class='bx bx-search searchicon header-item'></i>
+          <i class="bx bx-moon change-theme header-item" id="theme-button"></i>
+          <span class="english">English<i class='bx bxs-down-arrow' ></i></span>
+          <span class="usd_format">
+            <i class='bx bxs-badge-dollar header-item'>USD<i class='bx bxs-down-arrow' ></i></i>          
+          </span>
+        </div>
+        
+        {% else %}
+        <div class="profile-picture">
+          <img src="{% static 'images/' %}{{ profile.wallet_avatar }}" alt="Avatar">
+        </div>
+        <div class="wallet-id">
+          <label for="wallet-id">Wallet ID:</label>
+          <p id="wallet-id">{{ user_short }}...</p>
+        </div>
+        <div class="header-others">
+          <i class='bx bx-search searchicon header-item'></i>
+          <i class="bx bx-moon change-theme header-item" id="theme-button"></i>
+          <span class="english">English<i class='bx bxs-down-arrow' ></i></span>
+          <span class="usd_format">
+            <i class='bx bxs-badge-dollar header-item'>USD<i class='bx bxs-down-arrow' ></i></i>          
+          </span>
+        </div>   
+        {% endif %}
+      </div>
+      
+      <div class="small-screen-toggle">
+        <i class='bx bx-menu'></i>
+      </div>
+      <div class="small-screen-menu">
+        <div class="small-screen-toggle remove-menu-bar" >
+          <i class='bx bx-x' ></i>
+        </div>
+        {% if user.is_authenticated %}
+        <div class="profile-picture-small-menu profile-picture">
+          <img src="{% static 'images/' %}{{ profile.wallet_avatar }}" alt="Profile Picture">
+          <div class="wallet-id">
+          
+            <label for="wallet-id">Wallet ID:</label>
+            <p id="wallet-id">{{profile.wallet_id}}</p>
+          </div>
+        </div>
+        
+        {% endif %}
+        <div class="header-others">
+          
+          <i class="bx bx-moon change-theme header-item" id="theme-button"></i>
+          <span class="english">English<i class='bx bxs-down-arrow' ></i></span>
+          <span class="usd_format">
+            <i class='bx bxs-badge-dollar header-item'>USD<i class='bx bxs-down-arrow' ></i></i>          
+          </span>
+        </div>
+        <div class="header-menu-small">
+          <h3 href="/stacks" class="header-menu-item-small">My Stack</h3>
+          <h3 href="/storefront" class="header-menu-item-small">Storefront</h3>
+          <h3 href="/assets" class="header-menu-item-small">My Assets</h3>
+          <h3 href="/lives" class="header-menu-item-small">Geek TV</h3>
+          <h3 href="/community" class="header-menu-item-small">Community</h3>
+          
+        </div>
+
+      </div>
+      
+      
+    </div>
+    <!-- Theme Change Button-->
+</header>
+
+<!-- ================== MAIN SECTION ================================ -->
+  <main>
+    <!-- ===================== NFT ITEMS ========================-->
+    <section class="section stack-nft">
+      <div class="section-header">
+        <h2 class="section-title">Storefront</h2>
+        <h3 class="section-subtitle">Browse and Mint any of the below NFTs.</h3>
+      </div>
+
+      <div class="sort-container">
+        <button class="sort-btn active" data-filter="all">All</button>
+        <button class="sort-btn" data-filter="geeks">Geeks</button>
+        <button class="sort-btn" data-filter="modifiers">Modifiers</button>
+        <button class="sort-btn" data-filter="stackon-bots" disabled>Stackon Bots</button>
+      </div>
+
+      <div class="nft-stack-container">
+        {% for nft in nft_items %}
+        <div class="nft-stack" data-filter="{{ nft.nft_status }}" data-nft-id="{{ nft.id }}">
+          <div class="nft-image-container">
+            <img src="{% static 'images/' %}{{ nft.nft_image }}" alt="NFT Image">
+            <div class="nft-overlay">
+              <div class="nft-overlay-content">
+                <p class="nft-overlay-description">{{ nft.nft_description }}</p>
+                
+                <div class="nft-overlay-cta">
+                  <img class="nft-seller" src="{% static 'images/' %}{{ nft.nft_seller }}" alt="NFT Image">
+                  <span class="nft-overlay-cta-price">
+                  {% if nft.nft_minting %} 
+                    <p class="nft-price" style="text-decoration: line-through;">{{ nft.nft_price_tfuel}} TFUEL</p>
+                    <p class="nft-price" style="text-decoration: line-through;">${{ nft.nft_price_usd}}</p></span> 
+                 
+                  {%if free_mint < 1%}
+                  <span><button id="overlay-buy-now-btn-{{ nft.id }}" class="overlay-buy-now-btn" style="background-color: gray;" disbaled>Free Mint(s) Used</button></span>
+                  {%else%}
+                  <span><button id="overlay-buy-now-btn-{{ nft.id }}" class="overlay-buy-now-btn" >Free Mint<span class="free_mint">{{free_mint}}</span></button></span>
+                  {% endif %}
+                    {% else %}
+                    <p class="nft-price" >{{ nft.nft_price_tfuel}} TFUEL</p>
+                    <p class="nft-price">${{ nft.nft_price_usd}}</p></span> 
+                    <span><button id="overlay-buy-now-btn-{{ nft.id }}" class="overlay-buy-now-btn" style="background-color:red; pointer-events: none;">COMING SOON</button></span>
+                  {% endif %}
+                </div>
+              
+                
+                <!-- Add other features and information here -->
+              </div>
+            </div>
+          </div>
+
+          
+          <div class="nft-content">
+            <div class="nft-sales-data">
+              <div class="nft-seller-price">
+                <div class="nft-stack-name-container">
+                  <h2 class="nft-stack-name">{{ nft.nft_name }}</h2>
+                  <p class="nft-description">{{ nft.nft_pre_description }}</p>
+                  <div class="nft-seller-info">
+                    <img class="nft-seller" src="{% static 'images/' %}{{ nft.nft_seller }}" alt="NFT Image">
+                    {% if nft.nft_minting %}  
+                    <p class="nft-price" style="text-decoration: line-through;">{{ nft.nft_price_tfuel}} TFUEL</p>
+                  </div>
+                </div>
+                  {%if free_mint < 1%}
+                  <button class="buy-now-btn" style="background-color: gray;" disabled>Free Mint(s) Used</button>
+                  {%else%}
+                  <button class="buy-now-btn">Free Mint <span class="free_mint">{{free_mint}}</span></button>
+                  {% endif %}
+                  {% else %}
+                  <p class="nft-price">{{ nft.nft_price_tfuel}} TFUEL</p>
+                  </div>
+                </div>
+                  <button class="buy-now-btn" style="background-color:red; pointer-events: none;">Coming Soon</button>
+                  {% endif %}
+              </div>
+              
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </section>
+
+    <section class="wallet-authentication">
+      <div class="wallet-overlay wallet-overlay-1" id="wallet-overlay-1">
+        <div class="wallet-overlay-container">
+          <span class="theta_wallet_logo">
+            <img src="{% static 'images/theta_wallet.png' %}" alt="Stackon logo" />
+          </span>   
+          <div class="wallet-description">
+            <div class="transaction-table">
+              <span class="tx-title">Transaction Type</span>
+              <span class="tx-value"><p class="">Call Contract</p></span>
+            </div>
+            <div class="transaction-table">
+              <span class="tx-title">Token</span>
+              <span class="tx-value"><p class="tx-name"></p></span>
+            </div>
+            <div class="transaction-table">
+              <span class="tx-title">Status</span>
+              <span class="tx-value"><p class="tx-status"></p></span>
+            </div>
+            <div class="transaction-table">
+              <span class="tx-title">Estimated Gas Limit</span>
+              <span class="tx-value"><p class="tx-gas"> </p> TFUEL</span>
+            </div>
+            <div class="transaction-table">
+              <span class="tx-title">Mint Cost</span>
+              <span class="tx-value" style="text-decoration: line-through;"> <p class="tx-cost"> </p>  TFUEL</span>
+            </div>
+            <div class="transaction-table">
+              <span class="tx-title">Total</span>
+              <span class="tx-value"><p class="tx-total"> </p> TFUEL</span>
+            </div>
+          </div>
+          <div class="wallet-input-group">
+            <label for="wallet-description">Enter Password to Sign Transaction:</label>
+            <input type="password" id="password">
+          </div>
+          <div class="connect-wallet">
+            <button id="mint-button" class="btn btn-secondary">Mint </button>
+            <div class="loading-container">
+              <div class="loading-icon"></div>
+            </div>            
+
+          </div>
+          <div class="mint-error" style="text-align: center; margin: 0 50px; border-radius: 10px; padding: 10px; display: none;"></div>
+          <a  href="/storefront" class="cancel-overlay"><p>Return To Storefront</p></a>
+        </div>
+      </div>
+
+    </section>
+  </main>
+
+<!-- =========================== FOOTER ============================= -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-left footer-item">
+        <div class="contact-content">
+          <h3 class="contact-title">Get in Touch</h3>
+          <form action="" class="contact-form">
+            <div class="contact-form-div">
+              <label for="" class="contact-form-tag">Names</label>
+              <input
+                type="text"
+                placeholder="Insert your name"
+                class="contact-form-input"
+              />
+            </div>
+            <div class="contact-form-div">
+              <label for="" class="contact-form-tag">Mail</label>
+              <input
+                type="email"
+                placeholder="Insert your email"
+                class="contact-form-input"
+              />
+            </div>
+            <div class="contact-form-div contact-form-area">
+              <label for="" class="contact-form-tag">Project</label>
+              <textarea
+                name=""
+                id=""
+                cols="30"
+                rows="10"
+                placeholder="How can we help you?"
+                class="contact-form-input"
+              ></textarea>
+            </div>
+            <button class="contact-button">Send Message</button>
+          </form>
+        </div>
+      </div>
+      <div class="footer-right footer-item">
+        <h1 class="footer-title">Stackon</h1>
+        <ul class="footer-list">
+          <li>
+            <a href="#about" class="footer-link">Top Stacks</a>
+          </li>
+          <li>
+            <a href="#work" class="footer-link">About</a>
+          </li>
+          <li>
+            <a href="#testimonial" class="footer-link">Contact</a>
+          </li>
+        </ul>
+        <ul class="footer-social">
+          <a
+            href="https://www.instagram.com"
+            target="_blank"
+            class="footer-social-link"
+          >
+            <i class="bx bxl-instagram"></i>
+          </a>
+          <a
+            href="https://www.twitter.com"
+            target="_blank"
+            class="footer-social-link"
+          >
+            <i class="bx bxl-twitter"></i>
+          </a>
+          <a
+            href="https://www.linkedin.com"
+            target="_blank"
+            class="footer-social-link"
+          >
+            <i class="bx bxl-linkedin"></i>
+          </a>
+        </ul>
+        <span class="footer-copy">
+          &#169; Stackon 2023. All rights reserved.
+        </span>
+      </div>
+      
+    </div>
+  </footer>
+
+    <!--- ======================== CUSTOM JS LINK========================== -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mixitup/3.3.1/mixitup.min.js" integrity="sha512-nKZDK+ztK6Ug+2B6DZx+QtgeyAmo9YThZob8O3xgjqhw2IVQdAITFasl/jqbyDwclMkLXFOZRiytnUrXk/PM6A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="{% static 'js/typeahead.bundle.js' %}"></script>
+    <!--=============== MIXITUP FILTER ===============-->
+    <script src="{% static 'js/mixitup.min.js' %}"></script>
+    <!-- <script src="{% static 'js/isotope-docs.min.js' %}"></script> -->
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.4.0/dist/web3.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@metamask/detect-provider@2.0.0/dist/index.min.js"></script>
+    <!---======================= ICON LINK ========================= -->
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mixitup/3.3.1/mixitup.min.js" integrity="sha512-nKZDK+ztK6Ug+2B6DZx+QtgeyAmo9YThZob8O3xgjqhw2IVQdAITFasl/jqbyDwclMkLXFOZRiytnUrXk/PM6A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+   
+    <script src='https://vjs.zencdn.net/7.15.4/video.js'></script>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@0.12.4"></script>
+  
+    <script src="https://d1ktbyo67sh8fw.cloudfront.net/js/theta-hls-plugin.umd.min.js"></script>
+    <script src="https://d1ktbyo67sh8fw.cloudfront.net/js/videojs-theta-plugin.min.js"></script>
+    <script src="{% static 'js/thetajs.browser.js' %}"></script>
+    <script src="https://unpkg.com/he@1.2.0/he.js"></script>
+
+
+
+    <script>
+      function updateDropdownOptions3(dropdownValues) {
+          const dropdownIdTheta = 'theta'; // ID of the dropdown related to 'theta'
+          const containerIdToHide = 'playground'; // ID of the container to hide
+          const disableStackonPro = 'toggle-slider'
+
+          const thetaEnabled = dropdownValues[dropdownIdTheta];
+          const containerToHide = document.getElementById(containerIdToHide);
+
+          if (containerToHide) {
+              containerToHide.style.display = thetaEnabled ? 'block' : 'none';
+              containerToHide.disabled = True;
+
+          }
+
+          // Rest of the function code...
+      }
+      fetch('features_dict', {
+          method: 'GET',
+          headers: {
+              'Content-Type': 'application/json'
+          }
+          })
+          .then(response => response.json())
+          .then(data => {
+
+
+          updateDropdownOptions3(data);
+
+          })
+          .catch(error => {
+          console.error('Error:', error);
+          });
+    </script>
+
+    <script>
+      // // Get all the buttons with the class "overlay-buy-now-btn"
+      const buttons = document.querySelectorAll('.overlay-buy-now-btn');
+
+      // // Iterate over the buttons and add an event listener
+      buttons.forEach(button => {
+        button.addEventListener('click', () => {
+           // Perform the desired action for each button
+           console.log('Button clicked:', button.id);
+           // You can access other attributes or data associated with the button here
+         });
+       });
+
+      document.addEventListener('DOMContentLoaded', function() {
+        console.log('ThetaJS library is imported successfully.');
+        if (typeof window.ThetaJS !== 'undefined') {
+          const overlay1 = document.querySelector('.wallet-overlay-1');
+          const twitterMint = document.getElementById('overlay-buy-now-btn-13');
+          const telegramMint = document.getElementById('overlay-buy-now-btn-14');
+          const discordMint = document.getElementById('overlay-buy-now-btn-15');
+          const redditMint = document.getElementById('overlay-buy-now-btn-16');
+          const thetaMint = document.getElementById('overlay-buy-now-btn-19');
+          const ethereumMint = document.getElementById('overlay-buy-now-btn-20');
+          const polygonMint = document.getElementById('overlay-buy-now-btn-21');
+          const solanaMint = document.getElementById('overlay-buy-now-btn-22');
+          const bnbMint = document.getElementById('overlay-buy-now-btn-23');
+          const tezosMint = document.getElementById('overlay-buy-now-btn-24');
+          const mintBtn = document.getElementById('mint-button');
+          const txGas = document.querySelector('.tx-gas');
+          const txName = document.querySelector('.tx-name');
+          const txCost = document.querySelector('.tx-cost');
+          const txTotal = document.querySelector('.tx-total');
+          const txStatus = document.querySelector('.tx-status');
+          const txError = document.querySelector('.mint-error');
+          const loadingContainer = document.querySelector('.loading-container')
+          const passwordInput = document.getElementById('password');
+         
+          // You can proceed with using ThetaJS functions and objects here
+          const twitterContractAddress = "{{ contract.twitterModCollectionContractAddress }}"  
+          const telegramContractAddress = "{{ contract.telegramModCollectionContractAddress }}" 
+          const discordContractAddress = "{{ contract.discordModCollectionContractAddress }}" 
+          const redditContractAddress = "{{ contract.redditModCollectionContractAddress }}" 
+
+          const thetaContractAddress = "{{ contract.thetaGeekCollectionContractAddress }}"
+          const ethereumContractAddress = "{{ contract.ethereumGeekCollectionContractAddress }}" 
+          const polygonContractAddress = "{{ contract.polygonGeekCollectionContractAddress }}"
+          const solanaContractAddress = "{{ contract.solanaGeekCollectionContractAddress }}"
+          const bnbContractAddress = "{{ bnbcontract.GeekCollectionContractAddress }}"
+          const tezosContractAddress = "{{ contract.tezosGeekCollectionContractAddress }}"
+
+          
+
+          const chainId = window.ThetaJS.networks.ChainIds.Testnet;
+          const provider = new window.ThetaJS.providers.HttpProvider(chainId);
+          const stackonContractABI = '[{"inputs":[{"internalType":"string","name":"name","type":"string"},{"internalType":"string","name":"symbol","type":"string"},{"internalType":"uint256","name":"_totalPossibleSupply","type":"uint256"},{"internalType":"string","name":"_collectionURI","type":"string"}],"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"owner","type":"address"},{"indexed":true,"internalType":"address","name":"approved","type":"address"},{"indexed":true,"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"Approval","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"owner","type":"address"},{"indexed":true,"internalType":"address","name":"operator","type":"address"},{"indexed":false,"internalType":"bool","name":"approved","type":"bool"}],"name":"ApprovalForAll","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"from","type":"address"},{"indexed":true,"internalType":"address","name":"to","type":"address"},{"indexed":true,"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"Transfer","type":"event"},{"inputs":[{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"approve","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"owner","type":"address"}],"name":"balanceOf","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"baseURI","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"collectionURI","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"getApproved","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"owner","type":"address"},{"internalType":"address","name":"operator","type":"address"}],"name":"isApprovedForAll","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"isMinted","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"mint","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"name","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"ownerOf","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"from","type":"address"},{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"safeTransferFrom","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"from","type":"address"},{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"tokenId","type":"uint256"},{"internalType":"bytes","name":"_data","type":"bytes"}],"name":"safeTransferFrom","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"operator","type":"address"},{"internalType":"bool","name":"approved","type":"bool"}],"name":"setApprovalForAll","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"bytes4","name":"interfaceId","type":"bytes4"}],"name":"supportsInterface","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"symbol","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"index","type":"uint256"}],"name":"tokenByIndex","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"owner","type":"address"},{"internalType":"uint256","name":"index","type":"uint256"}],"name":"tokenOfOwnerByIndex","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"tokenURI","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"totalPossibleSupply","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"totalSupply","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"from","type":"address"},{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"transferFrom","outputs":[],"stateMutability":"nonpayable","type":"function"}]'
+          const private_key = '{{profile.private_key}}'
+          const userWallet = new window.ThetaJS.Wallet(private_key, provider);
+          const userWalletAddress = userWallet.address
+
+          async function checkBalance(contractAddress, feature)  {
+            const stackonContract = new window.ThetaJS.Contract(contractAddress, stackonContractABI, userWallet);
+            const balance = stackonContract.balanceOf(userWalletAddress);
+            balance.then((value) => {
+              const balanceValue = value.toString();
+            if (balanceValue > 0) {
+              console.log('TWITTER MOD OWNER');
+              $.ajax({
+                url: 'add_features',
+                method: 'POST',
+                data: { 
+                  'True': feature, 
+                   },
+                success: function(response) {
+                  console.log(`${feature} Feature Authentication Successful`);
+                  // You can update the asset value in the DOM with the edited value here
+                },
+                error: function(xhr, status, error) {
+                  // Handle errors
+                  console.log(`${feature} Feature Authentication Failed`);
+                }
+              });
+            } else {
+              console.log('NOT AN OWNER')
+            }
+            
+          });
+          }
+        
+          async function mint(contractAddress, feature) {
+            const stackonContract = new window.ThetaJS.Contract(contractAddress, stackonContractABI, userWallet);
+            const balance = stackonContract.balanceOf(userWalletAddress);
+            mintBtn.style.display = 'none'
+            loadingContainer.style.display = 'flex'
+            setTimeout(() => {
+              
+              balance.then((value) => {
+                const balanceValue = value.toString();
+              if (balanceValue > 0) {
+                console.log('YOU ALREADY MINTED THIS COLLECTION');
+                txStatus.innerHTML = 'Duplicate Transaction'
+                txError.style.display = 'block'
+                txError.style.backgroundColor = 'red'
+                txError.innerHTML = 'Duplicate Transaction, You Own this NFT.'
+                setTimeout(() => {
+                    overlay1.classList.remove('active');
+                  }, 2000);
+              } else {
+                const minted = stackonContract.mint()
+                minted.then((transaction) => {
+                  loadingContainer.style.display = 'none'
+                    console.log("Mint successful");
+                    checkBalance(contractAddress, feature)
+                    txError.style.display = 'block'
+                    txError.style.backgroundColor = 'green'
+                    txError.innerHTML = 'Mint Successful'
+                    txStatus.innerHTML = 'SUCCESFUL'
+                    setTimeout(() => {
+                      overlay1.classList.remove('active');
+                    }, 2000);
+                  
+                
+              }).catch((error) => {
+                console.log("Error occurred while minting:", error);
+                txStatus.innerHTML = 'FAILED'
+                txError.style.display = 'block'
+                txError.style.backgroundColor = 'red'
+                txError.innerHTML = 'Error occurred while minting: ' + error.message;
+              });
+
+              }
+              
+            });
+        }, 5000);
+          }
+
+
+          async function estimateGasForMint(contractAddress, collectionName, mintCost) {
+            const stackonContract = new window.ThetaJS.Contract(contractAddress, stackonContractABI, userWallet);
+            const gasLimit = await stackonContract.estimateGas.mint();
+            const gas = gasLimit.toString()/100000;
+            txGas.innerHTML = gas;
+            txName.innerHTML = collectionName;
+            txCost.innerHTML = mintCost;
+            txTotal.innerHTML = gas;
+            txStatus.innerHTML = 'Pending'
+            
+          }
+
+          twitterMint.addEventListener('click', () => {
+              overlay1.classList.add('active');
+              estimateGasForMint(twitterContractAddress, "twitterModCollection Vol. 1", 100);
+            });
+
+          telegramMint.addEventListener('click', () => {
+              overlay1.classList.add('active');
+              estimateGasForMint(telegramContractAddress, "telegramModCollection Vol. 1", 60);
+              
+            });
+
+          discordMint.addEventListener('click', () => {
+              overlay1.classList.add('active');
+              estimateGasForMint(discordContractAddress, "discordModCollection Vol. 1", 70);
+              
+            });
+
+          redditMint.addEventListener('click', () => {
+              overlay1.classList.add('active');
+              estimateGasForMint(redditContractAddress, "redditModCollection Vol. 1", 100);
+              
+            });
+
+          thetaMint.addEventListener('click', () => {
+              overlay1.classList.add('active');
+              estimateGasForMint(thetaContractAddress, "thetaGeekCollection Vol. 1", 700);
+              
+            });
+
+          ethereumMint.addEventListener('click', () => {
+              overlay1.classList.add('active');
+              estimateGasForMint(ethereumContractAddress, "ethereumGeekCollection Vol. 1", 650);
+              
+            });
+
+          polygonMint.addEventListener('click', () => {
+              overlay1.classList.add('active');
+              estimateGasForMint(polygonContractAddress, "polygonGeekCollection Vol. 1", 500);
+              
+            });
+          solanaMint.addEventListener('click', () => {
+              overlay1.classList.add('active');
+              estimateGasForMint(solanaContractAddress, "solanaGeekCollection Vol. 1", 500);
+              
+            });
+          bnbMint.addEventListener('click', () => {
+              overlay1.classList.add('active');
+              estimateGasForMint(bnbContractAddress, "bnbGeekCollection Vol. 1", 500);
+              
+            });
+
+          tezosMint.addEventListener('click', () => {
+              overlay1.classList.add('active');
+              estimateGasForMint(tezosContractAddress, "tezosGeekCollection Vol. 1", 500);
+              
+            });
+          
+          mintBtn.addEventListener('click', () => {
+            // Send an AJAX request to the Django view
+            const password = passwordInput.value;
+            console.log(password)
+            $.ajax({
+              url: 'check_password_correct',
+              method: 'POST',
+              data: { password: password },
+              success: function(response) {
+                // Handle the response from the server
+                if (response.is_password_correct) {
+                  // Password is correct
+                  console.log('Password is correct');
+                  if (txName.innerHTML == "twitterModCollection Vol. 1") {
+                    mint(twitterContractAddress, 'Twitter');
+                  } else if (txName.innerHTML == "telegramModCollection Vol. 1") {
+                    mint(telegramContractAddress, 'Telegram');
+                  } else if (txName.innerHTML == "discordModCollection Vol. 1") {
+                    mint(discordContractAddress, 'Discord');
+                  } else if (txName.innerHTML == "redditModCollection Vol. 1") {
+                    mint(redditContractAddress, 'Reddit');
+                  } else if (txName.innerHTML == "thetaGeekCollection Vol. 1") {
+                    mint(thetaContractAddress, 'Theta');
+                  } else if (txName.innerHTML == "thetaGeekCollection Vol. 1") {
+                    mint(redditContractAddress, 'Reddit');
+                  } else if (txName.innerHTML == "ethereumGeekCollection Vol. 1") {
+                    mint(ethereumContractAddress, 'Ethereum');
+                  } else if (txName.innerHTML == "polygonGeekCollection Vol. 1") {
+                    mint(polygonContractAddress, 'Polygon');
+                  } else if (txName.innerHTML == "solanaGeekCollection Vol. 1") {
+                    mint(solanaContractAddress, 'Solana');
+                  } else if (txName.innerHTML == "bnbGeekCollection Vol. 1") {
+                    mint(bnbContractAddress, 'BNB');
+                  } else if (txName.innerHTML == "tezosGeekCollection Vol. 1") {
+                    mint(tezosContractAddress, 'Tezos');
+                  } 
+                  // Perform the minting process or any other action
+                } else {
+                  // Password is incorrect
+                  console.log('Password is incorrect');
+                  txError.style.display = 'block'
+                  txError.style.backgroundColor = 'red'
+                  txError.innerHTML = 'Password is Incorrect'
+                  // Display an error message or take appropriate action
+                }
+              },
+              error: function(xhr, status, error) {
+                // Handle any error that occurred during the AJAX request
+                console.log('Error:', error);
+                txError.style.display = 'block'
+                txError.style.backgroundColor = 'red'
+                txError.innerHTML = 'Error signing transaction, please try again. '
+              }
+            });
+              
+             
+            });
+
+          checkBalance(twitterContractAddress, 'Twitter');
+          checkBalance(telegramContractAddress, 'Telegram');
+          checkBalance(discordContractAddress, 'Discord');
+          checkBalance(redditContractAddress, 'Reddit');
+
+          checkBalance(thetaContractAddress, 'Theta');
+          checkBalance(ethereumContractAddress, 'Ethereum');
+          checkBalance(polygonContractAddress, 'Polygon');
+          checkBalance(solanaContractAddress, 'Solana');
+          checkBalance(bnbContractAddress, 'BNB');
+          checkBalance(tezosContractAddress, 'Tezos');
+  
+          } else {
+            console.log('ThetaJS library is not imported or encountered an error.');
+          }
+        });
+    </script>
+
+    <script>
+      // Get all the sort buttons
+      const sortButtons = document.querySelectorAll('.sort-btn');
+
+      // Get all the nft stacks
+      const nftStacks = document.querySelectorAll('.nft-stack');
+
+      // Add click event listeners to the sort buttons
+      sortButtons.forEach(button => {
+        button.addEventListener('click', () => {
+          // Remove the 'active' class from all buttons
+          sortButtons.forEach(btn => btn.classList.remove('active'));
+
+          // Add the 'active' class to the clicked button
+          button.classList.add('active');
+
+          // Get the filter category from the clicked button's data attribute
+          const filterCategory = button.getAttribute('data-filter');
+
+          // Show or hide the nft stacks based on the filter category
+          nftStacks.forEach(stack => {
+            const stackFilter = stack.getAttribute('data-filter');
+            if (filterCategory === 'all' || stackFilter === filterCategory) {
+              stack.style.display = 'block';
+            } else {
+              stack.style.display = 'none';
+            }
+          });
+        });
+      });
+
+    </script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        var toggleCheckbox = document.getElementById('toggle-checkbox');
+  
+        toggleCheckbox.addEventListener('change', function() {
+          if (toggleCheckbox.checked) {
+            // Redirect to the /playground URL
+            window.location.href = '/';
+          } else {
+            // Do nothing (stay on the current URL)
+            window.location.href = '/playground';
+          }
+        });
+  
+        // Optionally, you can check the current URL and update the toggle state accordingly
+        if (window.location.href.includes('/')) {
+          toggleCheckbox.checked = true;
+        }
+
+        if (window.location.href.includes('/playground')) {
+          toggleCheckbox.checked = false;
+        }
+      });
+    </script>
+    
+    <script>
+      window.ethereum.on('accountsChanged', function(accounts) {
+        // Check if Metamask is available
+        if (typeof window.ethereum !== 'undefined') {
+              // Request the user's permission to connect the wallet
+              // Get the previous accounts length from local storage
+              var previousAccountsLength = localStorage.getItem('metamaskAccountsLength');
+              window.ethereum.request({ method: 'eth_accounts' })
+                  .then(function(accounts) {
+                      // Retrieve the selected account (wallet address)
+                      var walletAddress = accounts[0];
+                      console.log("PREVIOUS")
+                      console.log(previousAccountsLength);
+                      var currentAccountsLength = accounts.length;
+                      console.log("NOW")
+                      console.log(currentAccountsLength);
+
+
+                      if (previousAccountsLength > 0 && currentAccountsLength === 0) {
+                        // Wallet was disconnected
+                        window.location.href = "{% url 'disconnect' %}";
+                      }
+
+                       // Store the current accounts length in local storage
+                      localStorage.setItem('metamaskAccountsLength', currentAccountsLength);
+                    })
+                  .catch(function(error) {
+                      // Handle connection error
+                      console.log(error);
+                  });
+          } else {
+              // Metamask is not available
+              console.log('Metamask is not installed');
+          }
+      });
+
+    </script>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        // Get the connect button element
+        var connectButton = document.getElementById('auth-button');
+
+        // Attach a click event listener to the connect button
+        connectButton.addEventListener('click', function() {
+            // Check if Metamask is available
+            if (typeof window.ethereum !== 'undefined') {
+                // Request the user's permission to connect the wallet
+                window.ethereum.request({ method: 'eth_requestAccounts' })
+                    .then(function(accounts) {
+                        // Retrieve the selected account (wallet address)
+                        var walletAddress = accounts[0];
+
+                        // Submit the form with the wallet address
+                        var form = document.createElement('form');
+                        form.method = 'POST';
+                        form.action = '{% url "connect" %}';
+
+                        var input = document.createElement('input');
+                        input.type = 'hidden';
+                        input.name = 'wallet_address';
+                        input.value = walletAddress;
+
+                        form.appendChild(input);
+                        document.body.appendChild(form);
+
+                        form.submit();
+                        var currentAccountsLength = accounts.length;
+                        localStorage.setItem('metamaskAccountsLength', currentAccountsLength);
+                    })
+                    .catch(function(error) {
+                        // Handle connection error
+                        console.log(error);
+                    });
+            } else {
+                // Metamask is not available
+                console.log('Metamask is not installed');
+            }
+        });
+  });
+
+    </script>
+
+    <script>
+      const toggleButton = document.querySelector(".small-screen-toggle");
+      const menuBar = document.querySelector(".small-screen-menu");
+      const removeMenuBar = document.querySelector(".remove-menu-bar");
+
+      toggleButton.addEventListener("click", function () {
+        if (menuBar.classList.contains("active")) {
+          menuBar.classList.remove("active");
+        } else {
+          menuBar.classList.add("active");
+        }
+      });
+
+      
+      removeMenuBar.addEventListener("click", function () {
+        menuBar.classList.remove("active");
+      });
+
+    </script>
+
+    <script>
+      $(document).ready(function() {
+      $('.edit-asset-btn').on('click', function() {
+        var assetId = $(this).data('asset-id');
+        var assetValueElement = $('.asset-value[data-asset-id="' + assetId + '"]');
+        var saveButton = $('.save-asset-btn[data-asset-id="' + assetId + '"]');
+        var editButton = $('.edit-asset-btn[data-asset-id="' + assetId + '"]');
+
+        assetValueElement.attr('contenteditable', true);
+        assetValueElement.css('background-color', 'white');
+        assetValueElement.css('color', 'black');
+        assetValueElement.css('border', 'none');
+        saveButton.show();
+        editButton.hide();
+      });
+
+      $('.save-asset-btn').on('click', function() {
+        var assetId = $(this).data('asset-id');
+        var saveButton = $('.save-asset-btn[data-asset-id="' + assetId + '"]');
+        var editButton = $('.edit-asset-btn[data-asset-id="' + assetId + '"]');
+        var assetValueElement = $('.asset-value[data-asset-id="' + assetId + '"]');
+        assetValueElement.css('background-color', '');
+        assetValueElement.css('color', '');
+        assetValueElement.css('border', '');
+        saveButton.hide();
+        editButton.show();
+        var assetId = $(this).data('asset-id');
+        var assetValueElement = $('.asset-value[data-asset-id="' + assetId + '"]');
+        var editedValue = assetValueElement.text().trim();
+        var originalValue = assetValueElement.data('original-value');
+
+        if (editedValue !== originalValue) {
+          $.ajax({
+            url: 'update_asset_value',
+            method: 'POST',
+            data: { asset_id: assetId, asset_value: editedValue },
+            success: function(response) {
+              assetValueElement.attr('contenteditable', false);
+              $('.save-asset-btn[data-asset-id="' + assetId + '"]').hide();
+              // You can update the asset value in the DOM with the edited value here
+            },
+            error: function(xhr, status, error) {
+              // Handle errors
+            }
+          });
+        }
+      });
+
+      $('.delete-asset-btn').on('click', function() {
+        var assetId = $(this).data('asset-id');
+        var assetDelete = $('.delete-asset-btn[data-asset-id="' + assetId + '"]');
+        $.ajax({
+            url: 'delete_asset',
+            method: 'POST',
+            data: { asset_id: assetId},
+            success: function(response) {
+              $('.delete-asset-btn[data-asset-id="' + assetId + '"]').hide();
+              location.reload();
+              // You can update the asset value in the DOM with the edited value here
+            },
+            error: function(xhr, status, error) {
+              // Handle errors
+            }
+          });
+    });
+  });
+
+    </script>
+      
+
+    <script>
+      const filterButtons = document.querySelectorAll('.filter-button');
+      // Get the active button value from local storage or set it to null if it doesn't exist
+      let activeButton = localStorage.getItem('activeButton') || null;
+      // Set the active class on the appropriate button based on the stored value
+      let scrollPosition = 0; // initialize scroll position
+      if (activeButton) {
+          filterButtons.forEach(button => {
+              if (button.value === activeButton) {
+                  button.classList.add('active');
+                  
+              }
+          });
+      }
+
+      // Add event listener to each filter button
+      filterButtons.forEach(button => {
+          button.addEventListener('click', () => {
+              // Set the active class on the clicked button and remove it from all other buttons
+              filterButtons.forEach(button => {
+                  button.classList.remove('active');
+              });
+              button.classList.add('active');
+              // Update the stored active button value
+              activeButton = button.value;
+              localStorage.setItem('activeButton', activeButton);
+              // Submit the form and reload the page
+              // Get the current scroll position before the page reloads
+              // scrollPosition = window.scrollY;
+              button.form.submit();
+              // location.reload()
+          });
+      });
+
+      // Set the scroll position after the page reloads
+      window.onload = function() {
+        window.scrollTo(0, scrollPosition);
+      };
+
+
+    </script>
+
+    <script>
+      var swiper = new Swiper(".mySwiper", {
+        spaceBetween: 30,
+        centeredSlides: true,
+        autoplay: {
+          delay: 2500,
+          disableOnInteraction: false,
+        },
+        pagination: {
+          el: ".swiper-pagination",
+          clickable: true,
+        },
+
+      });
+
+     
+      var allswiper = new Swiper(".allSwiper", {
+        spaceBetween: 30,
+        centeredSlides: true,
+        pagination: {
+          el: ".swiper-pagination",
+          clickable: true,
+        },
+        navigation: {
+          nextEl: ".swiper-button-next",
+          prevEl: ".swiper-button-prev",
+        },
+      });
+        
+    </script>
+
+</body>
+</html>
+{% endblock content %}

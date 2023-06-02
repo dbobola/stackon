@@ -1,0 +1,834 @@
+/*-----------------------------------*\
+ * #CUSTOM PROPERTY 
+\*-----------------------------------*/
+
+:root {
+    /** COLORS */
+    --jet: hsl(0, 0%, 20%);
+    --white: hsl(0, 0%, 100%);
+    --black: hsl(0, 0%, 0%);
+    --container-color: hsl(228, 18.52%, 15.88%);
+    --body-color: hsl(240, 6.12%, 9.61%);
+    --inner-container-color: hsl(231, 16.67%, 23.53%);
+    --title-color: hsl(0, 0%, 100%);
+    --text-color: hsl(0, 0%, 100%);
+    --sub-text-color: hsl(226.15, 16.05%, 68.24%);
+    --supporting-text-color: hsl(227.38, 96.06%, 60.2%);
+    --text-color-increase: hsl(150, 52.22%, 35.29%);
+    --text-color-decrease: hsl(354.11, 68.2%, 53.14%);
+    --button-color: hsl(227.38, 96.06%, 60.2%);
+    --orange-color: hsl(28, 68%, 55%);
+  
+    --header-height: 4.5rem;
+    /** TYPOGRAPHY */
+  
+    /*========== Font and typography ==========*/
+    /*.5rem = 8px | 1rem = 16px ...*/
+    --body-font: "Poppins", sans-serif;
+    --biggest-font-size: 1.75rem;
+    --h1-font-size: 1.5rem;
+    --h2-font-size: 1.25rem;
+    --h3-font-size: 1rem;
+    --normal-font-size: 0.938rem;
+    --small-font-size: 0.813rem;
+    --smaller-font-size: 0.75rem;
+    --tiny-font-size: 0.625rem;
+  
+    /*========== Font weight ==========*/
+    --font-medium: 500;
+    --font-semibold: 600;
+  
+    /*========== z index ==========*/
+    --z-tooltip: 10;
+    --z-fixed: 100;
+    --z-modal: 1000;
+  
+    --transition: 0.15s ease-in-out;
+  }
+  
+  /*=============== BASE ===============*/
+  * {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+  }
+  
+  html {
+    scroll-behavior: smooth;
+    overflow-x: hidden;
+  }
+  body,
+  button,
+  input,
+  textarea {
+    font-family: var(--body-font);
+    font-size: var(--normal-font-size);
+  }
+  
+  body {
+    background-color: var(--body-color);
+    color: var(--text-color);
+    transition: 0.4s; /* for light mode animation */
+    overflow: hidden;
+    
+  }
+  
+  h1,
+  h2,
+  h3 {
+    color: var(--title-color);
+    font-weight: var(--font-semibold);
+  }
+  
+  .positive {
+    background-color: var(--text-color-increase);
+  }
+  
+  .negative {
+    background-color: var(--text-color-decrease);
+  }
+  
+  .neutral {
+    background-color: var(--button-color);
+  }
+  
+  .pos {
+    color: var(--text-color-increase);
+  }
+  
+  .neg {
+    color: var(--text-color-decrease);
+  }
+  
+  .neu{
+    color: var(--button-color);
+  }
+  
+  ul {
+    list-style: none;
+  }
+  
+  a {
+    text-decoration: none;
+  }
+  
+  button, a {
+    cursor: pointer;
+    border: none;
+    outline: none;
+  }
+  
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  .logo img {
+    width: 150px;
+  }
+  .logo{
+    margin: 0;
+  }
+  
+  /*=============== REUSABLE CSS CLASSES ===============*/
+  .container {
+    max-width: 968px;
+    margin-left: 1rem;
+    margin-right: 1rem;
+  }
+  
+  .section-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    margin: 20px 0;
+    margin-top: 0;
+    padding: 30px 0;
+  }
+  .section-subtitle {
+    color: var(--sub-text-color);
+    font-weight: 100;
+    font-size: small;
+  }
+  /* .grid {
+    display: grid;
+    gap: 1.25rem;
+  } */
+  
+  .main {
+    overflow: hidden;
+    padding-top: 80px; /* adjust as needed */
+  }
+  
+  li {
+    list-style: none;
+  }
+  .section {
+    
+    background-color: var(--container-color);
+  }
+  
+  .main {
+    overflow: hidden;
+      
+  }
+
+  /*-----------------------------------*\
+   * #STACKS
+  \*-----------------------------------*/
+  .stacks_container, .tweet-card, .assets-card, .equity-card {
+    background-color: transparent;
+  }
+
+  .header{
+    display: flex;
+    justify-content: space-between;
+    padding: 0 30px;
+    
+  }
+  .modifier-container{
+    border: 1px dashed var(--text-color);
+    margin: 10px 0;
+    width: 100%;
+    display: flex;
+    padding: 10px;
+    align-items: center;
+  }
+
+  .modifier-btn{
+    width: 15%;
+    margin-left: 15px;
+   
+  }
+
+  .modifier-results{
+    width: 85%;
+  }
+
+  .btn{
+    padding: 10px 20px;
+    border: 1px solid var(--text-color);
+    border-radius: 10px;
+    color: var(--text-color);
+  }
+
+  .go-live-btn{
+    background-color: var(--supporting-text-color);
+    height: 40px;
+    justify-content: center;
+  }
+
+  .add-modifier-btn{
+    background-color: transparent;
+  }
+  .modifier-results{
+    display: flex;
+    align-items: center;
+    margin-left: 10px;
+  }
+
+  .modifier-results img{
+    width: 30px;
+  }
+
+  .chat-box {
+    background-color: #F0F0F0;
+    border-radius: 10px;
+    padding: 10px;
+    margin-left: 15px;
+    width: 100%;
+  }
+  
+ 
+  
+  .content {
+    color: #000000;
+ 
+  }
+  
+  .empty-stack {
+    align-items: center;
+    text-align: center;
+    margin: 20px 0;
+    font-size: larger;
+    color: var(--sub-text-color);
+  }
+  .top-stacks{
+    background: linear-gradient(to bottom, var(--body-color), var(--button-color), var(--body-color));
+    padding-bottom: 1.5rem;
+    width: 100%;
+    height: 100vh; /* Use viewport height to fill the entire screen */
+    overflow: hidden; /* Hides any content that overflows the container */
+    position: relative; /* Establishes the container as the containing block for absolute positioning */
+    /* margin-top: 1rem; */
+  }
+  
+  .stacks-card-avatar {
+    position: relative;
+    border-radius: 50%;
+    height: 130px;
+    width: 50%;
+  }
+  
+  .stacks-card-avatar img {
+    border-radius: 50%;
+    position: absolute;
+    height: 130px;
+  }
+  
+  .stacks-avatar-badge {
+    position: absolute;
+    bottom: 5px;
+    right: 0;
+    background: var(--supporting-text-color);
+    border-radius: 50%;
+    height: 14px;
+    width: 14px;
+    font-size: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .stacks-avatar-badge ion-icon {
+    --ionicon-stroke-width: 70px;
+  }
+  
+  .stack-item-volume {
+    margin-top: 3px;
+    display: flex;
+    align-items: center;
+  }
+  
+  .stack-item {
+    position: relative; /* Add relative position to the asset container */
+  }
+  
+  .edit-asset-btn {
+    position: absolute; /* Position the buttons absolutely within the asset container */
+    display: none; /* Hide the buttons by default */
+  }
+  .delete-asset-btn {
+    position: absolute; /* Position the buttons absolutely within the asset container */
+    top: 5px;
+    right: 5px;
+    display: none; /* Hide the buttons by default */
+  }
+  
+  .stack-item:hover .edit-asset-btn,
+  .stack-item:hover .delete-asset-btn {
+    display: inline-block; /* Show the buttons when the asset container is hovered over */
+  }
+
+  .stacks_container {
+    border-radius: 5px;
+    padding-bottom: 10px;
+    position: relative;
+    margin: 10px;
+  }
+
+  .stacks-card {
+    border: 1px dashed var(--sub-text-color);
+    border-bottom: dashed var(--supporting-text-color);
+    border-right: dashed var(--supporting-text-color);
+    position: absolute;
+    top: 10;
+    left: 0;
+    width: 100%;
+    height: 80vh;
+    overflow: auto; /* Enables scrolling within the content */
+    padding: 10px 0;
+  }
+  
+  .stack-items {
+    padding: 10px;
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+   
+  }
+  .stack-item {
+    background-color: var(--supporting-text-color);
+    padding: 5px;
+  }
+  .stack-item-card {
+    padding: 5px;
+    border: 1px solid var(--sub-text-color);
+    background-color: var(--supporting-text-color);    
+    height: 125px;
+  }
+  .stack-item-head {
+    width: 100%;
+    align-items: center;
+    display: flex;
+  }
+  
+  .stack-item-info {
+    display: flex;
+    justify-content: space-between;
+    font-size: small;
+    position: relative;
+    right: 10;
+    
+    
+  }
+  .stack-item-name {
+    font-size: medium;
+    margin-left: 5px;
+    width: 80%;
+    white-space: nowrap;
+    margin-bottom: 2px;
+    
+  }
+
+  .stack-description, .stack-volume-traded{
+    color: var(--sub-text-color);
+    font-size: x-small;
+    margin-left: 5px;
+  }
+
+  .stack-volume-traded{
+    margin-top: 3px;
+  }
+
+  .stack-blockchain-logo{
+    width: 20px;
+    
+    margin-right: 5px;
+    background-color:var(--sub-text-color);
+    padding: 5px;
+    border-radius: 50%;
+  }
+
+  .asset-value{
+    align-items: center;
+
+  }
+  .content{
+    font-size: small;
+  }
+  
+  .stack-power{
+    color: var(--supporting-text-color);
+  }
+  .stack-item-change {
+    padding: 5px;
+    border-radius: 3px;
+    white-space: nowrap;
+    
+    
+  }
+  
+  .stack-item-details {
+    display: flex;
+    justify-content: space-between;
+  }
+  .stack-avatar {
+    border-radius: 50%;
+    width: 80px;
+    height: 70px;
+   
+  }
+  .stacks_container .stacks-card-number {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    font-size: var(--font-medium);
+    font-weight: var(--font-semibold);
+    padding: 5px 10px;
+    border-top-right-radius: 10px;
+    z-index: 99;
+  }
+  
+  .stack-item-profile{
+    align-items: center;
+    padding-top: 15px;
+  }
+
+  .switch{
+    display: flex;
+    align-items: center;
+    margin-right: 20px;
+  }
+  
+  .switch-stream{
+    display: flex;
+    
+  }
+  
+  .switch div{
+    color: var(--text-color);
+  }
+  .toggle-container {
+    display: inline-block;
+    position: relative;
+    width: 40px;
+    height: 18px;
+    border-radius: 10px;
+    margin-left: 5px;
+    margin-top: 10px;
+  }
+  
+  .toggle-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 10px;
+  }
+  
+  .toggle-slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+  }
+  
+  input[type="checkbox"] {
+    display: none;
+  }
+  
+  input[type="checkbox"]:checked + .toggle-slider {
+    background-color: #2196F3;
+  }
+  
+  input[type="checkbox"]:checked + .toggle-slider:before {
+    transform: translateX(22px);
+  }
+  
+  
+  .filter-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+  }
+  
+  .filter-overlay.active {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .filter-container {
+    background-color: var(--body-color);
+    color: var(--text-color);
+    padding: 20px;
+    border-radius: 5px;
+    width: 60%;
+    padding: 50px;
+    height: 80vh;
+    overflow: auto; /* Enables scrolling within the content */
+    
+    
+  }
+
+  .filter-sections{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    justify-content: space-between;
+  }
+
+  .filter-section-title{
+    color: var(--sub-text-color);
+    font-weight: 900;
+    font-size: small;
+  }
+
+  .filter-subsection{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    padding: 10px 20px;
+    font-size: x-small;
+    justify-content: space-between;
+  }
+  
+  .filter-input-group {
+    margin-bottom: 15px;
+    border-radius: 20px;
+    margin-right: 15px;
+  }
+  
+  .filter-input-group label {
+    display: block;
+    margin-bottom: 5px;
+  }
+  
+  .filter-input-group input,
+  .filter-input-group select {
+    width: 100%;
+    padding: 5px;
+    border-radius: 20px;
+    font-size: x-small;
+  }
+  
+  .filter-buttons {
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .filter-buttons button {
+    margin-right: 30px;
+    padding: 5px 10px;
+    background-color: var(--supporting-text-color);
+    color: var(--text-color);
+    border: none;
+    border-radius: 12px;
+    width: 100px;
+    height: 50px;
+    font-size: large;
+  }
+  
+  .filter-toggle-button {
+    margin-bottom: 10px;
+  }
+
+
+  .check-container {
+    display: block;
+    position: relative;
+    padding-left: 35px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    font-size: 22px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+  
+  /* Hide the browser's default checkbox */
+  .check-container input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+  }
+  
+  /* Create a custom checkbox */
+  .checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 25px;
+    width: 25px;
+    background-color: #eee;
+  }
+  
+  /* On mouse-over, add a grey background color */
+  .check-container:hover input ~ .checkmark {
+    background-color: #ccc;
+  }
+  
+  /* When the checkbox is checked, add a blue background */
+  .check-container input:checked ~ .checkmark {
+    background-color: #2196F3;
+  }
+  
+  /* Create the checkmark/indicator (hidden when not checked) */
+  .checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+  }
+  
+  /* Show the checkmark when checked */
+  .check-container input:checked ~ .checkmark:after {
+    display: block;
+  }
+  
+  /* Style the checkmark/indicator */
+  .check-container .checkmark:after {
+    left: 9px;
+    top: 5px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+  }
+  .multiple-choice {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  label {
+    margin-bottom: 10px;
+  }
+  
+  input[type="radio"] {
+    display: none;
+  }
+  
+  input[type="radio"] + span {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 1px solid #999999;
+    border-radius: 50%;
+    margin-right: 5px;
+    position: relative;
+    top: 4px;
+  }
+  
+  input[type="radio"]:checked + span::after {
+    content: '';
+    display: block;
+    width: 8px;
+    height: 8px;
+    background-color: #999999;
+    border-radius: 50%;
+    position: absolute;
+    top: 3px;
+    left: 3px;
+  }
+  
+
+
+
+  .stream-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+  }
+  
+  .stream-overlay.active {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .stream-container {
+    background-color: var(--body-color);
+    color: var(--text-color);
+    padding: 20px;
+    border-radius: 5px;
+    width: 30%;
+    padding: 50px;
+    
+  }
+  
+  .stream-input-group {
+    margin-bottom: 15px;
+    border-radius: 20px;
+  }
+  
+  .stream-input-group label {
+    display: block;
+    margin-bottom: 5px;
+  }
+  
+  .stream-input-group input,
+  .stream-input-group select {
+    width: 100%;
+    padding: 5px;
+    border-radius: 20px;
+  }
+  
+  .stream-buttons {
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .stream-buttons button {
+    margin-right: 30px;
+    padding: 5px 10px;
+    background-color: var(--supporting-text-color);
+    color: var(--text-color);
+    border: none;
+    border-radius: 12px;
+    width: 30%;
+    font-size: large;
+  }
+  
+  .stream-toggle-button {
+    margin-bottom: 10px;
+  }
+
+
+
+
+
+
+
+
+  
+  @media screen and (min-width: 542px) {
+  
+    .stacks_list {
+      width: 100%;
+    }
+
+    .stack-items {
+      grid-template-columns: repeat(2, 1fr);
+
+  }
+}
+  
+  /* For large devices */
+  @media screen and (min-width: 768px) {
+    .stacks_list {
+      width: 100%;
+    } 
+
+
+
+    .stack-items {
+      grid-template-columns: repeat(3, 1fr);
+     
+    }
+
+  }
+  
+  @media screen and (min-width: 1200px) {
+
+    .stacks_list {
+      width: 100%;
+      margin-right: 0;
+    }
+    .stack-items {
+      grid-template-columns: repeat(5, 1fr);
+     
+    }
+
+  }
+  @media screen and (min-width: 1350px) {
+    .stack-items {
+      grid-template-columns: repeat(5, 1fr);
+     
+    }
+  }
+  @media screen and (max-width: 400px) {
+  
+    .stack-items {
+      grid-template-columns: repeat(1, 1fr);
+    
+    }
+   
+  }
+  
+
+  

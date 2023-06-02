@@ -1,0 +1,864 @@
+{% block content %}
+{% load static %}
+{% load humanize %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Stackon Pro</title>
+    <!---===============  FAVICON =======================  -->
+    <link rel="shortcut icon" href="{% static '/images/logo.ico' %}" type="image/x-icon" />
+    <!--- ============== CUSTOM CSS LINK ==================  -->
+    <link rel="stylesheet" href="{% static 'css/livestream.css' %}" />
+    
+    <!-- =============== SWIPER CSS LINK =================== -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css"
+    />
+    <!--=============== BOXICONS ===============-->
+    <link
+      href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+      rel="stylesheet"
+    />
+    <!--- =============== GOOGLE FONT LINK ================== -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="https://unpkg.com/isotope-layout@3/dist/isotope.pkgd.js"></script>
+    <!-- or -->
+    <script src="https://unpkg.com/isotope-layout@3/dist/isotope.pkgd.min.js"></script>
+    <script src="{% static 'js/isotope.pkgd.js' %}"></script>
+    <script src="{% static 'js/isotope.pkgd.min.js' %}"></script>
+    <script>
+      if (window.history.replaceState) {
+        window.history.replaceState(null, null, window.location.href);
+      }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/@metamask/detect-provider"></script>
+    
+  </head>
+  <body id="top">
+<!-- =================== HEADER ===================================== -->
+  <header class="header" id="header">
+    <div class="banner">
+      <div class="banner-container">
+        {% for asset in assets %}
+        <h5 class="banner_asset">{{asset.name }}:</h5>
+        {% if asset.trend_percent >= 0.0 %}
+        <h5 class="banner_asset_increase pos">+{{ asset.trend_percent }}%</h5>
+        {% elif asset.trend_percent <= 0.0 %}
+        <h5 class="banner_asset_increase neg">{{ asset.trend_percent }}%</h5>
+        {% else %}
+        <h5 class="banner_asset_increase neu">{{ asset.trend_percent }}%</h5>
+        {% endif %}    
+        {%endfor%}
+      </div>
+    </div>
+    <div class="nav">
+      <div class="header-left">
+        <a href="/" class="logo header-item">
+          <img src="{% static 'images/stackon-logo.png' %}" alt="Stackon logo" />
+        </a>
+        <div class="header-menu">
+          <a href="/" class="header-menu-item">Dashboard</a>
+          <a href="/stacks" class="header-menu-item">My Stack</a>
+          <a href="/storefront" class="header-menu-item">Storefront</a>
+          <a href="/livestream" class="header-menu-item active" >Geek TV</a>
+          <a href="/community" class="header-menu-item">Community</a>
+          <a href="/playground"  id="playground" class="header-menu-item" style="display: none;">Playground</a>
+        </div>
+        </div>
+      
+      <div class="header-right">
+        <div class="switch">
+          <div>Stackon Pro</div>
+          <label class="toggle-container">
+              <input type="checkbox" id="toggle-checkbox">
+              <span class="toggle-slider"></span>
+          </label>
+        </div>
+        {% if not user.is_authenticated %}
+        
+        <button id="auth-button" class="btn btn-secondary header-item">Connect Wallet</button>
+  
+        <div class="header-others">
+          <i class='bx bx-search searchicon header-item'></i>
+          <i class="bx bx-moon change-theme header-item" id="theme-button"></i>
+          <span class="english">English<i class='bx bxs-down-arrow' ></i></span>
+          <span class="usd_format">
+            <i class='bx bxs-badge-dollar header-item'>USD<i class='bx bxs-down-arrow' ></i></i>          
+          </span>
+        </div>
+        
+        {% else %}
+        <div class="profile-picture">
+          <img src="{% static 'images/' %}{{ profile.wallet_avatar }}" alt="Avatar">
+        </div>
+        <div class="wallet-id">
+          <label for="wallet-id">Wallet ID:</label>
+          <p id="wallet-id">{{ user_short }}...</p>
+        </div>
+        <div class="header-others">
+          <i class='bx bx-search searchicon header-item'></i>
+          <i class="bx bx-moon change-theme header-item" id="theme-button"></i>
+          <span class="english">English<i class='bx bxs-down-arrow' ></i></span>
+          <span class="usd_format">
+            <i class='bx bxs-badge-dollar header-item'>USD<i class='bx bxs-down-arrow' ></i></i>          
+          </span>
+        </div>   
+        {% endif %}
+      </div>
+      
+      <div class="small-screen-toggle">
+        <i class='bx bx-menu'></i>
+      </div>
+      <div class="small-screen-menu">
+        <div class="small-screen-toggle remove-menu-bar" >
+          <i class='bx bx-x' ></i>
+        </div>
+        {% if user.is_authenticated %}
+        <div class="profile-picture-small-menu profile-picture">
+          <img src="{% static 'images/' %}{{ profile.wallet_avatar }}" alt="Profile Picture">
+          <div class="wallet-id">
+          
+            <label for="wallet-id">Wallet ID:</label>
+            <p id="wallet-id">{{profile.wallet_id}}</p>
+          </div>
+        </div>
+        
+        {% endif %}
+        <div class="header-others">
+          
+          <i class="bx bx-moon change-theme header-item" id="theme-button"></i>
+          <span class="english">English<i class='bx bxs-down-arrow' ></i></span>
+          <span class="usd_format">
+            <i class='bx bxs-badge-dollar header-item'>USD<i class='bx bxs-down-arrow' ></i></i>          
+          </span>
+        </div>
+        <div class="header-menu-small">
+          <h3 href="/stacks" class="header-menu-item-small">My Stack</h3>
+          <h3 href="/storefront" class="header-menu-item-small">Storefront</h3>
+          <h3 href="/assets" class="header-menu-item-small">My Assets</h3>
+          <h3 href="/lives" class="header-menu-item-small">Geek TV</h3>
+          <h3 href="/community" class="header-menu-item-small">Community</h3>
+          
+        </div>
+
+      </div>
+      
+      
+    </div>
+    <!-- Theme Change Button-->
+  </header>
+
+<!-- ================== MAIN SECTION ================================ -->
+  <main>
+    <!-- ===================== HERO CAROUSEL SECTION ============== -->
+    <section class="hero-carousel section" id="hero-carousel">
+      <div class="stream-overlay">
+        <div class="stream-container">
+          <div class="stream-input-group">
+            <label for="stream-title">Stream Title:</label>
+            <input type="text" id="stream-title">
+          </div>
+          <div class="stream-input-group">
+            <label for="stream-description">Stream Description:</label>
+            <input type="text" id="stream-description">
+          </div>
+          <div class="stream-input-group">
+            <label for="stream-category">Stream API Key:</label>
+            <input type="text" id="stream-api-key">
+          </div>
+          <div class="stream-input-group">
+            <label for="stream-category">Stream Secret Key:</label>
+            <input type="text" id="stream-secret-key">
+          </div>
+          <div class="stream-buttons">
+            <button id="stream-cancel-button">Cancel</button>
+            <button id="stream-confirm-button">Confirm</button>
+          </div>
+        </div>
+      </div>
+      <div class="all-video-container">
+        <span>
+          <button id="toggle-stream-button" class="btn start-live-btn" style="display: none;">Start Stream</button>
+          <button id="end-stream-button" class="btn end-live-btn negative">End Stream</button>
+          <button id="go-stream-button" class="btn go-live-btn positive">Go Live</button>
+        </span>
+      
+        {% if livestream%}
+        {% for live in livestream %}
+        <div class="video-container">
+          <div  id="video" class="video">
+            <!-- <iframe class="live-video" src="{{live.url}}" border="0" width="100%" height="100%" allowfullscreen></iframe> -->
+            <video id="screen-video-{{live.id}}" class="live-video"  height="100%" controls autoplay ></video>
+
+          </div>
+          <div class="video-details">
+            <span><h3 class="video-title">{{live.title}}</span>
+            <span class="video-badge-time"><p>{{live.badges}} badges | </p><p class="stream-time">  Started {{ live.time_stamp }} ago</p></span>
+            <span class="video-owner">
+              <img src="{% static 'images/' %}{{ live.creator.wallet_avatar }}" alt="Avatar">
+              <p>{{live.creator.user}}</p>
+            </span>
+            <span class="video-description"><p>{{live.description}}</p></span>
+            <span id="live-icon" style="display: none;" ><p  class="live-icon positive">{{live.status}}</p></span>
+            <span id="draft-icon" ><p  class="live-icon negative">DRAFT</p></span>
+
+            
+          </div>
+         
+        </div>     
+        {% endfor %}
+        {% else %}
+        <div class="no-stream">
+          <h3 id="no-stream-text" class=""> </h3>
+        </div>
+        {%endif %}
+        <div class="video-container">
+          <div  id="video" class="video">
+            <!-- <iframe class="live-video" src="{{live.url}}" border="0" width="100%" height="100%" allowfullscreen></iframe> -->
+            <iframe src="https://player.thetavideoapi.com/video/video_5uzztb9hf84m5bvppyisrqiy3v" 
+                border="0" 
+                width="100%" 
+                height="100%"
+                allowfullscreen></iframe>
+
+          </div>
+          <div class="video-details">
+            <span><h3 class="video-title">Welcome to Stackon-verse | Genesis of the Stackon Geeks | Revolutionizing the Way You Invest in NFTs </span>
+            <span class="video-badge-time"><p>239 badges | </p><p class="stream-time">  Started 12 days ago</p></span>
+            <span class="video-owner">
+              <img src="{% static 'images/logo.ico' %}" alt="Avatar">
+              <p>Stackon</p>
+            </span>
+            <span class="video-description"><p>Using AI-Powered Stack Geeks NFTs to Monitor, Evaluate, and Predict Your NFT Portfolio with the Sentiment Precision and Insight from World investors on Twitter, Telegram, Discord and Reddit.</p></span>
+            <span><p class="s-live-icon negative">PINNED</p></span>
+          </div>
+         
+        </div>
+      </div>
+    </section>
+  </main>
+
+
+    <!--- ======================== CUSTOM JS LINK========================== -->
+    <script src="{% static 'js/script.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mixitup/3.3.1/mixitup.min.js" integrity="sha512-nKZDK+ztK6Ug+2B6DZx+QtgeyAmo9YThZob8O3xgjqhw2IVQdAITFasl/jqbyDwclMkLXFOZRiytnUrXk/PM6A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="{% static 'js/typeahead.bundle.js' %}"></script>
+    <!--=============== MIXITUP FILTER ===============-->
+    <script src="{% static 'js/mixitup.min.js' %}"></script>
+    <!-- <script src="{% static 'js/isotope-docs.min.js' %}"></script> -->
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.4.0/dist/web3.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@metamask/detect-provider@2.0.0/dist/index.min.js"></script>
+    <!---======================= ICON LINK ========================= -->
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mixitup/3.3.1/mixitup.min.js" integrity="sha512-nKZDK+ztK6Ug+2B6DZx+QtgeyAmo9YThZob8O3xgjqhw2IVQdAITFasl/jqbyDwclMkLXFOZRiytnUrXk/PM6A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <script>
+      function updateDropdownOptions3(dropdownValues) {
+          const dropdownIdTheta = 'theta'; // ID of the dropdown related to 'theta'
+          const containerIdToHide = 'playground'; // ID of the container to hide
+          const containerIdToHide2 = 'toggle-stream-button';
+          // const noStreamText = document.getElementById('no-stream-text');
+
+          const thetaEnabled = dropdownValues[dropdownIdTheta];
+          const containerToHide = document.getElementById(containerIdToHide);
+
+          if (containerToHide) {
+              containerToHide.style.display = thetaEnabled ? 'block' : 'none';
+          }
+          const containerToHide2 = document.getElementById(containerIdToHide2);
+          if (containerToHide2) {
+              containerToHide2.style.display = thetaEnabled ? 'block' : 'none';
+              noStreamText.innerHTML =  thetaEnabled ? 'No Stream at the moment. Ready to go live? Click on the Start Stream Button.' : 'Oooops, you cannot stream, sorry! Visit the Storefront to mint a Theta Geek NFT to stream on the Theta P2P Video Delivery Network and also earn TFUEL from stream badges.'
+          }
+      }
+
+
+      // Example dictionary with values indicating whether a dropdown option should be enabled
+      fetch('features_dict', {
+          method: 'GET',
+          headers: {
+              'Content-Type': 'application/json'
+          }
+          })
+          .then(response => response.json())
+          .then(data => {
+          // 'data' variable contains the feature_dict dictionary
+          console.log(data);
+          // Perform further operations with the dictionary
+          updateDropdownOptions3(data);
+
+          })
+          .catch(error => {
+          console.error('Error:', error);
+          });
+
+    </script>
+
+    <script>
+
+        const toggleStreamButton = document.getElementById('toggle-stream-button')
+        const confirmButton = document.getElementById('stream-confirm-button');
+        const overlay = document.querySelector('.stream-overlay');
+        const endStreamButton = document.getElementById('end-stream-button');
+        const goStreamButton = document.getElementById('go-stream-button');
+        const cancelButton = document.getElementById('stream-cancel-button');
+        
+        var liveIcon = document.getElementById('live-icon');
+        var draftIcon = document.getElementById('draft-icon');
+        function saveStreamDetails() {
+            // Get the stream details from the input fields
+            var streamTitle = document.getElementById('stream-title').value;
+            var streamDescription = document.getElementById('stream-description').value;
+            var streamAPIKey = document.getElementById('stream-api-key').value;
+            var streamSecretKey = document.getElementById('stream-secret-key').value;
+
+            // Store the stream details in local storage
+            localStorage.setItem('streamTitle', streamTitle);
+            localStorage.setItem('streamDescription', streamDescription);
+            localStorage.setItem('streamAPIKey', streamAPIKey);
+            localStorage.setItem('streamSecretKey', streamSecretKey);
+        }
+
+        // Retrieve the stream title and description from Local Storage
+        function retrieveStreamDetails() {
+            var streamTitle = localStorage.getItem('streamTitle');
+            var streamDescription = localStorage.getItem('streamDescription');
+            var streamAPIKey = localStorage.getItem('streamAPIKey');
+            var streamSecretKey = localStorage.getItem('streamSecretKey');
+
+            if (streamTitle && streamDescription && streamAPIKey && streamSecretKey) {
+                document.getElementById('stream-title').value = streamTitle;
+                document.getElementById('stream-description').value = streamDescription;
+                document.getElementById('stream-api-key').value = streamAPIKey 
+                document.getElementById('stream-secret-key').value = streamSecretKey 
+
+            }
+        }
+
+        function initiateStream() {
+
+           // Retrieve the stream details from Local Storage
+          const streamTitle = localStorage.getItem('streamTitle');
+          const streamDescription = localStorage.getItem('streamDescription');
+          const streamAPIKey = localStorage.getItem('streamAPIKey');
+          const streamSecretKey = localStorage.getItem('streamSecretKey');
+
+          const overlay = document.querySelector('.stream-overlay');
+          const toggleStreamButton = document.getElementById('toggle-stream-button');
+          const endStreamButton = document.getElementById('end-stream-button');
+          const cancelButton = document.getElementById('stream-cancel-button');
+          const confirmButton = document.getElementById('stream-confirm-button');
+          const liveIcon = document.querySelector('live-icon');
+          const draftIcon = document.querySelector('draft-icon');
+
+          // Send the stream URL to Django backend
+          $.ajax({
+              url: 'start_stream',
+              method: 'POST',
+              data: {
+                streamTitle: streamTitle,
+                streamDescription: streamDescription,
+                streamAPIKey: streamAPIKey,
+                streamSecretKey: streamSecretKey
+              },
+              success: function(response) {
+                console.log('DATA SENT')
+                window.location.href = '/livestream';
+                
+                
+                
+                
+                
+              },
+              error: function(error) {
+                console.log('NOT SENT')
+              }
+            });
+            setTimeout(() => {
+                  toggleStreamButton.style.display = 'none';
+                  goStreamButton.style.display = 'block';
+                }, 5000);
+                
+            
+            
+
+        }
+
+        function startStream() {
+          // Retrieve the stream details from Local Storage
+          const streamTitle = localStorage.getItem('streamTitle');
+          const streamDescription = localStorage.getItem('streamDescription');
+          const streamAPIKey = localStorage.getItem('streamAPIKey');
+          const streamSecretKey = localStorage.getItem('streamSecretKey');
+
+          const overlay = document.querySelector('.stream-overlay');
+          const toggleStreamButton = document.getElementById('toggle-stream-button');
+          const endStreamButton = document.getElementById('end-stream-button');
+          const cancelButton = document.getElementById('stream-cancel-button');
+          const confirmButton = document.getElementById('stream-confirm-button');
+          const liveIcon = document.getElementById('live-icon');
+          const draftIcon = document.getElementById('draft-icon');
+
+
+          if (streamTitle && streamDescription && streamAPIKey && streamSecretKey) {
+            var options = {
+              'method': 'POST',
+              'url': 'https://api.thetavideoapi.com/stream',
+              'headers': {
+                'x-tva-sa-id': streamAPIKey,
+                'x-tva-sa-secret': streamSecretKey,
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                "name": streamTitle,
+                "resolutions": ["160p", "240p", "360p", "720p", "source"],
+                "source_resolution": "720p",
+                "fps": 60
+              })
+            };
+
+            
+        
+
+            navigator.mediaDevices.getDisplayMedia({ video: true, audio: false })
+              .then(function(stream) {
+                // Success: Get the screen stream
+                goStreamButton.style.display = 'none';
+                endStreamButton.style.display = 'block'
+                liveIcon.style.display = 'block'
+                draftIcon.style.display = 'none'
+                
+                var screenTrack = stream.getTracks()[0];
+                var screenStream = new MediaStream([screenTrack]);
+
+                // Attach the screen stream to the corresponding video elements
+                var videoElements = document.getElementsByClassName('live-video');
+                for (var i = 0; i < videoElements.length; i++) {
+                  var videoElement = videoElements[i];
+                  videoElement.srcObject = screenStream;
+                  
+                  videoElement.play();       
+                }
+                 // Enable full screen button
+                 var fullScreenButton = document.getElementById('video');
+                  fullScreenButton.addEventListener('click', function () {
+                  if (videoElement.requestFullscreen) {
+                      videoElement.requestFullscreen();
+                  } else if (videoElement.mozRequestFullScreen) { // Firefox
+                      videoElement.mozRequestFullScreen();
+                  } else if (videoElement.webkitRequestFullscreen) { // Chrome, Safari and Opera
+                      videoElement.webkitRequestFullscreen();
+                  } else if (videoElement.msRequestFullscreen) { // IE/Edge
+                      videoElement.msRequestFullscreen();
+                  }
+                  });
+
+                   // Send the screen stream to Theta
+                   screenTrack.onended = function () {
+                      // Clean up and stop the stream
+                      screenStream.getTracks().forEach(track => track.stop());
+
+                      // Make a request to stop the Theta stream
+                      request(options, function (error, response) {
+                          if (error) throw new Error(error);
+                          console.log(response.body);
+                      
+                  });
+                  };
+           
+
+                // Rest of your code...
+              })
+              .catch(function(error) {
+                // Error: Failed to get the screen stream
+                console.error('Error accessing screen stream:', error);
+              });
+          }
+        }
+       
+        function openOverlay() {
+            overlay.classList.add('active');
+          }
+
+        function closeOverlay() {
+            overlay.classList.remove('active');
+          }
+
+        toggleStreamButton.addEventListener('click', function() {
+            openOverlay();
+            retrieveStreamDetails();
+          });
+
+        cancelButton.addEventListener('click', function() {
+            closeOverlay();
+          });
+
+        endStreamButton.addEventListener('click', function() {
+
+                // Send the stream URL to Django backend
+                $.ajax({
+                url: 'delete_stream',
+                method: 'POST',
+                data: {
+
+                },
+                success: function(response) {
+                    // Handle success if needed
+                    toggleStreamButton.style.display = 'block';
+                    endStreamButton.style.display = 'none';    
+                    window.location.href = '/livestream';
+                },
+                error: function(error) {
+                    // Handle error if needed 
+                }
+                });
+                
+            });
+
+        confirmButton.addEventListener('click', function() {
+          // Retrieve the stream details and start the stream if they exist
+          saveStreamDetails();
+          closeOverlay();
+          initiateStream();
+        });
+
+        goStreamButton.addEventListener('click', function() {
+          // Retrieve the stream details and start the stream if they exist
+          startStream();
+        });
+    </script> 
+ 
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        var toggleCheckbox = document.getElementById('toggle-checkbox');
+  
+        toggleCheckbox.addEventListener('change', function() {
+          if (toggleCheckbox.checked) {
+            // Redirect to the /playground URL
+            window.location.href = '/';
+          } else {
+            // Do nothing (stay on the current URL)
+            window.location.href = '/playground';
+          }
+        });
+  
+        // Optionally, you can check the current URL and update the toggle state accordingly
+        if (window.location.href.includes('/')) {
+          toggleCheckbox.checked = true;
+        }
+
+        if (window.location.href.includes('/playground')) {
+          toggleCheckbox.checked = false;
+        }
+      });
+    </script>
+    
+    <script>
+      window.ethereum.on('accountsChanged', function(accounts) {
+        // Check if Metamask is available
+        if (typeof window.ethereum !== 'undefined') {
+              // Request the user's permission to connect the wallet
+              // Get the previous accounts length from local storage
+              var previousAccountsLength = localStorage.getItem('metamaskAccountsLength');
+              window.ethereum.request({ method: 'eth_accounts' })
+                  .then(function(accounts) {
+                      // Retrieve the selected account (wallet address)
+                      var walletAddress = accounts[0];
+                      console.log("PREVIOUS")
+                      console.log(previousAccountsLength);
+                      var currentAccountsLength = accounts.length;
+                      console.log("NOW")
+                      console.log(currentAccountsLength);
+
+
+                      if (previousAccountsLength > 0 && currentAccountsLength === 0) {
+                        // Wallet was disconnected
+                        window.location.href = "{% url 'disconnect' %}";
+                      }
+
+                       // Store the current accounts length in local storage
+                      localStorage.setItem('metamaskAccountsLength', currentAccountsLength);
+                    })
+                  .catch(function(error) {
+                      // Handle connection error
+                      console.log(error);
+                  });
+          } else {
+              // Metamask is not available
+              console.log('Metamask is not installed');
+          }
+      });
+
+    </script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+      // Get the connect button element
+      var connectButton = document.getElementById('auth-button');
+
+      // Attach a click event listener to the connect button
+      connectButton.addEventListener('click', function() {
+          // Check if Metamask is available
+          if (typeof window.ethereum !== 'undefined') {
+              // Request the user's permission to connect the wallet
+              window.ethereum.request({ method: 'eth_requestAccounts' })
+                  .then(function(accounts) {
+                      // Retrieve the selected account (wallet address)
+                      var walletAddress = accounts[0];
+
+                      // Submit the form with the wallet address
+                      var form = document.createElement('form');
+                      form.method = 'POST';
+                      form.action = '{% url "connect" %}';
+
+                      var input = document.createElement('input');
+                      input.type = 'hidden';
+                      input.name = 'wallet_address';
+                      input.value = walletAddress;
+
+                      form.appendChild(input);
+                      document.body.appendChild(form);
+
+                      form.submit();
+                      var currentAccountsLength = accounts.length;
+                      localStorage.setItem('metamaskAccountsLength', currentAccountsLength);
+                  })
+                  .catch(function(error) {
+                      // Handle connection error
+                      console.log(error);
+                  });
+          } else {
+              // Metamask is not available
+              console.log('Metamask is not installed');
+          }
+      });
+  });
+
+    </script>
+
+    <script>
+      const toggleButton = document.querySelector(".small-screen-toggle");
+      const menuBar = document.querySelector(".small-screen-menu");
+      const removeMenuBar = document.querySelector(".remove-menu-bar");
+
+      toggleButton.addEventListener("click", function () {
+        if (menuBar.classList.contains("active")) {
+          menuBar.classList.remove("active");
+        } else {
+          menuBar.classList.add("active");
+        }
+      });
+
+      
+      removeMenuBar.addEventListener("click", function () {
+        menuBar.classList.remove("active");
+      });
+
+    </script>
+    <script>
+      $(document).ready(function() {
+      $('.edit-asset-btn').on('click', function() {
+        var assetId = $(this).data('asset-id');
+        var assetValueElement = $('.asset-value[data-asset-id="' + assetId + '"]');
+        var saveButton = $('.save-asset-btn[data-asset-id="' + assetId + '"]');
+        var editButton = $('.edit-asset-btn[data-asset-id="' + assetId + '"]');
+
+        assetValueElement.attr('contenteditable', true);
+        assetValueElement.css('background-color', 'white');
+        assetValueElement.css('color', 'black');
+        assetValueElement.css('border', 'none');
+        saveButton.show();
+        editButton.hide();
+      });
+
+      $('.save-asset-btn').on('click', function() {
+        var assetId = $(this).data('asset-id');
+        var saveButton = $('.save-asset-btn[data-asset-id="' + assetId + '"]');
+        var editButton = $('.edit-asset-btn[data-asset-id="' + assetId + '"]');
+        var assetValueElement = $('.asset-value[data-asset-id="' + assetId + '"]');
+        assetValueElement.css('background-color', '');
+        assetValueElement.css('color', '');
+        assetValueElement.css('border', '');
+        saveButton.hide();
+        editButton.show();
+        var assetId = $(this).data('asset-id');
+        var assetValueElement = $('.asset-value[data-asset-id="' + assetId + '"]');
+        var editedValue = assetValueElement.text().trim();
+        var originalValue = assetValueElement.data('original-value');
+
+        if (editedValue !== originalValue) {
+          $.ajax({
+            url: 'update_asset_value',
+            method: 'POST',
+            data: { asset_id: assetId, asset_value: editedValue },
+            success: function(response) {
+              assetValueElement.attr('contenteditable', false);
+              $('.save-asset-btn[data-asset-id="' + assetId + '"]').hide();
+              // You can update the asset value in the DOM with the edited value here
+            },
+            error: function(xhr, status, error) {
+              // Handle errors
+            }
+          });
+        }
+      });
+
+      $('.delete-asset-btn').on('click', function() {
+        var assetId = $(this).data('asset-id');
+        var assetDelete = $('.delete-asset-btn[data-asset-id="' + assetId + '"]');
+        $.ajax({
+            url: 'delete_asset',
+            method: 'POST',
+            data: { asset_id: assetId},
+            success: function(response) {
+              $('.delete-asset-btn[data-asset-id="' + assetId + '"]').hide();
+              location.reload();
+              // You can update the asset value in the DOM with the edited value here
+            },
+            error: function(xhr, status, error) {
+              // Handle errors
+            }
+          });
+    });
+  });
+
+    </script>
+      
+    <script>
+      $(document).ready(function() {
+        // Initialize the typeahead input
+        var engine = new Bloodhound({
+          remote: '/search?query=%QUERY',
+          datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
+          queryTokenizer: Bloodhound.tokenizers.whitespace
+        });
+        engine.initialize();
+        $('#search').typeahead({
+          hint: true,
+          highlight: true,
+          minLength: 1
+        }, {
+          displayKey: 'name',
+          source: engine.ttAdapter(),
+          templates: {
+            suggestion: function(data) {
+              return '<div>' + data.name + '</div>';
+            }
+          }
+        });
+
+        // Handle the "Add Asset" button click event
+        $('#search-form').on('submit', function(event) {
+          event.preventDefault();
+          var selectedAsset = $('#search').typeahead('val');
+          $.ajax({
+            url: 'add_asset_to_stack',
+            type: 'POST',
+            data: {
+              'asset_name': selectedAsset
+            },
+            success: function(data) {
+                if (data.success) {
+                    location.reload(); // reload the page on success
+                } else {
+                  $('#error-message').html('Failed to add asset to stack: ' + data.message);
+                }
+            },
+            error: function(xhr, textStatus, errorThrown) {
+              $('#error-message').html('Failed to add asset to stack: ' + errorThrown);
+            }
+          });
+        });
+      });
+
+    </script>
+    <script>
+      const filterButtons = document.querySelectorAll('.filter-button');
+      // Get the active button value from local storage or set it to null if it doesn't exist
+      let activeButton = localStorage.getItem('activeButton') || null;
+      // Set the active class on the appropriate button based on the stored value
+      let scrollPosition = 0; // initialize scroll position
+      if (activeButton) {
+          filterButtons.forEach(button => {
+              if (button.value === activeButton) {
+                  button.classList.add('active');
+                  
+              }
+          });
+      }
+
+      // Add event listener to each filter button
+      filterButtons.forEach(button => {
+          button.addEventListener('click', () => {
+              // Set the active class on the clicked button and remove it from all other buttons
+              filterButtons.forEach(button => {
+                  button.classList.remove('active');
+              });
+              button.classList.add('active');
+              // Update the stored active button value
+              activeButton = button.value;
+              localStorage.setItem('activeButton', activeButton);
+              // Submit the form and reload the page
+              // Get the current scroll position before the page reloads
+              // scrollPosition = window.scrollY;
+              button.form.submit();
+              // location.reload()
+          });
+      });
+
+      // Set the scroll position after the page reloads
+      window.onload = function() {
+        window.scrollTo(0, scrollPosition);
+      };
+
+
+    </script>
+    <script>
+      var swiper = new Swiper(".mySwiper", {
+        spaceBetween: 30,
+        centeredSlides: true,
+        autoplay: {
+          delay: 2500,
+          disableOnInteraction: false,
+        },
+        pagination: {
+          el: ".swiper-pagination",
+          clickable: true,
+        },
+
+      });
+
+     
+      var allswiper = new Swiper(".allSwiper", {
+        spaceBetween: 30,
+        centeredSlides: true,
+        pagination: {
+          el: ".swiper-pagination",
+          clickable: true,
+        },
+        navigation: {
+          nextEl: ".swiper-button-next",
+          prevEl: ".swiper-button-prev",
+        },
+      });
+        
+    </script>
+
+</body>
+</html>
+{% endblock content %}

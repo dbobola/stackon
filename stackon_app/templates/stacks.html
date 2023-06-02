@@ -1,0 +1,1106 @@
+{% block content %}
+{% load static %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Stackon Pro</title>
+    <!---===============  FAVICON =======================  -->
+    <link rel="shortcut icon" href="{% static '/images/logo.ico' %}" type="image/x-icon" />
+    <!--- ============== CUSTOM CSS LINK ==================  -->
+    <link rel="stylesheet" href="{% static 'css/stacks.css' %}" />
+    
+    <!-- =============== SWIPER CSS LINK =================== -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css"
+    />
+    <!--=============== BOXICONS ===============-->
+    <link
+      href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+      rel="stylesheet"
+    />
+    <!--- =============== GOOGLE FONT LINK ================== -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    
+    
+
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="https://unpkg.com/isotope-layout@3/dist/isotope.pkgd.js"></script>
+    <!-- or -->
+    <script src="https://unpkg.com/isotope-layout@3/dist/isotope.pkgd.min.js"></script>
+    <script src="{% static 'js/isotope.pkgd.js' %}"></script>
+    <script src="{% static 'js/isotope.pkgd.min.js' %}"></script>
+    <script>
+      if (window.history.replaceState) {
+        window.history.replaceState(null, null, window.location.href);
+      }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/@metamask/detect-provider"></script>
+    
+  </head>
+  <body id="top">
+    
+<!-- ================== MAIN SECTION ================================ -->
+    <main>
+      <!-- ===================== STACKS ===================== -->
+      {% if user.is_authenticated %}
+      <section class="section top-stacks">
+        <div class="">
+            <div class="stacks_list">
+              <div class="stacks_container">   
+                <div class="header">
+                    <a href="/" class="logo">
+                        <img src="{% static 'images/stackon-logo.png' %}" alt="Stackon logo" />
+                    </a>
+                    <div class="switch-stream">
+                        <div class="switch">
+                            <div>Stackon Pro</div>
+                            <label class="toggle-container">
+                                <input type="checkbox" id="toggle-checkbox">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <span>
+                            <button onclick="openLinkInNewTab('/livestream')" id="toggle-stream-button" class="btn go-live-btn " style="display: none;">Stream on Geek TV</button>
+                        </span>
+                    </div>    
+                </div>
+               
+                <div class="modifier-container">
+                    <div class="modifier-results">
+                        <img class="modifier-avatar" src="{% static 'images/geek.png' %}" alt="Stackon logo" />
+                          <div class="chat-box">
+                            <div class="content">
+                              <p id="typing-text"></p>
+                            </div>
+                          </div>
+                    </div> 
+                    <div class="modifier-btn">
+                        <button  id="add-modifier-btn" class="add-modifier-btn btn">Add Modifier</button>
+                    </div>
+                </div>
+                <div class="filter-overlay">
+                    <div class="filter-container">
+                        <form id="my-form" method="POST" action="/stacks">
+                        <div class="filter-sections">
+                            <div class="filter-section">    
+                                <p class="filter-section-title">Blockchain</p>
+                                <div class="filter-subsection">
+                                    <div class="filter-input-group">
+                                        <label for="ethereum">Ethereum:</label>
+                                        <select id="ethereum">
+                                            <option value="none">-----</option>
+                                            <option value="Ethereum">Select</option>
+                                        </select>
+                                    </div> 
+                                    <div class="filter-input-group">
+                                        <label for="theta">Theta:</label>
+                                        <select id="theta">
+                                            <option value="none">-----</option>
+                                            <option value="Theta">Select</option>
+                                        </select>
+                                    </div>     
+                                    <div class="filter-input-group">
+                                        <label for="solana">Solana:</label>
+                                        <select id="solana">
+                                            <option value="none">-----</option>
+                                            <option value="Solana">Select</option>
+                                        </select>
+                                    </div>     
+                                    <div class="filter-input-group">
+                                        <label for="polygon">Polygon:</label>
+                                        <select id="polygon">
+                                            <option value="none">-----</option>
+                                            <option value="Polygon">Select</option> 
+                                        </select>
+                                    </div>  
+                                    <div class="filter-input-group">
+                                        <label for="bnb">BNB:</label>
+                                        <select id="bnb">
+                                            <option value="none">-----</option>
+                                            <option value="BNB">Select</option>
+                                            
+                                        </select>
+                                    </div>  
+                                    <div class="filter-input-group">
+                                        <label for="tezos">Tezos:</label>
+                                        <select id="tezos">
+                                            <option value="none">-----</option>
+                                            <option value="Tezos">Select</option>
+                                        </select>
+                                    </div>  
+                                </div>
+                            </div>
+                            <div class="filter-section">    
+                                <p class="filter-section-title">Market Data</p>
+                                <div class="filter-subsection">
+                                    <div class="filter-input-group">
+                                        <label for="floor-price">Floor Price:</label>
+                                        <select id="floor-price">
+                                            <option value="none">-----</option>
+                                            <option value="ZEROFIFTY">$0 - $49</option>
+                                            <option value="FIFTYHUNDRED">$50 - $99</option>
+                                            <option value="THOUSAND">$100 - $999</option>
+                                            <option value="HUNDREDTHOUSAND">$1000 - $99999</option>
+                                            <option value="MILLION">$99999 and above</option>
+                                        </select>
+                                    </div>       
+                                    <div class="filter-input-group">
+                                        <label for="rarity">Rarity:</label>
+                                        <select id="rarity">
+                                            <option value="none">-----</option>
+                                            <option value="Common">Common</option>
+                                            <option value="Uncommon">Uncommon</option>
+                                            <option value="Rare">Rare</option>
+                                            <option value="Epic">Epic</option>
+                                            <option value="Legendary">Legendary</option>
+                                        </select>
+                                    </div>       
+                                    <div class="filter-input-group">
+                                        <label for="volume">Volume Traded:</label>
+                                        <select id="volume">
+                                            <option value="none">-----</option>
+                                            <option value="BELOW10THOUSAND"> Below $10,000</option>
+                                            <option value="FROM10_100THOUSAND">$10,000 - $99,999</option>
+                                            <option value="FROM100_1MILLION">$100,000 - $999,999</option>
+                                            <option value="FROM1_50MILLION">$1,000,000 - $49,999,999</option>
+                                            <option value="FROM50_500MILLION">$50,000,000 - $499,999,999</option>
+                                            <option value="FROM500_1BILLION">$500,000,000 - $999,999,999</option>
+                                            <option value="ABOVE1BILLION">$1,000,000,000 and Above</option>
+                                        </select>
+                                    </div>          
+                                    <div class="filter-input-group">
+                                        <label for="launch-time">Launch Time:</label>
+                                        <select id="launch-time">
+                                            <option value="none">-----</option>
+                                            <option value="ONEMONTH">Last 1 Month</option>
+                                            <option value="THREEMONTH">Last 3 Months</option>
+                                            <option value="SIXMONTH">Last 6 Months</option>
+                                            <option value="ONEYEAR">Last 1 year</option>
+                                            <option value="TWOYEARS">Last 2 years</option>
+                                            <option value="FIVEYEARS">Last 5 years</option>
+                                        </select>
+                                    </div>       
+                                </div>
+                            </div>
+                            <div class="filter-section">    
+                                <p class="filter-section-title">Recent News</p>
+                                <div class="filter-subsection">
+                                    <div class="filter-input-group">
+                                        <label for="regulations">Regulations:</label>
+                                        <select id="regulations">
+                                        <option value="none">-----</option>
+                                        <option value="True">Select</option>
+                                   
+                                        </select>
+                                    </div>       
+                                    <div class="filter-input-group">
+                                        <label for="partnerships">Partnerships:</label>
+                                        <select id="partnerships">
+                                        <option value="none">-----</option>
+                                        <option value="True">Select</option>
+                                
+                                        </select>
+                                    </div>       
+                                    <div class="filter-input-group">
+                                        <label for="technology-updates">Technology Update:</label>
+                                        <select id="technology-updates">
+                                        <option value="none">-----</option>
+                                        <option value="True">Select</option>
+                                 
+                                        </select>
+                                    </div>       
+                                    <div class="filter-input-group">
+                                        <label for="security-incidents">Security Incidents:</label>
+                                        <select id="security-incidents">
+                                        <option value="none">-----</option>
+                                        <option value="True">Select</option>
+                                       
+                                        </select>
+                                    </div>       
+                                   
+                                </div>
+                            </div>      
+                            <div class="filter-section" id="allplatforms">    
+                                <p class="filter-section-title">All Platforms</p>
+                                <div class="filter-subsection">
+                                    <div class="filter-input-group">
+                                        <label for="overall-influencers">Influencer:</label>
+                                        <select id="overall-influencers">
+                                        <option value="none">-----</option>
+                                        <option value="Positive">Positive</option>
+                                        <option value="Neutral">Neutral</option>
+                                        <option value="Negative">Negative</option>
+                                        
+                                        </select>
+                                    </div>       
+                                    <div class="filter-input-group">
+                                        <label for="overall-investors">Investors:</label>
+                                        <select id="overall-investors">
+                                        <option value="none">-----</option>
+                                        <option value="Positive">Positive</option>
+                                        <option value="Neutral">Neutral</option>
+                                        <option value="Negative">Negative</option>
+                                        </select>
+                                    </div>       
+                                    <div class="filter-input-group">
+                                        <label for="overall-founders">Founders:</label>
+                                        <select id="overall-founders">
+                                        <option value="none">-----</option>
+                                        <option value="Positive">Positive</option>
+                                        <option value="Neutral">Neutral</option>
+                                        <option value="Negative">Negative</option>
+                                        </select>
+                                    </div>       
+    
+                                    <div class="filter-input-group">
+                                        <label for="overall-community">Community:</label>
+                                        <select id="overall-community">
+                                        <option value="none">-----</option>
+                                        <option value="Positive">Positive</option>
+                                        <option value="Neutral">Neutral</option>
+                                        <option value="Negative">Negative</option>
+                                        </select>
+                                    </div>       
+                                    <div class="filter-input-group">
+                                        <label for="overall-social-media">Overall:</label>
+                                        <select id="overall-social-media">
+                                        <option value="none">-----</option>
+                                        <option value="Positive">Positive</option>
+                                        <option value="Neutral">Neutral</option>
+                                        <option value="Negative">Negative</option>
+                                        </select>
+                                    </div>       
+                                </div>
+                            </div>
+                            <div class="filter-section" id="twitter">    
+                                <p class="filter-section-title">Twitter Only</p>
+                                <div class="filter-subsection">
+                                    <div class="filter-input-group">
+                                        <label for="twitter-influencers">Influencer:</label>
+                                        <select id="twitter-influencers">
+                                        <option value="none">-----</option>
+                                        <option value="Positive">Positive</option>
+                                        <option value="Neutral">Neutral</option>
+                                        <option value="Negative">Negative</option>
+                                        </select>
+                                    </div>       
+                                    <div class="filter-input-group">
+                                        <label for="twitter-investors">Investors:</label>
+                                        <select id="twitter-investors">
+                                        <option value="none">-----</option>
+                                        <option value="Positive">Positive</option>
+                                        <option value="Neutral">Neutral</option>
+                                        <option value="Negative">Negative</option>
+                                        </select>
+                                    </div>       
+                                    <div class="filter-input-group">
+                                        <label for="twitter-founders">Founders:</label>
+                                        <select id="twitter-founders">
+                                        <option value="none">-----</option>
+                                        <option value="Positive">Positive</option>
+                                        <option value="Neutral">Neutral</option>
+                                        <option value="Negative">Negative</option>
+                                        </select>
+                                    </div>       
+    
+                                    <div class="filter-input-group">
+                                        <label for="twitter-community">Community:</label>
+                                        <select id="twitter-community">
+                                        <option value="none">-----</option>
+                                        <option value="Positive">Positive</option>
+                                        <option value="Neutral">Neutral</option>
+                                        <option value="Negative">Negative</option>
+                                        </select>
+                                    </div>       
+                                    <div class="filter-input-group">
+                                        <label for="overall-twitter">Overall:</label>
+                                        <select id="overall-twitter">
+                                        <option value="none">-----</option>
+                                        <option value="Positive">Positive</option>
+                                        <option value="Neutral">Neutral</option>
+                                        <option value="Negative">Negative</option>
+                                        </select>
+                                    </div>       
+                                </div>
+                            </div>
+                            <div class="reddit filter-section" id="reddit">    
+                                <p class="filter-section-title">Reddit Only</p>
+                                <div class="filter-subsection">
+                                    <div class="filter-input-group">
+                                        <label for="reddit-influencers">Influencer:</label>
+                                        <select id="reddit-influencers">
+                                        <option value="none">-----</option>
+                                        <option value="Positive">Positive</option>
+                                        <option value="Neutral">Neutral</option>
+                                        <option value="Negative">Negative</option>
+                                        </select>
+                                    </div>       
+                                    <div class="filter-input-group">
+                                        <label for="reddit-investors">Investors:</label>
+                                        <select id="reddit-investors">
+                                        <option value="none">-----</option>
+                                        <option value="Positive">Positive</option>
+                                        <option value="Neutral">Neutral</option>
+                                        <option value="Negative">Negative</option>
+                                        </select>
+                                    </div>       
+                                    <div class="filter-input-group">
+                                        <label for="reddit-founders">Founders:</label>
+                                        <select id="reddit-founders">
+                                        <option value="none">-----</option>
+                                        <option value="Positive">Positive</option>
+                                        <option value="Neutral">Neutral</option>
+                                        <option value="Negative">Negative</option>
+                                        </select>
+                                    </div>       
+    
+                                    <div class="filter-input-group">
+                                        <label for="reddit-community">Community:</label>
+                                        <select id="reddit-community">
+                                        <option value="none">-----</option>
+                                        <option value="Positive">Positive</option>
+                                        <option value="Neutral">Neutral</option>
+                                        <option value="Negative">Negative</option>
+                                        </select>
+                                    </div>       
+                                    <div class="filter-input-group">
+                                        <label for="overall-reddit">Overall:</label>
+                                        <select id="overall-reddit">
+                                        <option value="none">-----</option>
+                                        <option value="Positive">Positive</option>
+                                        <option value="Neutral">Neutral</option>
+                                        <option value="Negative">Negative</option>
+                                        </select>
+                                    </div>       
+                                </div>
+                            </div>
+                            <div class="telegram filter-section " id="telegram">    
+                                <p class="filter-section-title">Telegram Only</p>
+                                <div class="filter-subsection">
+                                    <div class="filter-input-group">
+                                        <label for="telegram-influencers">Influencer:</label>
+                                        <select id="telegram-influencers">
+                                        <option value="none">-----</option>
+                                        <option value="Positive">Positive</option>
+                                        <option value="Neutral">Neutral</option>
+                                        <option value="Negative">Negative</option>
+                                        </select>
+                                    </div>       
+                                    <div class="filter-input-group">
+                                        <label for="telegram-investors">Investors:</label>
+                                        <select id="telegram-investors">
+                                        <option value="none">-----</option>
+                                        <option value="Positive">Positive</option>
+                                        <option value="Neutral">Neutral</option>
+                                        <option value="Negative">Negative</option>
+                                        </select>
+                                    </div>       
+                                    <div class="filter-input-group">
+                                        <label for="telegram-founders">Founders:</label>
+                                        <select id="telegram-founders">
+                                        <option value="none">-----</option>
+                                        <option value="Positive">Positive</option>
+                                        <option value="Neutral">Neutral</option>
+                                        <option value="Negative">Negative</option>
+                                        </select>
+                                    </div>       
+    
+                                    <div class="filter-input-group">
+                                        <label for="telegram-community">Community:</label>
+                                        <select id="telegram-community">
+                                        <option value="none">-----</option>
+                                        <option value="Positive">Positive</option>
+                                        <option value="Neutral">Neutral</option>
+                                        <option value="Negative">Negative</option>
+                                        </select>
+                                    </div>       
+                                    <div class="filter-input-group">
+                                        <label for="overall-telegram">Overall</label>
+                                        <select id="overall-telegram">
+                                        <option value="none">-----</option>
+                                        <option value="Positive">Positive</option>
+                                        <option value="Neutral">Neutral</option>
+                                        <option value="Negative">Negative</option>
+                                        </select>
+                                    </div>       
+                                </div>
+                            </div>
+                            <div class="filter-section" id="discord">    
+                                <p class="filter-section-title">Discord Only</p>
+                                <div class="filter-subsection">
+                                    <div class="filter-input-group">
+                                        <label for="discord-influencers">Influencer:</label>
+                                        <select id="discord-influencers">
+                                        <option value="none">-----</option>
+                                        <option value="Positive">Positive</option>
+                                        <option value="Neutral">Neutral</option>
+                                        <option value="Negative">Negative</option>
+                                        </select>
+                                    </div>       
+                                    <div class="filter-input-group">
+                                        <label for="discord-investors">Investors:</label>
+                                        <select id="discord-investors">
+                                        <option value="none">-----</option>
+                                        <option value="Positive">Positive</option>
+                                        <option value="Neutral">Neutral</option>
+                                        <option value="Negative">Negative</option>
+                                        </select>
+                                    </div>       
+                                    <div class="filter-input-group">
+                                        <label for="discord-founders">Founders:</label>
+                                        <select id="discord-founders">
+                                        <option value="none">-----</option>
+                                        <option value="Positive">Positive</option>
+                                        <option value="Neutral">Neutral</option>
+                                        <option value="Negative">Negative</option>
+                                        </select>
+                                    </div>       
+    
+                                    <div class="filter-input-group">
+                                        <label for="discord-community">Community:</label>
+                                        <select id="discord-community">
+                                        <option value="none">-----</option>
+                                        <option value="Positive">Positive</option>
+                                        <option value="Neutral">Neutral</option>
+                                        <option value="Negative">Negative</option>
+                                        </select>
+                                    </div>       
+                                    <div class="filter-input-group">
+                                        <label for="overall-discord">Overall</label>
+                                        <select id="overall-discord">
+                                        <option value="none">-----</option>
+                                        <option value="Positive">Positive</option>
+                                        <option value="Neutral">Neutral</option>
+                                        <option value="Negative">Negative</option>
+                                        </select>
+                                    </div>       
+                                </div>
+                            </div>
+                        </div>
+                      <div class="filter-buttons">
+                        <button id="reset-button">Reset</button>
+                        <button id="filter-cancel-button">Cancel</button>
+                        <button type="submit" id="filter-confirm-button">Confirm</button>
+                      </div>
+                    </form>
+                    </div>
+                  </div>
+                <div class="stacks-card">
+                    {% if profile.stack.count == 0 %}
+                    {% endif %}
+                    {% if assets %}
+                        <div class="stack-items">
+                        {% for asset in assets %}
+                        {% if forloop.counter <= 20 %}
+                        <div class="stack-item">
+                            <div class="stack-item-card">
+                            <div class="stack-item-head">
+                                <img class="stack-avatar" src="{% static 'images/' %}{{ asset.image }}" alt="">    
+                                <div class="stack-item-profile">
+                                    <h3 class="stack-item-name">{{ asset.name }}</h3>
+                                    <p class="stack-description">{{ asset.description }}</p>
+                                    <p class="stack-volume-traded">Volume: {{ asset.volume_traded }}</p>
+                                </div>  
+                            </div>
+                            <div class="stack-item-details"> 
+                                <h5 class="stack-item-volume">
+                                    <span><img class="stack-blockchain-logo" src="{% static 'images/' %}{{ asset.blockchain_logo }}" alt=""></span>
+                                    <span class="asset-value" data-asset-id="{{ asset.id }}"> {{ asset.floor_price }}</span>
+                                </h5>
+                                <div class="stack-item-right">
+                                    {% if asset.trend_percent >= 0.0 %}
+                                    <h5 class="stack-item-change positive">+{{ asset.trend_percent }}%</h5>
+                                    {% elif asset.trend_percent <= 0.0 %}
+                                    <h5 class="stack-item-change negative">{{ asset.trend_percent }}%</h5>
+                                    {% else %}
+                                    <h5 class="stack-item-change neutral">{{ asset.trend_percent }}%</h5>
+                                    {% endif %}
+                                </div>
+                            </div>  
+                            </div>
+                        </div>
+                    {% endif %}  
+                    {% endfor %}
+
+                    {% else %}
+                    <div class="empty-stack">
+                        <span>No Asset in Your Stack</span>
+                    </div>
+                {% endif %}
+                </div>
+              </div>
+            </div>  
+        </div>
+        </div>
+      </section>
+      {% endif %}
+    </main>
+
+
+    <!--- ======================== CUSTOM JS LINK========================== -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mixitup/3.3.1/mixitup.min.js" integrity="sha512-nKZDK+ztK6Ug+2B6DZx+QtgeyAmo9YThZob8O3xgjqhw2IVQdAITFasl/jqbyDwclMkLXFOZRiytnUrXk/PM6A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="{% static 'js/typeahead.bundle.js' %}"></script>
+     <!--=============== MIXITUP FILTER ===============-->
+     <script src="{% static 'js/mixitup.min.js' %}"></script>
+     <!-- <script src="{% static 'js/isotope-docs.min.js' %}"></script> -->
+     <script src="{% static 'js/jquery.min.js' %}"></script>
+     <script src="{% static 'js/isotope.pkgd.js' %}"></script>
+     <script src="{% static 'js/isotope.pkgd.min.js' %}"></script>
+     <script src="https://cdn.jsdelivr.net/npm/web3@1.4.0/dist/web3.min.js"></script>
+     <script src="https://cdn.jsdelivr.net/npm/@metamask/detect-provider@2.0.0/dist/index.min.js"></script>
+     <!---======================= ICON LINK ========================= -->
+     <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+     <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/mixitup/3.3.1/mixitup.min.js" integrity="sha512-nKZDK+ztK6Ug+2B6DZx+QtgeyAmo9YThZob8O3xgjqhw2IVQdAITFasl/jqbyDwclMkLXFOZRiytnUrXk/PM6A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+     <script src="https://unpkg.com/he@1.2.0/he.js"></script>
+     
+     <script>
+        function openLinkInNewTab(url) {
+          window.open(url, '_blank');
+        }
+     </script>
+
+    <script>
+    function updateDropdownOptions(dropdownValues) {
+            Object.entries(dropdownValues).forEach(([dropdownId, enabled]) => {
+                const dropdown = document.getElementById(dropdownId);
+                if (dropdown) {
+                    if (enabled) {
+                        dropdown.disabled = false;
+                        
+                    } else {
+                        dropdown.disabled = true;
+                        
+                    }
+                }
+            
+            });
+        }
+
+    function updateDropdownOptions2(dropdownValues) {
+            const excludedValues = ['twitter', 'discord', 'telegram', 'reddit', 'allplatforms']; // Specify the excluded dropdown values
+
+            Object.entries(dropdownValues).forEach(([dropdownId, enabled]) => {
+                if (excludedValues.includes(dropdownId)) { // Check if the dropdown value is not in the excluded list
+                    const dropdown = document.getElementById(dropdownId);
+                    if (dropdown) {
+                        const container = dropdown.closest('.filter-section');
+                        if (container) {
+                            const selectElements = container.querySelectorAll('select');
+                            selectElements.forEach((select) => {
+                                select.disabled = !enabled;
+                            });
+                        }
+                    }
+                }
+            });
+        }
+
+    function updateDropdownOptions3(dropdownValues) {
+        const dropdownIdTheta = 'theta'; // ID of the dropdown related to 'theta'
+        const containerIdToHide = 'toggle-stream-button'; // ID of the container to hide
+
+        const thetaEnabled = dropdownValues[dropdownIdTheta];
+        const containerToHide = document.getElementById(containerIdToHide);
+
+        if (containerToHide) {
+            containerToHide.style.display = thetaEnabled ? 'block' : 'none';
+        }
+
+        // Rest of the function code...
+    }
+
+
+    // Example dictionary with values indicating whether a dropdown option should be enabled
+    fetch('features_dict', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+        })
+        .then(response => response.json())
+        .then(data => {
+        // 'data' variable contains the feature_dict dictionary
+        console.log(data);
+        // Perform further operations with the dictionary
+        updateDropdownOptions(data);
+        updateDropdownOptions2(data);
+        updateDropdownOptions3(data);
+
+        })
+        .catch(error => {
+        console.error('Error:', error);
+        });
+
+    
+    
+        // Function to update the dropdown options based on the dictionary values
+
+
+    // Call the function initially to set the dropdown options based on the dictionary values
+    
+
+    </script>
+
+    <script>
+        const typingSpeed = 50; // Adjust the typing speed (in milliseconds) as desired
+
+        $(document).ready(function() {
+            const typingTextElement = $('#typing-text');
+            const geekText = '{% if assets %}{% if geek_text != "None"%}{{ geek_text }}{% else %}Welcome here! Visit the Storefront to mint a Blockchain Network Geek or Social Media Modifier e.g ethereumGeek to have access to all NFTs on the Ethereum Network or twitterMod to have access to all sentiment analysis from Twitter. Then proceed to click on "Add Modifier" to get variant sentiments on NFTs.{% endif %}{% else %}Oooops! No Asset(s) match your Modifiers.{% endif %}';
+            let currentIndex = 0;
+
+            function typeNextCharacter() {
+                if (currentIndex < geekText.length) {
+                typingTextElement.text(typingTextElement.text() + geekText[currentIndex]);
+                currentIndex++;
+                setTimeout(typeNextCharacter, typingSpeed);
+                }
+            }
+
+            // Start the typing animation
+            typeNextCharacter();
+            });
+    </script>
+
+    <script>
+        // Add this JavaScript code to handle the click event of the reset button
+        document.getElementById('reset-button').addEventListener('click', function() {
+            // Set all select elements' values to "none"
+            var selectElements = document.querySelectorAll('select');
+            selectElements.forEach(function(selectElement) {
+                selectElement.value = 'none';
+            });
+        });
+
+    </script>
+
+    <script>
+        $(document).ready(function() {
+            function saveSelectedOptions() {
+                var selectedOptions = {};
+
+                // Loop through all select elements
+                $('select').each(function() {
+                    var selectId = $(this).attr('id');
+                    var selectedValue = $(this).val();
+
+                    // Only save the option if it is different from the default value
+                    if (selectedValue !== 'none') {
+                    selectedOptions[selectId] = selectedValue;
+                    }
+                });
+
+                localStorage.setItem('selectedOptions', JSON.stringify(selectedOptions));
+                }
+
+                // Function to load selected options from localStorage
+                function loadSelectedOptions() {
+                var selectedOptions = JSON.parse(localStorage.getItem('selectedOptions'));
+
+                if (selectedOptions) {
+                    // Loop through all select elements
+                    $('select').each(function() {
+                    var selectId = $(this).attr('id');
+
+                    // Set the selected option from localStorage if it exists
+                    if (selectedOptions.hasOwnProperty(selectId)) {
+                        $(this).val(selectedOptions[selectId]);
+                    }
+                    });
+                }
+                }    
+
+            //
+            loadSelectedOptions();
+            $('#my-form').submit(function(event) {
+                event.preventDefault(); // Prevent default form submission
+                
+                // Retrieve the selected option value
+                var allDiscord= $('#overall-discord').val();
+                var discordCommunity= $('#discord-community').val();
+                var discordFounders= $('#discord-founders').val();
+                var discordInvestors= $('#discord-investors').val();
+                var discordInfluencers= $('#discord-influencers').val();
+                var allTelegram = $('#overall-telegram').val();
+                var telegramCommunity = $('#telegram-community').val();
+                var telegramFounders = $('#telegram-founders').val();
+                var telegramInvestors= $('#telegram-investors').val();
+                var telegramInfluencers = $('#telegram-influencers').val();
+                var allReddit = $('#overall-reddit').val();
+                var redditCommunity = $('#reddit-community').val();
+                var redditFounders= $('#reddit-founders').val();
+                var redditInvestors = $('#reddit-investors').val();
+                var redditInfluencers = $('#reddit-influencers').val();
+                var allTwitter= $('#overall-twitter').val();
+                var twitterCommunity= $('#twitter-community').val();
+                var twitterFounders = $('#twitter-founders').val();
+                var twitterInvestors = $('#twitter-investors').val();
+                var twitterInfluencers = $('#twitter-influencers').val();
+                var allSocialMedia = $('#overall-social-media').val();
+                var allCommunity = $('#overall-community').val();
+                var allFounders = $('#overall-founders').val();
+                var allInvestors = $('#overall-investors').val();
+                var allInfluencers = $('#overall-influencers').val();
+                var securityIncidents = $('#security-incidents').val();
+                var technologyUpdates = $('#technology-updates').val();
+                var partnerships = $('#partnerships').val();
+                var regulations = $('#regulations').val();
+                var launchTime = $('#launch-time').val();
+                var volume = $('#volume').val();
+                var rarity = $('#rarity').val();
+                var floorPrice = $('#floor-price').val();
+                var tezos = $('#tezos').val();
+                var bnb = $('#bnb').val();
+                var polygon= $('#polygon').val();
+                var solana = $('#solana').val();
+                var theta = $('#theta').val();
+                var ethereum = $('#ethereum').val();   
+                console.log(ethereum)
+
+                saveSelectedOptions();
+                
+                // Send the selected option to your Django backend
+                $.ajax({
+                url: $(this).attr('action'),  // Use the form's action attribute as the URL
+                type: $(this).attr('method'), // Use the form's method attribute as the HTTP method
+                data: {
+                    'ethereum': ethereum,
+                    'theta':theta,
+                    'solana':solana,
+                    'polygon':polygon,
+                    'bnb':bnb,
+                    'tezos':tezos,
+                    'floorPrice':floorPrice,
+                    'rarity':rarity,
+                    'volume':volume,
+                    'launchTime':launchTime,
+                    'regulations':regulations,
+                    'partnerships':partnerships,
+                    'technologyUpdates':technologyUpdates,
+                    'securityIncidents':securityIncidents,
+                    'allInfluencers':allInfluencers,
+                    'allInvestors':allInvestors,
+                    'allFounders':allFounders ,
+                    'allCommunity':allCommunity,
+                    'allSocialMedia':allSocialMedia,
+                    'twitterInfluencers':twitterInfluencers,
+                    'twitterInvestors':twitterInvestors,
+                    'twitterFounders':twitterFounders,
+                    'twitterCommunity':twitterCommunity,
+                    'allTwitter':allTwitter,
+                    'redditInfluencers':redditInfluencers,
+                    'redditInvestors':redditInvestors,
+                    'redditFounders':redditFounders,
+                    'redditCommunity':redditCommunity,
+                    'allReddit':allReddit,
+                    'telegramInfluencers':telegramInfluencers,
+                    'telegramInvestors':telegramInvestors,
+                    'telegramFounders':telegramFounders,
+                    'telegramCommunity':telegramCommunity,
+                    'allTelegram':allTelegram,
+                    'discordInfluencers':discordInfluencers,
+                    'discordInvestors':discordInvestors,
+                    'discordFounders':discordFounders,
+                    'discordCommunity':discordCommunity,
+                    'allDiscord':allDiscord,
+                    
+                },
+                success: function(response) {
+                    // Handle success response from Django
+                    console.log('Data sent successfully');
+                    window.location.href = '/stacks';
+                    
+                    
+                   
+                },
+                error: function(xhr, errmsg, err) {
+                    // Handle error response from Django
+                    console.log('Error:', errmsg);
+                }
+                });
+            });
+            });
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var overlay = document.querySelector('.filter-overlay');
+            var toggleFilterButton = document.getElementById('add-modifier-btn');
+            var cancelButton = document.getElementById('filter-cancel-button');
+            var confirmButton = document.getElementById('filter-confirm-button');
+
+            function openOverlay() {
+                overlay.classList.add('active');
+            }
+
+            function closeOverlay() {
+                overlay.classList.remove('active');
+            }
+
+
+            toggleFilterButton.addEventListener('click', function() {
+                openOverlay();
+            });
+
+            
+
+            cancelButton.addEventListener('click', function() {
+                closeOverlay();
+                toggleFilterButton.checked = false;
+            });
+
+            confirmButton.addEventListener('click', function() {
+
+                // var streamingPlatform = document.getElementById('streaming-platform').value;
+                // var streamTitle = document.getElementById('stream-title').value;
+                // var streamDescription = document.getElementById('stream-description').value;
+                // var streamCategory = document.getElementById('stream-category').value;
+
+                // Perform validation or further processing if needed
+
+                // Close the overlay
+                closeOverlay();
+
+                // Enable the toggle button
+                toggleFilterButton.disabled = false;
+
+                // Reset the form inputs
+                // document.getElementById('streaming-platform').selectedIndex = 0;
+                // document.getElementById('stream-title').value = '';
+                // document.getElementById('stream-description').value = '';
+                // document.getElementById('stream-category').value = '';
+
+                // Perform further actions with the streaming options (e.g., start streaming)
+
+                // // Example: Log the streaming options
+                // console.log('Streaming Platform:', streamingPlatform);
+                // console.log('Stream Title:', streamTitle);
+                // console.log('Stream Description:', streamDescription);
+                // console.log('Stream Category:', streamCategory);
+            });
+        });
+
+
+    </script>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        var toggleCheckbox = document.getElementById('toggle-checkbox');
+  
+        toggleCheckbox.addEventListener('change', function() {
+          if (toggleCheckbox.checked) {
+            // Redirect to the /playground URL
+            window.location.href = '/';
+          } else {
+            // Do nothing (stay on the current URL)
+            window.location.href = '/playground';
+          }
+        });
+  
+        // Optionally, you can check the current URL and update the toggle state accordingly
+        if (window.location.href.includes('/')) {
+          toggleCheckbox.checked = true;
+        }
+
+        if (window.location.href.includes('/playground')) {
+          toggleCheckbox.checked = false;
+        }
+      });
+    </script>
+
+    <script>
+      window.ethereum.on('accountsChanged', function(accounts) {
+        // Check if Metamask is available
+        if (typeof window.ethereum !== 'undefined') {
+              // Request the user's permission to connect the wallet
+              // Get the previous accounts length from local storage
+              var previousAccountsLength = localStorage.getItem('metamaskAccountsLength');
+              window.ethereum.request({ method: 'eth_accounts' })
+                  .then(function(accounts) {
+                      // Retrieve the selected account (wallet address)
+                      var walletAddress = accounts[0];
+                      console.log("PREVIOUS")
+                      console.log(previousAccountsLength);
+                      var currentAccountsLength = accounts.length;
+                      console.log("NOW")
+                      console.log(currentAccountsLength);
+
+
+                      if (previousAccountsLength > 0 && currentAccountsLength === 0) {
+                        // Wallet was disconnected
+                        window.location.href = "{% url 'disconnect' %}";
+                      }
+
+                       // Store the current accounts length in local storage
+                      localStorage.setItem('metamaskAccountsLength', currentAccountsLength);
+                    })
+                  .catch(function(error) {
+                      // Handle connection error
+                      console.log(error);
+                  });
+          } else {
+              // Metamask is not available
+              console.log('Metamask is not installed');
+          }
+      });
+
+    </script>
+
+    <script>
+      $(document).ready(function() {
+      $('.edit-asset-btn').on('click', function() {
+        var assetId = $(this).data('asset-id');
+        var assetValueElement = $('.asset-value[data-asset-id="' + assetId + '"]');
+        var saveButton = $('.save-asset-btn[data-asset-id="' + assetId + '"]');
+        var editButton = $('.edit-asset-btn[data-asset-id="' + assetId + '"]');
+
+        assetValueElement.attr('contenteditable', true);
+        assetValueElement.css('background-color', 'white');
+        assetValueElement.css('color', 'black');
+        assetValueElement.css('border', 'none');
+        saveButton.show();
+        editButton.hide();
+      });
+
+      $('.save-asset-btn').on('click', function() {
+        var assetId = $(this).data('asset-id');
+        var saveButton = $('.save-asset-btn[data-asset-id="' + assetId + '"]');
+        var editButton = $('.edit-asset-btn[data-asset-id="' + assetId + '"]');
+        var assetValueElement = $('.asset-value[data-asset-id="' + assetId + '"]');
+        assetValueElement.css('background-color', '');
+        assetValueElement.css('color', '');
+        assetValueElement.css('border', '');
+        saveButton.hide();
+        editButton.show();
+        var assetId = $(this).data('asset-id');
+        var assetValueElement = $('.asset-value[data-asset-id="' + assetId + '"]');
+        var editedValue = assetValueElement.text().trim();
+        var originalValue = assetValueElement.data('original-value');
+
+        if (editedValue !== originalValue) {
+          $.ajax({
+            url: 'update_asset_value',
+            method: 'POST',
+            data: { asset_id: assetId, asset_value: editedValue },
+            success: function(response) {
+              assetValueElement.attr('contenteditable', false);
+              $('.save-asset-btn[data-asset-id="' + assetId + '"]').hide();
+              // You can update the asset value in the DOM with the edited value here
+            },
+            error: function(xhr, status, error) {
+              // Handle errors
+            }
+          });
+        }
+      });
+
+      $('.delete-asset-btn').on('click', function() {
+        var assetId = $(this).data('asset-id');
+        var assetDelete = $('.delete-asset-btn[data-asset-id="' + assetId + '"]');
+        $.ajax({
+            url: 'delete_asset',
+            method: 'POST',
+            data: { asset_id: assetId},
+            success: function(response) {
+              $('.delete-asset-btn[data-asset-id="' + assetId + '"]').hide();
+              location.reload();
+              // You can update the asset value in the DOM with the edited value here
+            },
+            error: function(xhr, status, error) {
+              // Handle errors
+            }
+          });
+    });
+  });
+
+    </script>
+
+    <script>
+      const filterButtons = document.querySelectorAll('.filter-button');
+      // Get the active button value from local storage or set it to null if it doesn't exist
+      let activeButton = localStorage.getItem('activeButton') || null;
+      // Set the active class on the appropriate button based on the stored value
+      let scrollPosition = 0; // initialize scroll position
+      if (activeButton) {
+          filterButtons.forEach(button => {
+              if (button.value === activeButton) {
+                  button.classList.add('active');
+                  
+              }
+          });
+      }
+
+      // Add event listener to each filter button
+      filterButtons.forEach(button => {
+          button.addEventListener('click', () => {
+              // Set the active class on the clicked button and remove it from all other buttons
+              filterButtons.forEach(button => {
+                  button.classList.remove('active');
+              });
+              button.classList.add('active');
+              // Update the stored active button value
+              activeButton = button.value;
+              localStorage.setItem('activeButton', activeButton);
+              // Submit the form and reload the page
+              // Get the current scroll position before the page reloads
+              // scrollPosition = window.scrollY;
+              button.form.submit();
+              // location.reload()
+          });
+      });
+
+      // Set the scroll position after the page reloads
+      window.onload = function() {
+        window.scrollTo(0, scrollPosition);
+      };
+
+
+    </script>
+
+    <script>
+      var swiper = new Swiper(".mySwiper", {
+        spaceBetween: 30,
+        centeredSlides: true,
+        autoplay: {
+          delay: 2500,
+          disableOnInteraction: false,
+        },
+        pagination: {
+          el: ".swiper-pagination",
+          clickable: true,
+        },
+
+      });
+
+     
+      var allswiper = new Swiper(".allSwiper", {
+        spaceBetween: 30,
+        centeredSlides: true,
+        pagination: {
+          el: ".swiper-pagination",
+          clickable: true,
+        },
+        navigation: {
+          nextEl: ".swiper-button-next",
+          prevEl: ".swiper-button-prev",
+        },
+      });
+        
+    </script>   
+
+</body>
+</html>
+{% endblock content %}

@@ -1,0 +1,1299 @@
+{% block content %}
+{% load static %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Stackon Pro</title>
+    <!---===============  FAVICON =======================  -->
+    <link rel="shortcut icon" href="{% static '/images/logo.ico' %}" type="image/x-icon" />
+    <!--- ============== CUSTOM CSS LINK ==================  -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    
+    <!-- =============== SWIPER CSS LINK =================== -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css"
+    />
+    <!--=============== BOXICONS ===============-->
+    <link
+      href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+      rel="stylesheet"
+    />
+    <!--- =============== GOOGLE FONT LINK ================== -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    
+    
+
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="https://unpkg.com/isotope-layout@3/dist/isotope.pkgd.js"></script>
+    <!-- or -->
+    <script src="https://unpkg.com/isotope-layout@3/dist/isotope.pkgd.min.js"></script>
+    <script src="{% static 'js/isotope.pkgd.js' %}"></script>
+    <script src="{% static 'js/isotope.pkgd.min.js' %}"></script>
+    <script>
+      if (window.history.replaceState) {
+        window.history.replaceState(null, null, window.location.href);
+      }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/@metamask/detect-provider"></script>
+    
+  </head>
+  <body id="top">
+<!-- =================== HEADER ===================================== -->
+  <header class="header" id="header">
+    <div class="banner">
+      <div class="banner-container">
+        {% for asset in assets %}
+        <h5 class="banner_asset">{{asset.name }}:</h5>
+        {% if asset.trend_percent >= 0.0 %}
+        <h5 class="banner_asset_increase pos">+{{ asset.trend_percent }}%</h5>
+        {% elif asset.trend_percent <= 0.0 %}
+        <h5 class="banner_asset_increase neg">{{ asset.trend_percent }}%</h5>
+        {% else %}
+        <h5 class="banner_asset_increase neu">{{ asset.trend_percent }}%</h5>
+        {% endif %}    
+        {%endfor%}
+      </div>
+    </div>
+    <div class="nav">
+      <div class="header-left">
+        {% if not user.is_authenticated %}
+        <a href="/" class="logo header-item">
+          <img src="{% static 'images/stackon-logo.png' %}" style="width: 300px;" alt="Stackon logo" />
+        </a>
+        {% else %}
+        <a href="/" class="logo header-item">
+          <img src="{% static 'images/stackon-logo.png' %}" alt="Stackon logo" />
+        </a>
+        {% endif %}
+        {% if user.is_authenticated %}
+        <div class="header-menu">
+          <a href="/" class="header-menu-item active">Dashboard</a>
+          <a href="/stacks" class="header-menu-item">My Stack</a>
+          <a href="/storefront" class="header-menu-item">Storefront</a>
+          <a href="/livestream" class="header-menu-item">Geek TV</a>
+          <a href="/community" class="header-menu-item">Community</a>
+          <a href="/playground"  id="playground" class="header-menu-item" style="display: none;">Playground</a>
+        </div>
+        {% endif %}
+      </div>
+      
+      <div class="header-right">
+        {% if user.is_authenticated %}
+        <div class="switch">
+          <div>Stackon Pro</div>
+          <label class="toggle-container">
+              <input type="checkbox" id="toggle-checkbox">
+              <span class="toggle-slider"></span>
+          </label>
+        </div>
+        {% endif %}
+        {% if not user.is_authenticated %}
+        <button id="auth-button" class="btn btn-secondary header-item">Connect Wallet</button>
+  
+        <div class="header-others">
+          <i class='bx bx-search searchicon header-item'></i>
+          <i class="bx bx-moon change-theme header-item" id="theme-button"></i>
+          <span class="english">English<i class='bx bxs-down-arrow' ></i></span>
+          <span class="usd_format">
+            <i class='bx bxs-badge-dollar header-item'>USD<i class='bx bxs-down-arrow' ></i></i>          
+          </span>
+        </div>
+        {%endif%}
+        
+        {% if user.is_authenticated %}
+        <div class="profile-picture">
+          <img src="{% static 'images/' %}{{ profile.wallet_avatar }}" alt="Avatar">
+        </div>
+        <div class="wallet-id">
+          <label for="wallet-id">Wallet ID:</label>
+          <p id="wallet-id">{{ user_short }}...</p>
+        </div>
+        <div class="header-others">
+          <i class='bx bx-search searchicon header-item'></i>
+          <i class="bx bx-moon change-theme header-item" id="theme-button"></i>
+          <span class="english">English<i class='bx bxs-down-arrow' ></i></span>
+          <span class="usd_format">
+            <i class='bx bxs-badge-dollar header-item'>USD<i class='bx bxs-down-arrow' ></i></i>          
+          </span>
+        </div>   
+        {% endif %}
+      </div>
+      
+      <div class="small-screen-toggle">
+        <i class='bx bx-menu'></i>
+      </div>
+      <div class="small-screen-menu">
+        <div class="small-screen-toggle remove-menu-bar" >
+          <i class='bx bx-x' ></i>
+        </div>
+        {% if user.is_authenticated %}
+        <div class="profile-picture-small-menu profile-picture">
+          <img src="{% static 'images/' %}{{ profile.wallet_avatar }}" alt="Profile Picture">
+          <div class="wallet-id">
+          
+            <label for="wallet-id">Wallet ID:</label>
+            <p id="wallet-id">{{profile.wallet_id}}</p>
+          </div>
+        </div>
+        
+        {% endif %}
+        <div class="header-others">
+          
+          <i class="bx bx-moon change-theme header-item" id="theme-button"></i>
+          <span class="english">English<i class='bx bxs-down-arrow' ></i></span>
+          <span class="usd_format">
+            <i class='bx bxs-badge-dollar header-item'>USD<i class='bx bxs-down-arrow' ></i></i>          
+          </span>
+        </div>
+        <div class="header-menu-small">
+          <h3 href="/stacks" class="header-menu-item-small">My Stack</h3>
+          <h3 href="/storefront" class="header-menu-item-small">Storefront</h3>
+          <h3 href="/assets" class="header-menu-item-small">My Assets</h3>
+          <h3 href="/lives" class="header-menu-item-small">Geek TV</h3>
+          <h3 href="/community" class="header-menu-item-small">Community</h3>
+          
+        </div>
+
+      </div>
+      
+      
+    </div>
+    <!-- Theme Change Button-->
+  </header>
+
+<!-- ================== MAIN SECTION ================================ -->
+  <main>
+    <!-- ===================== HERO CAROUSEL SECTION ============== -->
+    <section class="hero-carousel section" id="hero-carousel">
+      <div class="hero-header">
+        <h3 class="hero-title">Revolutionizing the Way You Invest in <span class="hero-title-nfts">NFTs</span>
+          </h3>
+        <p class="hero-subtitle">Using AI-Powered Stack Geeks NFTs to Monitor, Evaluate, and Predict Your NFT Portfolio with the Sentiment Precision and Insight from World investors on Twitter, Telegram, Discord and Reddit. </p>
+      </div>
+      <div class="allSwiper">
+        <div class="carousel-container swiper-wrapper">
+          {% if not user.is_authenticated %}
+            <div class="carousel carousel-stacks swiper-slide">
+              <h4 class="carousel-title">🗃️ What to do <span class="swipe-view">Swipe ➡️  </span></h4>
+              <div class="swiper mySwiper">
+                <div class="swiper-wrapper">
+                    <div class="about_container swiper-slide">   
+                        <div class="card-icon">
+                          <img
+                            src="{% static 'images/single-create-sell-item-1.png' %}"
+                            alt="wallet icon"
+                          />
+                        </div>
+      
+                        <h3 class="h3 about-card-title">1. Browse Stacks</h3>
+      
+                        <p class="about-card-text">
+                          Explore and select a Stack that matches your capacity. Choose from a range of utility NFTs that have different capacities and support for various blockchains.
+                        </p>
+                    </div>    
+                    <div class="about_container swiper-slide">   
+                      <div class="card-icon">
+                        <img
+                          src="{% static 'images/single-create-sell-item-2.png' %}"
+                          alt="wallet icon"
+                        />
+                      </div>
+    
+                      <h3 class="h3 about-card-title">2. Add Assets </h3>
+    
+                      <p class="about-card-text">
+                        Easily add assets you want to monitor and get insights on. Stackon gathers real-time social media and market price data to predict potential floor price changes for each asset.
+                      </p>
+                    </div>    
+                    <div class="about_container swiper-slide">   
+                    <div class="card-icon">
+                      <img
+                        src="{% static 'images/single-create-sell-item-3.png' %}"
+                        alt="wallet icon"
+                      />
+                    </div>
+    
+                    <h3 class="h3 about-card-title">3. Get Insights</h3>
+    
+                    <p class="about-card-text">
+                      Receive real-time insights on the potential floor price change of added assets. Stackon processes the collected data through its algorithm to deliver valuable insights to help you make informed investment decisions.
+                    </p>
+                    </div>    
+                    <div class="about_container swiper-slide">   
+                  <div class="card-icon">
+                    <img
+                      src="{% static 'images/single-create-sell-item-4.png' %}"
+                      alt="wallet icon"
+                    />
+                  </div>
+    
+                  <h3 class="h3 about-card-title">4. Monitor Portfolio </h3>
+    
+                  <p class="about-card-text">
+                    Use Stackon as an AI advisor to monitor your NFT portfolio. With real-time insights, you can monitor the performance of your portfolio and get alerts on changes in potential floor prices of the assets you hold.
+                  </p>
+                    </div> 
+                </div>  
+                <div class="swiper-pagination"></div>
+              </div>
+            </div>  
+          {% else %}    
+            <div class="carousel carousel- swiper-slide">
+              <h4 class="carousel-title">Dashboard</span></h4>
+              <div class="equity-card">    
+                <div class="equity-header">
+                  <h6 class="equity-subheader">Equity Value (TFUEL)</h6>
+                  <i class='bx bx-history equity-subheader'></i>
+                </div>
+                <h2 class="value-eth"></h2>
+                <h4 class="value-usd equity-subheader"></h4>
+                <div class="average-change">
+                  <h6 class="equity-subheader">Average Change</h6>
+                  <h5 class="value-average">{{ profile.equity_base }}/<span class="value-average-percent">{{ profile.equity_change }}%</span></h5>
+                </div>
+                <div class="equity-buttons">
+                  <button class="btn btn-secondary equity-button" >Deposit</button>
+                  <button class="btn btn-secondary equity-button">Browse Stack</button>
+                  <button class="btn btn-secondary equity-button">Mint Assets</button>
+                </div>
+              </div>
+            </div>
+          {% endif %}
+          <div class="carousel carousel-community swiper-slide">
+            <h4 class="carousel-title">👨‍👨‍👦‍👦 Community Enagagement <span class="swipe-view">Swipe ➡️ </span></h4>
+            <div class="swiper mySwiper">
+              <div class="swiper-wrapper">
+                {% for post in posts %}
+                <div class="tweet-card swiper-slide">
+                  <div class="avatar">
+                    <img src="{% static 'images/' %}{{ post.avatar }}" alt="Avatar" />
+                    {% if post.social_media == "Twitter" %}
+                    <span class="social_media"><i class='bx bxl-twitter'></i></span>
+                    {% elif post.social_media == "Telegram" %}
+                    <span class="social_media"><i class='bx bxl-telegram' ></i></span>
+                    {% elif post.social_media == "Discord" %}
+                    <span class="social_media"><i class='bx bxl-discord-alt'></i></span>
+                    {% elif post.social_media == "Reddit" %}
+                    <span class="social_media"><i class='bx bxl-reddit'></i></span>
+                    {% else %}
+                    <span class="social_media"><i class='bx bxl-google'></i></span>
+                    {% endif %}  
+                  </div>
+                  <div class="tweet-content">
+                    <div class="tweet-header">
+                      <h3 class="name">{{ post.display_name }}</h3>
+                      <span class="username">{{ post.user_name }}e</span>
+                      <span class="separator">·</span>
+                      <span class="timestamp">{{ post.timestamp }}</span>
+                    
+                      
+                      
+                    
+                      
+                    </div>
+                    <div class="tweet-body">
+                      <p>
+                        {{ post.post }}
+                      </p>
+                    </div>
+                    <div class="tweet-footer">
+                      <button class="reply-button">
+                        <i class="fa fa-reply"></i>
+                        <span class="button-label">Reply</span>
+                      </button>
+                      
+                      <button class="like-button">
+                        <i class="fa fa-heart"></i>
+                        <span class="button-label">Like</span>
+                      </button>
+                      <button class="share-button">
+                        <i class="fa fa-share"></i>
+                        <span class="button-label">Share</span>
+                      </button>
+                    </div>
+                  </div>   
+                </div>
+                {% endfor %}
+              </div>
+              <div class="swiper-pagination"></div>
+              
+            </div>
+          </div>
+          <div class="carousel carousel-nft-items swiper-slide">       
+            <div class=" swiper mySwiper">
+              <div class="swiper-wrapper">
+                {% for nft in nft_items %}
+                <div class="swiper-slide">
+                  <div class="nft-image">
+                    <img src="{% static 'images/'%}{{ nft.nft_image }}" alt="NFT Image">
+                  </div>
+                  <div class="nft-content">
+                    <h3 class="nft-name">{{ nft.nft_name }}</h3>
+                    <p class="nft-description">{{ nft.nft_description }}</p>
+                    <div class="nft-sales-data">
+                      <div class="nft-seller-price">
+                        <img class="nft-seller" src="{% static 'images/' %}{{ nft.nft_seller }}" alt="NFT Image">
+                        <p class="nft-price">{{ nft.nft_price_tfuel}} TFUEL</p>
+                        
+                      </div>
+                      <button class="buy-now-btn">Buy Now</button>
+                    </div>
+                  </div>
+                </div>
+                
+                {% endfor %}
+                
+              </div>
+              <div class="swiper-pagination"></div>
+            </div>
+          </div>
+        </div>
+      </div> 
+      
+      <div class="largeDevicesCarousel carousel-container ">
+        {% if not user.is_authenticated %}
+          <div class="carousel carousel-stacks ">
+            <h4 class="carousel-title">🗃️ What to do <span class="swipe-view">Swipe ➡️  </span></h4>
+            <div class="swiper mySwiper">
+              <div class="swiper-wrapper">
+                <div class="about_container swiper-slide">   
+                    <div class="card-icon">
+                      <img
+                        src="{% static 'images/single-create-sell-item-1.png' %}"
+                        alt="wallet icon"
+                      />
+                    </div>
+    
+                    <h3 class="h3 about-card-title">1. Create Theta wallet on Stackon</h3>
+    
+                    <p class="about-card-text">
+                      Create a Theta Wallet directly from the Stackon platform, providing you with a secure and convenient way to manage your Theta digital assets. Use this wallet throughout your Stackon experience to interact with Theta-based features and functionalities seamlessly.
+                    </p>
+                </div>    
+                <div class="about_container swiper-slide">   
+                  <div class="card-icon">
+                    <img
+                      src="{% static 'images/single-create-sell-item-2.png' %}"
+                      alt="wallet icon"
+                    />
+                  </div>
+    
+                  <h3 class="h3 about-card-title">2. Mint Geeks and Modifiers on Stackon </h3>
+    
+                  <p class="about-card-text">
+                    Mint unique Geeks and Modifiers on Stackon, enabling you to leverage these assets to gain insights into NFT markets, predict favorable NFT signals, and understand the sentiment and trends surrounding specific NFTs.
+                  </p>
+                </div>    
+                <div class="about_container swiper-slide">   
+                <div class="card-icon">
+                  <img
+                    src="{% static 'images/single-create-sell-item-3.png' %}"
+                    alt="wallet icon"
+                  />
+                </div>
+    
+                <h3 class="h3 about-card-title">3.Explore Modifiers on Stackon</h3>
+    
+                <p class="about-card-text">
+                  Dive into the world of Modifiers on Stackon and discover their potential in analyzing and interpreting NFT data, providing you with valuable information to make informed decisions in the NFT space.
+                </p>
+                </div>    
+                <div class="about_container swiper-slide">   
+              <div class="card-icon">
+                <img
+                  src="{% static 'images/single-create-sell-item-4.png' %}"
+                  alt="wallet icon"
+                />
+              </div>
+    c
+              <h3 class="h3 about-card-title">4. Learn Modifier Hacks on Geeks TV.</h3>
+    
+              <p class="about-card-text">
+                Tune in to Stackon TV and delve into the realm of Modifier Hacks, where you can learn advanced techniques and strategies to effectively utilize Modifiers for optimizing your NFT investment strategies and gaining a competitive edge.
+              </p>
+                </div> 
+            </div>   
+              <div class="swiper-pagination"></div>
+            </div>
+          </div>  
+        {% else %}    
+          <div class="carousel carousel- ">
+            <h4 class="carousel-title">Dashboard</span></h4>
+            <div class="equity-card">    
+              <div class="equity-header">
+                <h6 class="equity-subheader">Equity Value (TFUEL)</h6>
+                <i class='bx bx-history equity-subheader'></i>
+              </div>
+              <h2 class="value-eth" id="valueTFUEL">0.0</h2>
+              <h4 class="value-usd equity-subheader" id="valueUSD">0.0</h4>
+              <div class="average-change">
+                <h6 class="equity-subheader">Average Change</h6>
+                <h5 class="value-average">{{ profile.equity_base }}/<span class="value-average-percent">{{ profile.equity_change }}%</span></h5>
+                <p class="verify-wallet" style="font-size: x-small; margin-top: 3px; color: red; display: none;">Unverified wallet, Please deposit TFUEL into this wallet. </p>
+              </div>
+              <div class="equity-buttons">
+                <button class="btn btn-secondary equity-button" id="deposit-button"> Deposit</button>
+                <a href="/stacks">
+                  <button class="btn btn-secondary equity-button">Browse Stack</button>
+                </a>
+                <a href="/storefront">
+                  <button class="btn btn-secondary equity-button">Mint Assets</button>
+                </a>
+              </div>
+            </div>
+          </div>
+        {% endif %}
+        <div class="carousel carousel-community ">
+          <h4 class="carousel-title">👨‍👨‍👦‍👦 Community Enagagement <span class="swipe-view">Swipe ➡️ </span></h4>
+          <div class="swiper mySwiper">
+            <div class="swiper-wrapper">
+              {% for post in posts %}
+              <div class="tweet-card swiper-slide">
+                <div class="avatar">
+                  <img src="{% static 'images/' %}{{ post.avatar }}" alt="Avatar" />
+                  {% if post.social_media == "Twitter" %}
+                  <span class="social_media"><i class='bx bxl-twitter'></i></span>
+                  {% elif post.social_media == "Telegram" %}
+                  <span class="social_media"><i class='bx bxl-telegram' ></i></span>
+                  {% elif post.social_media == "Discord" %}
+                  <span class="social_media"><i class='bx bxl-discord-alt'></i></span>
+                  {% elif post.social_media == "Reddit" %}
+                  <span class="social_media"><i class='bx bxl-reddit'></i></span>
+                  {% else %}
+                  <span class="social_media"><i class='bx bxl-google'></i></span>
+                  {% endif %}  
+                </div>
+                <div class="tweet-content">
+                  <div class="tweet-header">
+                    <h3 class="name">{{ post.display_name }}</h3>
+                    <span class="username">{{ post.user_name }}e</span>
+                    <span class="separator">·</span>
+                    <span class="timestamp">{{ post.timestamp }}</span>
+                  
+                    
+                    
+                  
+                    
+                  </div>
+                  <div class="tweet-body">
+                    <p>
+                      {{ post.post }}
+                    </p>
+                  </div>
+                  <div class="tweet-footer">
+                    <button class="reply-button">
+                      <i class="fa fa-reply"></i>
+                      <span class="button-label">Reply</span>
+                    </button>
+                    
+                    <button class="like-button">
+                      <i class="fa fa-heart"></i>
+                      <span class="button-label">Like</span>
+                    </button>
+                    <button class="share-button">
+                      <i class="fa fa-share"></i>
+                      <span class="button-label">Share</span>
+                    </button>
+                  </div>
+                </div>   
+              </div>
+              {% endfor %}
+            </div>
+            <div class="swiper-pagination"></div>
+            
+          </div>
+        </div>
+        <div class="carousel carousel-nft-items">       
+          <div class=" swiper mySwiper">
+            <div class="swiper-wrapper">
+              {% for nft in nft_items %}
+              <div class="swiper-slide">
+                <div class="nft-image">
+                  <img src="{% static 'images/'%}{{ nft.nft_image }}" alt="NFT Image">
+                </div>
+                <div class="nft-content">
+                  <h3 class="nft-name">{{ nft.nft_name }}</h3>
+                  <p class="nft-description">{{ nft.nft_description }}</p>
+                  <div class="nft-sales-data">
+                    <div class="nft-seller-price">
+                      <img class="nft-seller" src="{% static 'images/' %}{{ nft.nft_seller }}" alt="NFT Image">
+                      {% if nft.nft_minting %}
+                      <p class="nft-price" style="text-decoration: line-through;">{{ nft.nft_price_tfuel}} TFUEL</p>
+                    </div>
+                    {% if user.is_authenticated %}
+                    <a href="/storefront"><button class="buy-now-btn">Free Mint</button> </a>
+                    {% else %}
+                    <button id="home-free-mint" class="buy-now-btn">Free Mint</button> 
+                    {% endif %}
+
+                    {% else %}
+                      <p class="nft-price">{{ nft.nft_price_tfuel}} TFUEL</p>
+                    </div>
+                    
+                    <button class="buy-now-btn" style="background-color:red; pointer-events: none;">Coming Soon</button>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+              
+              {% endfor %}
+              
+            </div>
+            <div class="swiper-pagination"></div>
+          </div>
+        </div>
+        
+      </div>
+    </section>
+
+    <section class="wallet-authentication">
+      <div class="wallet-overlay wallet-overlay-1" id="wallet-overlay-1">
+        <div class="wallet-overlay-container">
+          <span class="theta_wallet_logo">
+            <img src="{% static 'images/theta_wallet.png' %}" alt="Stackon logo" />
+          </span>   
+          <div class="wallet-description">
+            <p>
+              Theta Wallet allows you to securely manage your Stackon assets and interact with the Stackon network. If you already have a Theta Wallet, click the "Connect" button below to connect your existing wallet. If you don't have a Theta Wallet yet, <a class="create-wallet-link" id="create-wallet-link">create a new wallet</a>. This will generate a new wallet address and provide you with a private key or mnemonic phrase that you should securely store. Make sure to write down or store this information in a safe place.
+            </p>
+          </div>
+          <div class="connect-wallet">
+            <button id="connect-button" class="btn btn-secondary">Connect</button>
+          </div>
+          <a  href="" class="cancel-overlay"><p>Return To Dashboard</p></a>
+        </div>
+      </div>
+      <div class="wallet-overlay wallet-overlay-2" id="wallet-overlay-2">
+        <div class="wallet-overlay-container">
+          <span class="theta_wallet_logo">
+            <img src="{% static 'images/theta_wallet.png' %}" alt="Stackon logo" />
+          </span>   
+          <div class="wallet-inputs">   
+            <div class="wallet-input-group">
+              <label for="wallet-title">Private Key:</label>
+              <p class="mnemonic-phrase-description"> </p>
+              <input type="text" id="private_key">
+            </div>
+            <div class="wallet-input-group">
+              <label for="wallet-description">Password:</label>
+              <input type="password" id="password">
+            </div>
+            <p id="error-message" style="color: red;"></p>
+          </div>
+          <div class="connect-wallet">
+            <button id="unlock-button" class="btn btn-secondary">Unlock Wallet</button>
+          </div>
+          <p class="create-wallet-prompt">If you don't have a Theta Wallet yet, <a id="create-wallet-link2" class="create-wallet-link">create a new wallet</a>. </p>
+          <a  href="" class="cancel-overlay"><p>Return To Dashboard</p></a>
+        </div>
+        
+      </div>
+      <div class="wallet-overlay wallet-overlay-3" id="wallet-overlay-3">
+        <div class="wallet-overlay-container">
+          <span class="theta_wallet_logo">
+            <img src="{% static 'images/theta_wallet.png' %}" alt="Stackon logo" />
+          </span>   
+          <div class="wallet-inputs">   
+            <div class="wallet-input-group">
+              <label for="wallet-description">Password:</label>
+              <input type="password" id="create-password">
+            </div>
+            <div class="wallet-input-group">
+              <label for="wallet-category">Confirm Password:</label>
+              <input type="password" id="create-confirm-password">
+            </div>
+            <p id="create-error-message" style="color: red;"></p>
+          </div>
+          <div class="connect-wallet">
+            <button id="create-wallet" class="btn btn-secondary">Create Wallet</button>
+          </div>
+          <a  href="" class="cancel-overlay"><p>Return To Dashboard</p></a>
+        </div>
+      </div>
+      <div class="wallet-overlay wallet-overlay-4" id="wallet-overlay-4">
+        <div class="wallet-overlay-container">
+          <span class="theta_wallet_logo">
+            <img src="{% static 'images/theta_wallet.png' %}" alt="Stackon logo" />
+          </span>   
+          <div class="wallet-inputs">   
+            <div class="mnemonic-input-group">
+              <h3>Mnemonic Phrase</h3>
+              <p class="mnemonic-description">Copy this Private Key and 12 word phrase. Make sure to store it somewhere safe.</p>
+              <h3 id="display-mnemonic-phrase" class="display-mnemonic-phrase"></h3>
+              <h4 id="display-private-key" class="display-mnemonic-phrase"></h4>
+            </div>
+          </div>
+          <div class="connect-wallet">
+            <button id="connect-button-2" class="btn btn-secondary">Connect Wallet</button>
+          </div>
+          <a  href="" class="cancel-overlay"><p>Return To Dashboard</p></a>
+        </div>
+      </div>
+      <div class="wallet-overlay wallet-overlay-5" id="wallet-overlay-5">
+        <div class="wallet-overlay-container">
+          <span class="theta_wallet_logo">
+            <img src="{% static 'images/theta_wallet.png' %}" alt="Stackon logo" />
+          </span>   
+          <div class="wallet-inputs">   
+            <div class="mnemonic-input-group">
+              <h3>Deposit TFUEL or THETA Tokens in your wallet to verify your wallet</h3>
+              <p class="mnemonic-description">Do not send ETH or ERC20 tokens to this address.</p>
+              <h2 id="display-wallet-address" class="display-wallet-address"></h2>
+            </div>
+          </div>
+          
+          <a  href="" class="cancel-overlay"><p>Return To Dashboard</p></a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== ASSETS TABLE ========================-->
+    <section class="section assets-table" id="">
+      <div class="section-header">
+        <h2 class="section-title">Top Non-Fungible Assets</h2>
+        <h3 class="section-subtitle">Explore Sentiments of your Favorite Non Fungible Tokens</h3>
+      </div>
+      <div class="table-wrapper">
+          <table class="top-assets-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Collection</th>
+                <th>Floor Price</th>
+                <th>Total Volume</th>
+                <th>Twitter </th>
+                <th>Reddit </th>
+                <th>Telegram </th>
+                <th>Discord</th>
+                <th>Overall</th>
+                <th>Popularity Trend</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for ass in assets %}
+              <tr>
+                <td>{{ ass.pk }}</td>
+                <td class="collection">
+                  <img src="{% static 'images/' %}{{ ass.image }}" alt="Avatar" /></div>
+                  <div class="collection_name">{{ ass.name }}</div>
+                </td>
+                <td class="floor-price">
+                  <img class="stack-blockchain-logo" src="{% static 'images/' %}{{ ass.blockchain_logo }}" alt="">
+                  <span>{{ ass.floor_price }}</span></td>
+                <td class="volume">{{ ass.volume_traded }}</td>
+                <!-- Sentiment -->
+                {% if ass.overall_twitter == 'Positive' %}
+                <td class="pos">{{ ass.overall_twitter }}</td>
+                {% elif ass.overall_twitter == 'Negative' %}
+                <td class="neg">{{ ass.overall_twitter }}</td>
+                {% else %}
+                <td class="neu">{{ ass.overall_twitter }}</td>
+                {% endif %}
+
+                {% if ass.overall_reddit == 'Positive' %}
+                <td class="pos">{{ ass.overall_reddit }}</td>
+                {% elif ass.overall_reddit == 'Negative' %}
+                <td class="neg">{{ ass.overall_reddit }}</td>
+                {% else %}
+                <td class="neu">{{ ass.overall_reddit }}</td>
+                {% endif %}
+
+                {% if ass.overall_telegram == 'Positive' %}
+                <td class="pos">{{ ass.overall_telegram }}</td>
+                {% elif ass.overall_telegram == 'Negative' %}
+                <td class="neg">{{ ass.overall_telegram }}</td>
+                {% else %}
+                <td class="neu">{{ ass.overall_telegram }}</td>
+                {% endif %}
+
+                {% if ass.overall_discord == 'Positive' %}
+                <td class="pos">{{ ass.overall_discord }}</td>
+                {% elif ass.overall_discord == 'Negative' %}
+                <td class="neg">{{ ass.overall_discord }}</td>
+                {% else %}
+                <td class="neu">{{ ass.overall_discord }}</td>
+                {% endif %}
+
+                {% if ass.overall_social_media == 'Positive' %}
+                <td class="pos">{{ ass.overall_social_media }}</td>
+                {% elif ass.overall_social_media == 'Negative' %}
+                <td class="neg">{{ ass.overall_social_media }}</td>
+                {% else %}
+                <td class="neu">{{ ass.overall_social_media }}</td>
+                {% endif %}
+          
+                <td class="trend"><img src="{% static 'images/' %}{{ ass.trend }}" alt="{{ ass.trend }}"></td>
+                
+              </tr>
+              {% endfor %}
+          
+              
+              
+              
+            </tbody>
+          </table>
+        </div>
+
+    </section>
+  </main>
+
+<!-- =========================== FOOTER ============================= -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-left footer-item">
+        <div class="contact-content">
+          <h3 class="contact-title">Get in Touch</h3>
+          <form action="" class="contact-form">
+            <div class="contact-form-div">
+              <label for="" class="contact-form-tag">Names</label>
+              <input
+                type="text"
+                placeholder="Insert your name"
+                class="contact-form-input"
+              />
+            </div>
+            <div class="contact-form-div">
+              <label for="" class="contact-form-tag">Mail</label>
+              <input
+                type="email"
+                placeholder="Insert your email"
+                class="contact-form-input"
+              />
+            </div>
+            <div class="contact-form-div contact-form-area">
+              <label for="" class="contact-form-tag">Project</label>
+              <textarea
+                name=""
+                id=""
+                cols="30"
+                rows="10"
+                placeholder="How can we help you?"
+                class="contact-form-input"
+              ></textarea>
+            </div>
+            <button class="contact-button">Send Message</button>
+          </form>
+        </div>
+      </div>
+      <div class="footer-right footer-item">
+        <h1 class="footer-title">Stackon</h1>
+        <ul class="footer-list">
+          <li>
+            <a href="#about" class="footer-link">Top Stacks</a>
+          </li>
+          <li>
+            <a href="#work" class="footer-link">About</a>
+          </li>
+          <li>
+            <a href="#testimonial" class="footer-link">Contact</a>
+          </li>
+        </ul>
+        <ul class="footer-social">
+          <a
+            href="https://www.instagram.com"
+            target="_blank"
+            class="footer-social-link"
+          >
+            <i class="bx bxl-instagram"></i>
+          </a>
+          <a
+            href="https://www.twitter.com"
+            target="_blank"
+            class="footer-social-link"
+          >
+            <i class="bx bxl-twitter"></i>
+          </a>
+          <a
+            href="https://www.linkedin.com"
+            target="_blank"
+            class="footer-social-link"
+          >
+            <i class="bx bxl-linkedin"></i>
+          </a>
+        </ul>
+        <span class="footer-copy">
+          &#169; Stackon 2023. All rights reserved.
+        </span>
+      </div>
+      
+    </div>
+  </footer>
+
+    <!--- ======================== CUSTOM JS LINK========================== -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mixitup/3.3.1/mixitup.min.js" integrity="sha512-nKZDK+ztK6Ug+2B6DZx+QtgeyAmo9YThZob8O3xgjqhw2IVQdAITFasl/jqbyDwclMkLXFOZRiytnUrXk/PM6A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="{% static 'js/typeahead.bundle.js' %}"></script>
+    <!--=============== MIXITUP FILTER ===============-->
+    <script src="{% static 'js/mixitup.min.js' %}"></script>
+    <!-- <script src="{% static 'js/isotope-docs.min.js' %}"></script> -->
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.4.0/dist/web3.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@metamask/detect-provider@2.0.0/dist/index.min.js"></script>
+    <!---======================= ICON LINK ========================= -->
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mixitup/3.3.1/mixitup.min.js" integrity="sha512-nKZDK+ztK6Ug+2B6DZx+QtgeyAmo9YThZob8O3xgjqhw2IVQdAITFasl/jqbyDwclMkLXFOZRiytnUrXk/PM6A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="{% static 'js/thetajs.browser.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bignumber.js/8.0.2/bignumber.min.js" integrity="sha512-7UzDjRNKHpQnkh1Wf1l6i/OPINS9P2DDzTwQNX79JxfbInCXGpgI1RPb3ZD+uTP3O5X7Ke4e0+cxt2TxV7n0qQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bignumber.js/8.0.2/bignumber.js" integrity="sha512-XQDG6H87RgMf+aNFwDPCUcFwUf3t9liyqN/2BkJ8KGixupbjPwQHNhypNA972mLIkg4KPo4lkGmqAf3yfDz8hw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+
+    <script>
+    
+
+      function updateDropdownOptions3(dropdownValues) {
+          const dropdownIdTheta = 'theta'; // ID of the dropdown related to 'theta'
+          const containerIdToHide = 'playground'; // ID of the container to hide
+
+          const thetaEnabled = dropdownValues[dropdownIdTheta];
+          const containerToHide = document.getElementById(containerIdToHide);
+
+          if (containerToHide) {
+              containerToHide.style.display = thetaEnabled ? 'block' : 'none';
+          }
+      }
+
+      fetch('features_dict', {
+          method: 'GET',
+          headers: {
+              'Content-Type': 'application/json'
+          }
+          })
+          .then(response => response.json())
+          .then(data => {
+          // 'data' variable contains the feature_dict dictionary
+          console.log(data);
+          // Perform further operations with the dictionary
+          updateDropdownOptions3(data);
+
+          })
+          .catch(error => {
+          console.error('Error:', error);
+          });
+
+    </script>
+  
+    <script> 
+      document.addEventListener('DOMContentLoaded', function() {
+        const valueTFUEL = document.getElementById('valueTFUEL');
+        const valueUSD = document.getElementById('valueUSD');
+        const overlay5 = document.querySelector('.wallet-overlay-5');
+        const connectButton = document.getElementById('deposit-button');
+        const displayWalletAddress = document.getElementById('display-wallet-address');  
+        const verifyWallet = document.querySelector('.verify-wallet');
+
+        connectButton.addEventListener('click', function() {
+          overlay5.classList.add('active');
+          displayWalletAddress.innerHTML = "{{ profile.user }}"
+         
+        });
+        
+        if (typeof window.ThetaJS !== 'undefined') {
+          console.log('ThetaJS library is imported successfully.');
+          // You can proceed with using ThetaJS functions and objects here
+          const chainId = window.ThetaJS.networks.ChainIds.Testnet;
+          const provider = new window.ThetaJS.providers.HttpProvider(chainId);
+
+          const adminPrivateKey = "{{ contract.admin_private_key }}";
+          const adminWallet = new window.ThetaJS.Wallet(adminPrivateKey, provider);
+          const adminAddress = "{{ contract.admin_wallet_address }}";
+          const adminAccount = provider.getAccount(adminAddress);
+
+
+          var userAddress = "{{ profile.user }}"
+          const userAccount = provider.getAccount(userAddress);
+          console.log(userAddress)
+          console.log(userAccount)
+
+          userAccount.then((balance) => {
+            const thetaBalance = balance.coins.thetawei/1000000000000000000;
+            const tfuelBalance = balance.coins.tfuelwei/1000000000000000000;
+
+            valueTFUEL.innerHTML = tfuelBalance.toFixed(2);
+            valueUSD.innerHTML = "= $" + (tfuelBalance*0.04).toFixed(2)
+
+            console.log("Theta balance:", thetaBalance);
+            console.log("TFUEL balance:", tfuelBalance);
+
+            // You can now use the balances in your code as needed
+          }).catch((error) => {
+            valueTFUEL.innerHTML = 0.0
+            valueUSD.innerHTML = "= $0.0"
+            verifyWallet.style.display = 'block'
+            console.error("Error retrieving balance:", error);
+          });
+  
+        
+        }});
+
+      
+    </script>
+
+    <script>
+
+      document.addEventListener('DOMContentLoaded', function() {
+      // Get the connect button element
+      const connectButton = document.getElementById('auth-button'); 
+      const goToCreateWallet = document.getElementById('create-wallet-link');
+      const goToCreateWallet2 = document.getElementById('create-wallet-link2');
+      const unlockWallet = document.getElementById('unlock-button');
+      const createWallet = document.getElementById('create-wallet');
+      const connectWallet = document.getElementById('connect-button');
+      const connectWallet2 = document.getElementById('connect-button-2');
+      const overlay1 = document.querySelector('.wallet-overlay-1');
+      const overlay2 = document.querySelector('.wallet-overlay-2');
+      const overlay3 = document.querySelector('.wallet-overlay-3');
+      const overlay4 = document.querySelector('.wallet-overlay-4');
+      const cancelOverlay = document.querySelector('.cancel-overlay');
+      const passwordInput = document.getElementById('password');
+      const confirmPasswordInput = document.getElementById('confirm-password');
+      const errorMessage = document.getElementById('error-message');
+      const cPasswordInput = document.getElementById('create-password');
+      const cConfirmPasswordInput = document.getElementById('create-confirm-password');
+      const cErrorMessage = document.getElementById('create-error-message'); 
+      const displayMnemonic = document.getElementById('display-mnemonic-phrase');
+      const privateKey = document.getElementById('private_key'); 
+      const displayPrivateKey = document.getElementById('display-private-key');
+      const homeFreeMint = document.getElementById('home-free-mint')
+      
+      homeFreeMint.addEventListener('click', function() {
+        overlay1.classList.add('active');
+        overlay4.classList.remove('active');
+        overlay3.classList.remove('active');
+        overlay3.classList.remove('active');
+      });
+      
+
+      // Attach a click event listener to the connect button
+      connectButton.addEventListener('click', function() {
+        overlay1.classList.add('active');
+        overlay4.classList.remove('active');
+        overlay3.classList.remove('active');
+        overlay3.classList.remove('active');
+      });
+
+      connectWallet.addEventListener('click', function() {
+        overlay2.classList.add('active');
+        overlay1.classList.remove('active');
+        overlay4.classList.remove('active');
+        overlay3.classList.remove('active');
+      });
+
+      goToCreateWallet.addEventListener('click', function() {
+        overlay3.classList.add('active');
+        overlay2.classList.remove('active');
+        overlay1.classList.remove('active');
+        overlay4.classList.remove('active');
+      });
+
+      goToCreateWallet2.addEventListener('click', function() {
+        overlay3.classList.add('active');
+        overlay2.classList.remove('active');
+        overlay1.classList.remove('active');
+        overlay4.classList.remove('active');
+      });
+
+      createWallet.addEventListener('click', function() {
+        const password = cPasswordInput.value;
+        const confirmPassword = cConfirmPasswordInput.value;
+
+        if (password !== confirmPassword ) {
+          cErrorMessage.style.display = 'block';
+          cErrorMessage.innerText = "Passwords do not match";
+        } else if(password == '' ||  confirmPassword == '') {
+          cErrorMessage.style.display = 'block';
+          cErrorMessage.innerText = "Please Input Passwords";
+        }
+        else {
+
+          if (typeof window.ThetaJS !== 'undefined') {
+            const chainId = window.ThetaJS.networks.ChainIds.Testnet;
+            const provider = new window.ThetaJS.providers.HttpProvider(chainId);
+            const wallet = window.ThetaJS.Wallet.createRandom();
+            const mnemonicPhrase = wallet.mnemonic.phrase;
+            const privateKey = wallet.privateKey;
+            const publicKey = wallet.publicKey;
+            const walletAddress = wallet.address;
+
+            $.ajax({
+                url: 'create_wallet',
+                method: 'POST',
+                data: { 
+                  password: password,
+                  walletAddress: walletAddress,
+                  mnemonicPhrase: mnemonicPhrase,
+                  privateKey: privateKey,
+                },
+                success: function(response) {
+                  // You can update the asset value in the DOM with the edited value here
+                  overlay4.classList.add('active');
+                  overlay3.classList.remove('active');
+                  overlay2.classList.remove('active');
+                  overlay1.classList.remove('active');
+                  displayMnemonic.innerText = mnemonicPhrase
+                  displayPrivateKey.innerText = privateKey
+
+                },
+                error: function(xhr, status, error) {
+                  cErrorMessage.innerText = "Failed to Create Wallet, Please Try Again";
+                }
+              });
+          } else {
+            cErrorMessage.innerText = "Failed to Create Wallet, Please Try Again";
+          }
+        }
+
+      });
+
+      connectWallet2.addEventListener('click', function() {
+        overlay2.classList.add('active');
+        overlay1.classList.remove('active');
+        overlay4.classList.remove('active');
+        overlay3.classList.remove('active');
+      });
+
+      unlockWallet.addEventListener('click', function() {
+        const password = passwordInput.value;
+        const private_key = privateKey.value;
+
+        const chainId = window.ThetaJS.networks.ChainIds.Testnet;
+        const provider = new window.ThetaJS.providers.HttpProvider(chainId);
+        const wallet = new window.ThetaJS.Wallet(private_key, provider);
+        const wallet_address = wallet.address;
+
+        if(password == '' ) {
+          errorMessage.innerText = "Please Input Password";
+        } else {
+          $.ajax({
+                url: 'connect',
+                method: 'POST',
+                data: { 
+                  wallet_address: wallet_address, 
+                  password: password,
+                  privateKey: private_key,
+                  
+                },
+                success: function(response) {
+                  overlay1.classList.remove('active');
+                  overlay4.classList.remove('active');
+                  overlay3.classList.remove('active');
+                  overlay2.classList.remove('active');
+                  window.location.href = '/';
+                  
+                },
+                error: function(xhr, status, error) {
+                  errorMessage.innerText = "Failed to Unlock Wallet, Please Check Your Private Key and Password";
+                }
+              });
+          
+        }
+      });
+
+
+
+    });
+
+    </script>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        var toggleCheckbox = document.getElementById('toggle-checkbox');
+  
+        toggleCheckbox.addEventListener('change', function() {
+          if (toggleCheckbox.checked) {
+            // Redirect to the /playground URL
+            window.location.href = '/';
+          } else {
+            // Do nothing (stay on the current URL)
+            window.location.href = '/playground';
+          }
+        });
+  
+        // Optionally, you can check the current URL and update the toggle state accordingly
+        if (window.location.href.includes('/')) {
+          toggleCheckbox.checked = true;
+        }
+
+        if (window.location.href.includes('/playground')) {
+          toggleCheckbox.checked = false;
+        }
+      });
+    </script>
+
+    <script>
+      const toggleButton = document.querySelector(".small-screen-toggle");
+      const menuBar = document.querySelector(".small-screen-menu");
+      const removeMenuBar = document.querySelector(".remove-menu-bar");
+
+      toggleButton.addEventListener("click", function () {
+        if (menuBar.classList.contains("active")) {
+          menuBar.classList.remove("active");
+        } else {
+          menuBar.classList.add("active");
+        }
+      });
+
+      
+      removeMenuBar.addEventListener("click", function () {
+        menuBar.classList.remove("active");
+      });
+
+    </script>
+
+    <script>
+      $(document).ready(function() {
+      $('.edit-asset-btn').on('click', function() {
+        var assetId = $(this).data('asset-id');
+        var assetValueElement = $('.asset-value[data-asset-id="' + assetId + '"]');
+        var saveButton = $('.save-asset-btn[data-asset-id="' + assetId + '"]');
+        var editButton = $('.edit-asset-btn[data-asset-id="' + assetId + '"]');
+
+        assetValueElement.attr('contenteditable', true);
+        assetValueElement.css('background-color', 'white');
+        assetValueElement.css('color', 'black');
+        assetValueElement.css('border', 'none');
+        saveButton.show();
+        editButton.hide();
+      });
+
+      $('.save-asset-btn').on('click', function() {
+        var assetId = $(this).data('asset-id');
+        var saveButton = $('.save-asset-btn[data-asset-id="' + assetId + '"]');
+        var editButton = $('.edit-asset-btn[data-asset-id="' + assetId + '"]');
+        var assetValueElement = $('.asset-value[data-asset-id="' + assetId + '"]');
+        assetValueElement.css('background-color', '');
+        assetValueElement.css('color', '');
+        assetValueElement.css('border', '');
+        saveButton.hide();
+        editButton.show();
+        var assetId = $(this).data('asset-id');
+        var assetValueElement = $('.asset-value[data-asset-id="' + assetId + '"]');
+        var editedValue = assetValueElement.text().trim();
+        var originalValue = assetValueElement.data('original-value');
+
+        if (editedValue !== originalValue) {
+          $.ajax({
+            url: 'update_asset_value',
+            method: 'POST',
+            data: { asset_id: assetId, asset_value: editedValue },
+            success: function(response) {
+              assetValueElement.attr('contenteditable', false);
+              $('.save-asset-btn[data-asset-id="' + assetId + '"]').hide();
+              // You can update the asset value in the DOM with the edited value here
+            },
+            error: function(xhr, status, error) {
+              // Handle errors
+            }
+          });
+        }
+      });
+
+      $('.delete-asset-btn').on('click', function() {
+        var assetId = $(this).data('asset-id');
+        var assetDelete = $('.delete-asset-btn[data-asset-id="' + assetId + '"]');
+        $.ajax({
+            url: 'delete_asset',
+            method: 'POST',
+            data: { asset_id: assetId},
+            success: function(response) {
+              $('.delete-asset-btn[data-asset-id="' + assetId + '"]').hide();
+              location.reload();
+              // You can update the asset value in the DOM with the edited value here
+            },
+            error: function(xhr, status, error) {
+              // Handle errors
+            }
+          });
+    });
+  });
+
+    </script>
+
+
+    <script>
+      const filterButtons = document.querySelectorAll('.filter-button');
+      // Get the active button value from local storage or set it to null if it doesn't exist
+      let activeButton = localStorage.getItem('activeButton') || null;
+      // Set the active class on the appropriate button based on the stored value
+      let scrollPosition = 0; // initialize scroll position
+      if (activeButton) {
+          filterButtons.forEach(button => {
+              if (button.value === activeButton) {
+                  button.classList.add('active');
+                  
+              }
+          });
+      }
+
+      // Add event listener to each filter button
+      filterButtons.forEach(button => {
+          button.addEventListener('click', () => {
+              // Set the active class on the clicked button and remove it from all other buttons
+              filterButtons.forEach(button => {
+                  button.classList.remove('active');
+              });
+              button.classList.add('active');
+              // Update the stored active button value
+              activeButton = button.value;
+              localStorage.setItem('activeButton', activeButton);
+              // Submit the form and reload the page
+              // Get the current scroll position before the page reloads
+              // scrollPosition = window.scrollY;
+              button.form.submit();
+              // location.reload()
+          });
+      });
+
+      // Set the scroll position after the page reloads
+      window.onload = function() {
+        window.scrollTo(0, scrollPosition);
+      };
+
+
+    </script>
+
+    <script>
+      var swiper = new Swiper(".mySwiper", {
+        spaceBetween: 30,
+        centeredSlides: true,
+        autoplay: {
+          delay: 2500,
+          disableOnInteraction: false,
+        },
+        pagination: {
+          el: ".swiper-pagination",
+          clickable: true,
+        },
+
+      });
+
+     
+      var allswiper = new Swiper(".allSwiper", {
+        spaceBetween: 30,
+        centeredSlides: true,
+        pagination: {
+          el: ".swiper-pagination",
+          clickable: true,
+        },
+        navigation: {
+          nextEl: ".swiper-button-next",
+          prevEl: ".swiper-button-prev",
+        },
+      });
+        
+    </script>
+
+</body>
+</html>
+{% endblock content %}
