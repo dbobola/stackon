@@ -22,6 +22,9 @@ urlpatterns = [
     path('add_asset_to_stack', views.add_asset_to_stack, name='add_asset_to_stack'),
     path('update_asset_value', views.update_asset_value, name='update_asset_value'),
     path('delete_asset', views.delete_asset, name='delete_asset'),
-    path('check_password_correct', views.check_password_correct, name='check_password_correct')
+    path('check_password_correct', views.check_password_correct, name='check_password_correct'),
+    path('api/sentiment/<int:asset_id>/<str:platform>/<str:category>', views.get_sentiment_data, name='get_sentiment_data'),
+    path('chainlink', views.chainlink, name='chainlink')
+
 ]
 

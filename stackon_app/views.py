@@ -15,6 +15,58 @@ from django.template.defaultfilters import timesince
 import json
 from django.contrib.auth.hashers import check_password
 
+#0xb141829aB8BCE3309DB473c444675Dd7aa8872B4 
+
+@csrf_exempt
+def chainlink(request):
+    assets = Assets.objects.order_by('pk')[:20]
+    posts = NFTPosts.objects.all()
+    nft_items = Geek.objects.all()
+
+    context = {
+                'assets': assets,
+                'posts': posts,   
+                'nft_items': nft_items,
+            }
+
+    if request.user.is_authenticated:
+        current_user = User.objects.get(username=request.user)
+        profile = Accounts.objects.get(user=current_user)
+        user_short = str(profile.wallet_address)
+        user_short = user_short[:12]
+
+        context = {
+                'assets': assets,
+                'posts': posts,   
+                'nft_items': nft_items,
+                'profile': profile,
+                'user_short': user_short,
+            }
+    return render(request, 'chainlink.html', context=context)
+
+
+
+@csrf_exempt
+def get_sentiment_data(request, asset_id, platform, category):
+    try:
+        # Get the asset instance from the database using the asset_id
+        asset = Assets.objects.get(pk=asset_id)
+       
+        if category == "overall":
+            filt = category + "_"+ platform
+        else:
+            filt = platform + "_"+ category
+
+
+        data = getattr(asset, filt)
+        sentiment_data = {"sentiment": data}
+  
+        # Convert the sentiment data to JSON
+        json_data = json.dumps(sentiment_data)
+        return HttpResponse(json_data,content_type='application/json')
+
+    except Assets.DoesNotExist:
+        return HttpResponse(json.dumps({'error': 'Asset not found'}), content_type='application/json')
 
 @csrf_exempt
 def check_password_correct(request):
@@ -580,6 +632,7 @@ def delete_stream(request):
         return HttpResponse('Livestream deleted successfully')
     
     return HttpResponse('Invalid request')
+
 @csrf_exempt
 def start_stream(request):
     if request.method == 'POST':
@@ -776,7 +829,7 @@ def connect_playground(request):
 
 def search(request):
     query = request.GET.get('query', '')
-    results = NFTAsset.objects.filter(name__icontains=query)
+    results = Assets.objects.filter(name__icontains=query)
     data = [{'id': r.id, 'name': r.name} for r in results]
     return JsonResponse(data, safe=False)
 
@@ -818,3 +871,43 @@ def delete_asset(request):
     return JsonResponse({'success': False, 'message': 'Invalid request method.'})
     
 
+
+
+      # sentiment_data = {
+        #     'asset_name': asset.name,
+        #     'twitter_sentiment': {
+        #         'influencers': asset.twitter_influencers,
+        #         'investors': asset.twitter_investors,
+        #         'founders': asset.twitter_founders,
+        #         'community': asset.twitter_community,
+        #         'overall': asset.overall_twitter,
+        #     },
+        #     'reddit_sentiment': {
+        #         'influencers': asset.reddit_influencers,
+        #         'investors': asset.reddit_investors,
+        #         'founders': asset.reddit_founders,
+        #         'community': asset.reddit_community,
+        #         'overall': asset.overall_reddit,
+        #     },
+        #     'telegram_sentiment': {
+        #         'influencers': asset.telegram_influencers,
+        #         'investors': asset.telegram_investors,
+        #         'founders': asset.telegram_founders,
+        #         'community': asset.telegram_community,
+        #         'overall': asset.overall_telegram,
+        #     },
+        #     'discord_sentiment': {
+        #         'influencers': asset.discord_influencers,
+        #         'investors': asset.discord_investors,
+        #         'founders': asset.discord_founders,
+        #         'community': asset.discord_community,
+        #         'overall': asset.overall_discord,
+        #     },
+        #     'overall_social_media_sentiment': {
+        #         'influencers': asset.overall_influencers,
+        #         'investors': asset.overall_investors,
+        #         'founders': asset.overall_founders,
+        #         'community': asset.overall_community,
+        #         'overall': asset.overall_discord,
+        #     },
+        # }

@@ -14,7 +14,7 @@
     <link rel="shortcut icon" href="{% static '/images/logo.ico' %}" type="image/x-icon" />
     <!--- ============== CUSTOM CSS LINK ==================  -->
     <link rel="stylesheet" href="{% static 'css/livestream.css' %}" />
-    
+
     <!-- =============== SWIPER CSS LINK =================== -->
     <link
       rel="stylesheet"
@@ -45,7 +45,7 @@
       }
     </script>
     <script src="https://cdn.jsdelivr.net/npm/@metamask/detect-provider"></script>
-    
+
   </head>
   <body id="top">
 <!-- =================== HEADER ===================================== -->
@@ -60,7 +60,7 @@
         <h5 class="banner_asset_increase neg">{{ asset.trend_percent }}%</h5>
         {% else %}
         <h5 class="banner_asset_increase neu">{{ asset.trend_percent }}%</h5>
-        {% endif %}    
+        {% endif %}
         {%endfor%}
       </div>
     </div>
@@ -78,7 +78,7 @@
           <a href="/playground"  id="playground" class="header-menu-item" style="display: none;">Playground</a>
         </div>
         </div>
-      
+
       <div class="header-right">
         <div class="switch">
           <div>Stackon Pro</div>
@@ -88,18 +88,18 @@
           </label>
         </div>
         {% if not user.is_authenticated %}
-        
+
         <button id="auth-button" class="btn btn-secondary header-item">Connect Wallet</button>
-  
+
         <div class="header-others">
           <i class='bx bx-search searchicon header-item'></i>
           <i class="bx bx-moon change-theme header-item" id="theme-button"></i>
           <span class="english">English<i class='bx bxs-down-arrow' ></i></span>
           <span class="usd_format">
-            <i class='bx bxs-badge-dollar header-item'>USD<i class='bx bxs-down-arrow' ></i></i>          
+            <i class='bx bxs-badge-dollar header-item'>USD<i class='bx bxs-down-arrow' ></i></i>
           </span>
         </div>
-        
+
         {% else %}
         <div class="profile-picture">
           <img src="{% static 'images/' %}{{ profile.wallet_avatar }}" alt="Avatar">
@@ -113,12 +113,12 @@
           <i class="bx bx-moon change-theme header-item" id="theme-button"></i>
           <span class="english">English<i class='bx bxs-down-arrow' ></i></span>
           <span class="usd_format">
-            <i class='bx bxs-badge-dollar header-item'>USD<i class='bx bxs-down-arrow' ></i></i>          
+            <i class='bx bxs-badge-dollar header-item'>USD<i class='bx bxs-down-arrow' ></i></i>
           </span>
-        </div>   
+        </div>
         {% endif %}
       </div>
-      
+
       <div class="small-screen-toggle">
         <i class='bx bx-menu'></i>
       </div>
@@ -130,19 +130,19 @@
         <div class="profile-picture-small-menu profile-picture">
           <img src="{% static 'images/' %}{{ profile.wallet_avatar }}" alt="Profile Picture">
           <div class="wallet-id">
-          
+
             <label for="wallet-id">Wallet ID:</label>
             <p id="wallet-id">{{profile.wallet_id}}</p>
           </div>
         </div>
-        
+
         {% endif %}
         <div class="header-others">
-          
+
           <i class="bx bx-moon change-theme header-item" id="theme-button"></i>
           <span class="english">English<i class='bx bxs-down-arrow' ></i></span>
           <span class="usd_format">
-            <i class='bx bxs-badge-dollar header-item'>USD<i class='bx bxs-down-arrow' ></i></i>          
+            <i class='bx bxs-badge-dollar header-item'>USD<i class='bx bxs-down-arrow' ></i></i>
           </span>
         </div>
         <div class="header-menu-small">
@@ -151,12 +151,12 @@
           <h3 href="/assets" class="header-menu-item-small">My Assets</h3>
           <h3 href="/lives" class="header-menu-item-small">Geek TV</h3>
           <h3 href="/community" class="header-menu-item-small">Community</h3>
-          
+
         </div>
 
       </div>
-      
-      
+
+
     </div>
     <!-- Theme Change Button-->
   </header>
@@ -177,11 +177,11 @@
           </div>
           <div class="stream-input-group">
             <label for="stream-category">Stream API Key:</label>
-            <input type="text" id="stream-api-key">
+            <input type="password" id="stream-api-key">
           </div>
           <div class="stream-input-group">
             <label for="stream-category">Stream Secret Key:</label>
-            <input type="text" id="stream-secret-key">
+            <input type="password" id="stream-secret-key">
           </div>
           <div class="stream-buttons">
             <button id="stream-cancel-button">Cancel</button>
@@ -193,9 +193,11 @@
         <span>
           <button id="toggle-stream-button" class="btn start-live-btn" style="display: none;">Start Stream</button>
           <button id="end-stream-button" class="btn end-live-btn negative">End Stream</button>
-          <button id="go-stream-button" class="btn go-live-btn positive">Go Live</button>
+          <button id="go-stream-button" class="btn go-live-btn positive" style="display: none;">Go Live</button>
         </span>
-      
+        <div id='no-stream-text'></div>
+
+
         {% if livestream%}
         {% for live in livestream %}
         <div class="video-container">
@@ -215,10 +217,10 @@
             <span id="live-icon" style="display: none;" ><p  class="live-icon positive">{{live.status}}</p></span>
             <span id="draft-icon" ><p  class="live-icon negative">DRAFT</p></span>
 
-            
+
           </div>
-         
-        </div>     
+
+        </div>
         {% endfor %}
         {% else %}
         <div class="no-stream">
@@ -228,15 +230,15 @@
         <div class="video-container">
           <div  id="video" class="video">
             <!-- <iframe class="live-video" src="{{live.url}}" border="0" width="100%" height="100%" allowfullscreen></iframe> -->
-            <iframe src="https://player.thetavideoapi.com/video/video_5uzztb9hf84m5bvppyisrqiy3v" 
-                border="0" 
-                width="100%" 
+            <iframe src="https://player.thetavideoapi.com/video/video_ufby78v5iwf7y91inm3sx1bcck"
+                border="0"
+                width="100%"
                 height="100%"
                 allowfullscreen></iframe>
 
           </div>
           <div class="video-details">
-            <span><h3 class="video-title">Welcome to Stackon-verse | Genesis of the Stackon Geeks | Revolutionizing the Way You Invest in NFTs </span>
+            <span><h3 class="video-title">Welcome to Stackon-verse | Tour of the Stackon Playground | Revolutionizing the Way You Invest in NFTs </span>
             <span class="video-badge-time"><p>239 badges | </p><p class="stream-time">  Started 12 days ago</p></span>
             <span class="video-owner">
               <img src="{% static 'images/logo.ico' %}" alt="Avatar">
@@ -245,7 +247,7 @@
             <span class="video-description"><p>Using AI-Powered Stack Geeks NFTs to Monitor, Evaluate, and Predict Your NFT Portfolio with the Sentiment Precision and Insight from World investors on Twitter, Telegram, Discord and Reddit.</p></span>
             <span><p class="s-live-icon negative">PINNED</p></span>
           </div>
-         
+
         </div>
       </div>
     </section>
@@ -253,10 +255,10 @@
 
 
     <!--- ======================== CUSTOM JS LINK========================== -->
-    <script src="{% static 'js/script.js' %}"></script>
+
     <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mixitup/3.3.1/mixitup.min.js" integrity="sha512-nKZDK+ztK6Ug+2B6DZx+QtgeyAmo9YThZob8O3xgjqhw2IVQdAITFasl/jqbyDwclMkLXFOZRiytnUrXk/PM6A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="{% static 'js/typeahead.bundle.js' %}"></script>
+
     <!--=============== MIXITUP FILTER ===============-->
     <script src="{% static 'js/mixitup.min.js' %}"></script>
     <!-- <script src="{% static 'js/isotope-docs.min.js' %}"></script> -->
@@ -268,44 +270,54 @@
     <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mixitup/3.3.1/mixitup.min.js" integrity="sha512-nKZDK+ztK6Ug+2B6DZx+QtgeyAmo9YThZob8O3xgjqhw2IVQdAITFasl/jqbyDwclMkLXFOZRiytnUrXk/PM6A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
-    <script>
+   <script>
       function updateDropdownOptions3(dropdownValues) {
-          const dropdownIdTheta = 'theta'; // ID of the dropdown related to 'theta'
-          const containerIdToHide = 'playground'; // ID of the container to hide
-          const containerIdToHide2 = 'toggle-stream-button';
-          // const noStreamText = document.getElementById('no-stream-text');
+        const dropdownIdTheta = 'theta';
+        const containerIdToHide = 'playground';
+        const containerIdToHide2 = 'toggle-stream-button';
+        const containerIdToHide3 = 'go-stream-button';
+        const noStreamText = document.getElementById('no-stream-text');
 
-          const thetaEnabled = dropdownValues[dropdownIdTheta];
-          const containerToHide = document.getElementById(containerIdToHide);
+        const thetaEnabled = dropdownValues[dropdownIdTheta];
+        const containerToHide = document.getElementById(containerIdToHide);
+        console.log("theta enabled is ", thetaEnabled)
 
-          if (containerToHide) {
-              containerToHide.style.display = thetaEnabled ? 'block' : 'none';
-          }
-          const containerToHide2 = document.getElementById(containerIdToHide2);
-          if (containerToHide2) {
-              containerToHide2.style.display = thetaEnabled ? 'block' : 'none';
-              noStreamText.innerHTML =  thetaEnabled ? 'No Stream at the moment. Ready to go live? Click on the Start Stream Button.' : 'Oooops, you cannot stream, sorry! Visit the Storefront to mint a Theta Geek NFT to stream on the Theta P2P Video Delivery Network and also earn TFUEL from stream badges.'
-          }
+        if (containerToHide) {
+          containerToHide.style.display = thetaEnabled ? 'block' : 'none';
+        }
+
+        const containerToHide2 = document.getElementById(containerIdToHide2);
+        if (containerToHide2) {
+          containerToHide2.style.display = thetaEnabled ? 'block' : 'none';
+        }
+
+        const containerToHide3 = document.getElementById(containerIdToHide3);
+        if (containerToHide3) {
+          containerToHide3.style.display = thetaEnabled ? 'block' : 'none';
+        }
+
+        if (noStreamText) {
+          noStreamText.innerHTML = thetaEnabled ? 'No Stream at the moment. Ready to go live? Click on the Start Stream Button to initiate stream, then click on the Go Live button to trigger stream.' : 'Oooops, you cannot stream, sorry! Visit the Storefront to mint a Theta Geek NFT to stream on the Theta P2P Video Delivery Network and also earn TFUEL from stream badges.';
+        }
       }
-
 
       // Example dictionary with values indicating whether a dropdown option should be enabled
       fetch('features_dict', {
-          method: 'GET',
-          headers: {
-              'Content-Type': 'application/json'
-          }
-          })
-          .then(response => response.json())
-          .then(data => {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+        .then(response => response.json())
+        .then(data => {
           updateDropdownOptions3(data);
-
-          })
-          .catch(error => {
+        })
+        .catch(error => {
           console.error('Error:', error);
-          });
+        });
 
-    </script>
+</script>
+
 
     <script>
 
@@ -315,7 +327,7 @@
         const endStreamButton = document.getElementById('end-stream-button');
         const goStreamButton = document.getElementById('go-stream-button');
         const cancelButton = document.getElementById('stream-cancel-button');
-        
+
         var liveIcon = document.getElementById('live-icon');
         var draftIcon = document.getElementById('draft-icon');
         function saveStreamDetails() {
@@ -342,8 +354,8 @@
             if (streamTitle && streamDescription && streamAPIKey && streamSecretKey) {
                 document.getElementById('stream-title').value = streamTitle;
                 document.getElementById('stream-description').value = streamDescription;
-                document.getElementById('stream-api-key').value = streamAPIKey 
-                document.getElementById('stream-secret-key').value = streamSecretKey 
+                document.getElementById('stream-api-key').value = streamAPIKey
+                document.getElementById('stream-secret-key').value = streamSecretKey
 
             }
         }
@@ -375,20 +387,20 @@
                 streamSecretKey: streamSecretKey
               },
               success: function(response) {
-                window.location.href = '/livestream';     
-                
+                window.location.href = '/livestream';
+
               },
               error: function(error) {
-      
+
               }
             });
             setTimeout(() => {
                   toggleStreamButton.style.display = 'none';
                   goStreamButton.style.display = 'block';
                 }, 5000);
-                
-            
-            
+
+
+
 
         }
 
@@ -406,9 +418,12 @@
           const confirmButton = document.getElementById('stream-confirm-button');
           const liveIcon = document.getElementById('live-icon');
           const draftIcon = document.getElementById('draft-icon');
+          const goStreamButton = document.getElementById('go-stream-button');
+          console.log(streamAPIKey);
 
 
           if (streamTitle && streamDescription && streamAPIKey && streamSecretKey) {
+              console.log("seen")
             var options = {
               'method': 'POST',
               'url': 'https://api.thetavideoapi.com/stream',
@@ -425,17 +440,19 @@
               })
             };
 
-            
-        
+
+
+        if (navigator.mediaDevices && navigator.mediaDevices.getDisplayMedia) {
 
             navigator.mediaDevices.getDisplayMedia({ video: true, audio: false })
               .then(function(stream) {
                 // Success: Get the screen stream
+                console.log('streaming')
                 goStreamButton.style.display = 'none';
                 endStreamButton.style.display = 'block'
                 liveIcon.style.display = 'block'
                 draftIcon.style.display = 'none'
-                
+
                 var screenTrack = stream.getTracks()[0];
                 var screenStream = new MediaStream([screenTrack]);
 
@@ -444,8 +461,8 @@
                 for (var i = 0; i < videoElements.length; i++) {
                   var videoElement = videoElements[i];
                   videoElement.srcObject = screenStream;
-                  
-                  videoElement.play();       
+
+                  videoElement.play();
                 }
                  // Enable full screen button
                  var fullScreenButton = document.getElementById('video');
@@ -469,11 +486,11 @@
                       // Make a request to stop the Theta stream
                       request(options, function (error, response) {
                           if (error) throw new Error(error);
-                     
-                      
+
+
                   });
                   };
-           
+
 
                 // Rest of your code...
               })
@@ -481,9 +498,13 @@
                 // Error: Failed to get the screen stream
                 console.error('Error accessing screen stream:', error);
               });
+                // Your code to access the screen stream
+            } else {
+              console.error('getDisplayMedia is not supported in this browser.');
+            }
           }
         }
-       
+
         function openOverlay() {
             overlay.classList.add('active');
           }
@@ -513,14 +534,14 @@
                 success: function(response) {
                     // Handle success if needed
                     toggleStreamButton.style.display = 'block';
-                    endStreamButton.style.display = 'none';    
+                    endStreamButton.style.display = 'none';
                     window.location.href = '/livestream';
                 },
                 error: function(error) {
-                    // Handle error if needed 
+                    // Handle error if needed
                 }
                 });
-                
+
             });
 
         confirmButton.addEventListener('click', function() {
@@ -534,12 +555,12 @@
           // Retrieve the stream details and start the stream if they exist
           startStream();
         });
-    </script> 
- 
+    </script>
+
     <script>
       document.addEventListener('DOMContentLoaded', function() {
         var toggleCheckbox = document.getElementById('toggle-checkbox');
-  
+
         toggleCheckbox.addEventListener('change', function() {
           if (toggleCheckbox.checked) {
             // Redirect to the /playground URL
@@ -549,7 +570,7 @@
             window.location.href = '/playground';
           }
         });
-  
+
         // Optionally, you can check the current URL and update the toggle state accordingly
         if (window.location.href.includes('/')) {
           toggleCheckbox.checked = true;
@@ -560,7 +581,7 @@
         }
       });
     </script>
-    
+
 
     <script>
       const toggleButton = document.querySelector(".small-screen-toggle");
@@ -575,7 +596,7 @@
         }
       });
 
-      
+
       removeMenuBar.addEventListener("click", function () {
         menuBar.classList.remove("active");
       });
@@ -649,55 +670,8 @@
   });
 
     </script>
-      
-    <script>
-      $(document).ready(function() {
-        // Initialize the typeahead input
-        var engine = new Bloodhound({
-          remote: '/search?query=%QUERY',
-          datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
-          queryTokenizer: Bloodhound.tokenizers.whitespace
-        });
-        engine.initialize();
-        $('#search').typeahead({
-          hint: true,
-          highlight: true,
-          minLength: 1
-        }, {
-          displayKey: 'name',
-          source: engine.ttAdapter(),
-          templates: {
-            suggestion: function(data) {
-              return '<div>' + data.name + '</div>';
-            }
-          }
-        });
 
-        // Handle the "Add Asset" button click event
-        $('#search-form').on('submit', function(event) {
-          event.preventDefault();
-          var selectedAsset = $('#search').typeahead('val');
-          $.ajax({
-            url: 'add_asset_to_stack',
-            type: 'POST',
-            data: {
-              'asset_name': selectedAsset
-            },
-            success: function(data) {
-                if (data.success) {
-                    location.reload(); // reload the page on success
-                } else {
-                  $('#error-message').html('Failed to add asset to stack: ' + data.message);
-                }
-            },
-            error: function(xhr, textStatus, errorThrown) {
-              $('#error-message').html('Failed to add asset to stack: ' + errorThrown);
-            }
-          });
-        });
-      });
 
-    </script>
     <script>
       const filterButtons = document.querySelectorAll('.filter-button');
       // Get the active button value from local storage or set it to null if it doesn't exist
@@ -708,7 +682,7 @@
           filterButtons.forEach(button => {
               if (button.value === activeButton) {
                   button.classList.add('active');
-                  
+
               }
           });
       }
@@ -754,7 +728,7 @@
 
       });
 
-     
+
       var allswiper = new Swiper(".allSwiper", {
         spaceBetween: 30,
         centeredSlides: true,
@@ -767,7 +741,7 @@
           prevEl: ".swiper-button-prev",
         },
       });
-        
+
     </script>
 
 </body>

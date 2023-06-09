@@ -1,0 +1,734 @@
+{% block content %}
+{% load static %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Stackon Pro</title>
+    <!---===============  FAVICON =======================  -->
+    <link rel="shortcut icon" href="{% static '/images/logo.ico' %}" type="image/x-icon" />
+    <!--- ============== CUSTOM CSS LINK ==================  -->
+    <link rel="stylesheet" href="{% static 'css/chainlink.css' %}" />
+    
+    <!-- =============== SWIPER CSS LINK =================== -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css"
+    />
+    <!--=============== BOXICONS ===============-->
+    <link
+      href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+      rel="stylesheet"
+    />
+    <!--- =============== GOOGLE FONT LINK ================== -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism.min.css">
+
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="https://unpkg.com/isotope-layout@3/dist/isotope.pkgd.js"></script>
+    <!-- or -->
+    <script src="https://unpkg.com/isotope-layout@3/dist/isotope.pkgd.min.js"></script>
+    <script src="{% static 'js/isotope.pkgd.js' %}"></script>
+    <script src="{% static 'js/isotope.pkgd.min.js' %}"></script>
+    <script>
+      if (window.history.replaceState) {
+        window.history.replaceState(null, null, window.location.href);
+      }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/@metamask/detect-provider"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
+    
+  </head>
+  <body id="top">
+<!-- =================== HEADER ===================================== -->
+  <header class="header" id="header">
+    <div class="banner">
+      <div class="banner-container">
+        {% for asset in assets %}
+        <h5 class="banner_asset">{{asset.name }}:</h5>
+        {% if asset.trend_percent >= 0.0 %}
+        <h5 class="banner_asset_increase pos">+{{ asset.trend_percent }}%</h5>
+        {% elif asset.trend_percent <= 0.0 %}
+        <h5 class="banner_asset_increase neg">{{ asset.trend_percent }}%</h5>
+        {% else %}
+        <h5 class="banner_asset_increase neu">{{ asset.trend_percent }}%</h5>
+        {% endif %}    
+        {%endfor%}
+      </div>
+    </div>
+    <div class="nav">
+      <div class="header-left">
+        <a href="/" class="logo header-item">
+          <img src="{% static 'images/stackon-logo.png' %}" alt="Stackon logo" />
+        </a>
+        <div class="header-menu">
+          <a href="/" class="header-menu-item">Dashboard</a>
+          <a href="/stacks" class="header-menu-item">My Stack</a>
+          <a href="/storefront" class="header-menu-item">Storefront</a>
+          <a href="/chainlink" class="header-menu-item">Developers</a>
+          <a href="/community" class="header-menu-item active">Community</a>
+          <a href="/playground"  id="playground" class="header-menu-item" style="display: none;">Playground</a>
+        </div>
+        </div>
+
+      
+      <div class="header-right">
+        <div class="switch">
+          <div>Stackon Pro</div>
+          <label class="toggle-container">
+              <input type="checkbox" id="toggle-checkbox" disabled>
+              <span class="toggle-slider"></span>
+          </label>
+        </div>
+        {% if not user.is_authenticated %}
+        
+        <button id="auth-button" class="btn btn-secondary header-item">Connect Wallet</button>
+  
+        <div class="header-others">
+          <i class='bx bx-search searchicon header-item'></i>
+          <i class="bx bx-moon change-theme header-item" id="theme-button"></i>
+          <span class="english">English<i class='bx bxs-down-arrow' ></i></span>
+          <span class="usd_format">
+            <i class='bx bxs-badge-dollar header-item'>USD<i class='bx bxs-down-arrow' ></i></i>          
+          </span>
+        </div>
+        
+        {% else %}
+        <div class="profile-picture">
+          <img src="{% static 'images/' %}{{ profile.wallet_avatar }}" alt="Avatar">
+        </div>
+        <div class="wallet-id">
+          <label for="wallet-id">Wallet ID:</label>
+          <p id="wallet-id">{{ user_short }}...</p>
+        </div>
+        <div class="header-others">
+          <i class='bx bx-search searchicon header-item'></i>
+          <i class="bx bx-moon change-theme header-item" id="theme-button"></i>
+          <span class="english">English<i class='bx bxs-down-arrow' ></i></span>
+          <span class="usd_format">
+            <i class='bx bxs-badge-dollar header-item'>USD<i class='bx bxs-down-arrow' ></i></i>          
+          </span>
+        </div>   
+        {% endif %}
+      </div>
+      
+      <div class="small-screen-toggle">
+        <i class='bx bx-menu'></i>
+      </div>
+      <div class="small-screen-menu">
+        <div class="small-screen-toggle remove-menu-bar" >
+          <i class='bx bx-x' ></i>
+        </div>
+        {% if user.is_authenticated %}
+        <div class="profile-picture-small-menu profile-picture">
+          <img src="{% static 'images/' %}{{ profile.wallet_avatar }}" alt="Profile Picture">
+          <div class="wallet-id">
+          
+            <label for="wallet-id">Wallet ID:</label>
+            <p id="wallet-id">{{profile.wallet_id}}</p>
+          </div>
+        </div>
+        
+        {% endif %}
+        <div class="header-others">
+          
+          <i class="bx bx-moon change-theme header-item" id="theme-button"></i>
+          <span class="english">English<i class='bx bxs-down-arrow' ></i></span>
+          <span class="usd_format">
+            <i class='bx bxs-badge-dollar header-item'>USD<i class='bx bxs-down-arrow' ></i></i>          
+          </span>
+        </div>
+        <div class="header-menu-small">
+          <h3 href="/stacks" class="header-menu-item-small">My Stack</h3>
+          <h3 href="/storefront" class="header-menu-item-small">Storefront</h3>
+          <h3 href="/assets" class="header-menu-item-small">My Assets</h3>
+          <h3 href="/lives" class="header-menu-item-small">Geek TV</h3>
+          <h3 href="/community" class="header-menu-item-small">Community</h3>
+          
+        </div>
+
+      </div>
+      
+      
+    </div>
+    <!-- Theme Change Button-->
+  </header>
+
+<!-- ================== MAIN SECTION ================================ -->
+  <main>
+    <!-- ===================== HERO CAROUSEL SECTION ============== -->
+    <h1>Stackon Docs</h1>
+    <section class="hero-carousel section" id="hero-carousel">     
+       
+        <div>
+            <div class="doc-header">
+                <h2>Cryptocurrency Sentiment Data Feeds</h2>   
+                <p class="doc-subtitle">This documentation provides a comprehensive guide on integrating Chainlink's decentralized oracle network to seamlessly access and utilize sentiment data derived from Stackon's AI-powered platform. Learn how to leverage the power of sentiment analysis and gain valuable insights into the emotions surrounding NFT assets. Discover step-by-step instructions, code examples, and best practices to integrate the NFT sentiment data feed into your applications and trading strategies. Unleash the potential of sentiment-driven trading with Stackon and Chainlink, revolutionizing the way you navigate the dynamic NFT market."</p>
+            </div>
+            <div>
+                <h3 class="doc-title">1. Choose Asset and ID</h3>
+                <p class="doc-subtitle">Before interacting with the contract, obtain a list of all available NFTs along with their corresponding IDs. Users should choose the desired NFT from the list. </p>
+            </div>
+            <div class="table-div">   
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Asset</th>
+                            <th>Sentiment ID</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for asset in assets %}
+                        <tr>
+                            <td>{{ asset.name}}</td>
+                            <td>{{ asset.id}}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>  
+                </table>      
+            </div> 
+            <div>
+                <h3 class="doc-title">2. Select Social Media Platform and ID</h3>
+                <p class="doc-subtitle">Once the NFT is selected, choose the social media platform from which you want to retrieve sentiment data. Take note of the platform's ID associated with the chosen platform.</p>
+            </div>
+            <div class="table-div">   
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Platform</th>
+                            <th>Platform ID</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Get Sentiments on Twitter</td>
+                            <td>twitter</td>
+                        </tr>
+                        <tr>
+                            <td> Get Sentiments on Reddit</td>
+                            <td>reddit</td>
+                        </tr>
+                        <tr>
+                            <td>Get Sentiments on Telegram</td>
+                            <td>telegram</td>
+                        </tr>
+                        <tr>
+                            <td>Get Sentiments on Discord</td>
+                            <td>discord</td>
+                        </tr>
+                        <tr>
+                            <td>Get Sentiments on all 4 Platform including Blogs</td>
+                            <td>social_media</td>
+                        </tr>
+                    </tbody>  
+                </table>      
+            </div> 
+            <div>
+                <h3 class="doc-title">3. Choose User Category and ID</h3>
+                <p class="doc-subtitle">After selecting the platform, choose the category of users for whom you want to retrieve sentiment data. Make note of the ID assigned to the selected category. </p>
+            </div>
+            <div class="table-div">   
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Category</th>
+                            <th>Category ID</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Investors on the Platform</td>
+                            <td>investors</td>
+                        </tr>
+                        <tr>
+                            <td>Influencers on the Platform</td>
+                            <td>influencers</td>
+                        </tr>
+                        <tr>
+                            <td>Founders on the Platform</td>
+                            <td>founders</td>
+                        </tr>
+                        <tr>
+                            <td>Community on the Platform</td>
+                            <td>community</td>
+                        </tr>
+                        <tr>
+                            <td>Overall users of the Platform</td>
+                            <td>overall</td>
+                        </tr>
+                    </tbody>  
+                </table>      
+            </div> 
+
+            <div>
+                <h3 class="doc-title">4. Compile and Deploy the Contract</h3>
+                <p class="doc-subtitle">Open the Remix IDE and copy the provided Sentiment Data Consumer contract into the editor. Compile the contract within the Remix environment.</p>
+            </div>
+            <div id="search-results" class="search-results">
+                <div class="code-block">
+                    <div class="no-contract">
+                        <pre><code class="language-solidity">
+                          // SPDX-License-Identifier: MIT
+                          pragma solidity ^0.8.7;
+                          
+                          import "@chainlink/contracts/src/v0.8/ChainlinkClient.sol";
+                          import "@chainlink/contracts/src/v0.8/ConfirmedOwner.sol";
+                          
+                          contract SentimentDataConsumer is ChainlinkClient, ConfirmedOwner {
+                              using Chainlink for Chainlink.Request;
+                          
+                              uint256 private constant ORACLE_PAYMENT = (1 * LINK_DIVISIBILITY) / 10; 
+                              string public sentimentData;
+                          
+                              event SentimentDataFulfilled(
+                                  bytes32 indexed requestId,
+                                  string indexed sentimentData
+                              );
+                          
+                              // Job ID for the Chainlink oracle
+                              string private jobId = "35746a027b904a08b2e9159810fe0529"; 
+                          
+                              // Oracle address
+                              address private oracle = address(0xb141829aB8BCE3309DB473c444675Dd7aa8872B4); 
+                          
+                              // LINK token address
+                              address private linkToken = address(0x779877A7B0D9E8603169DdbD7836e478b4624789);
+                          
+                              constructor() ConfirmedOwner(msg.sender) {
+                                  setChainlinkToken(linkToken);
+                              }
+                          
+                              function requestSentimentData(
+                                  string memory _assetID,
+                                  string memory _platform,
+                                  string memory _category
+                                  
+                              ) public onlyOwner {
+                                  Chainlink.Request memory req = buildChainlinkRequest(
+                                      stringToBytes32(jobId),
+                                      address(this),
+                                      this.fulfillSentimentData.selector
+                                  );
+                                  string memory url = string(
+                                      abi.encodePacked(
+                                          "https://www.stackonverse.com/api/sentiment/",
+                                          _assetID,
+                                          "/",
+                                          _platform,
+                                          "/",
+                                          _category
+                                      )
+                                  );
+                                  req.add("get", url);
+                                  req.add("path", "sentiment");
+                                  sendChainlinkRequestTo(oracle, req, ORACLE_PAYMENT);
+                              }
+                          
+                              function fulfillSentimentData(
+                                  bytes32 _requestId,
+                                  string memory _sentimentData
+                              ) public recordChainlinkFulfillment(_requestId) {
+                                  emit SentimentDataFulfilled(_requestId, _sentimentData);
+                                  sentimentData = _sentimentData;
+                              }
+                          
+                              function stringToBytes32(
+                                  string memory source
+                              ) private pure returns (bytes32 result) {
+                                  bytes memory tempEmptyStringTest = bytes(source);
+                                  if (tempEmptyStringTest.length == 0) {
+                                      return 0x0;
+                                  }
+                          
+                                  assembly {
+                                      result := mload(add(source, 32))
+                                  }
+                              }
+                          }
+                          
+                            
+                            
+                        </code></pre>
+                    </div>
+                    <div class="copy-icon"><i class='bx bxs-copy'></i></div>
+                </div>
+                <img src="{% static 'images/edit-contract.png' %}" alt="">
+            </div>
+            <div>
+                <h3 class="doc-title">5. Deploy and Fund the Contract then Edit and Execute requestSentimentData Function</h3>
+                <p class="doc-subtitle">In the deployed contract, locate the requestSentimentData function and update it with the chosen NFT ID, social media platform ID, and user category ID. Execute the function to initiate the transaction.
+
+                  Note: Ensure that the contract has sufficient funds and that the Chainlink oracle and LINK token addresses are correctly configured. After a successful transaction, use the contract's getSentimentData function to retrieve the sentiment data associated with the chosen NFT, social media platform, and user category. The retrieved sentiment data will be displayed.
+
+                  Note: If no sentiment data is available, the value will be displayed as "No Data."</p>
+               
+            </div>
+            <div id="search-results" class="search-results">
+              <img src="{% static 'images/Positive.png' %}" alt="">
+            </div>
+          
+
+        </div>
+      
+       
+          
+    </section>
+  </main>
+
+
+    <!--- ======================== CUSTOM JS LINK========================== -->
+    <script src="{% static 'js/script.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mixitup/3.3.1/mixitup.min.js" integrity="sha512-nKZDK+ztK6Ug+2B6DZx+QtgeyAmo9YThZob8O3xgjqhw2IVQdAITFasl/jqbyDwclMkLXFOZRiytnUrXk/PM6A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="{% static 'js/typeahead.bundle.js' %}"></script>
+    <!--=============== MIXITUP FILTER ===============-->
+    <script src="{% static 'js/mixitup.min.js' %}"></script>
+    <!-- <script src="{% static 'js/isotope-docs.min.js' %}"></script> -->
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.4.0/dist/web3.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@metamask/detect-provider@2.0.0/dist/index.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.10.3/typeahead.bundle.min.js" integrity="sha512-E4rXB8fOORHVM/jZYNCX2rIY+FOvmTsWJ7OKZOG9x/0RmMAGyyzBqZG0OGKMpTyyuXVVoJsKKWYwbm7OU2klxA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.10.3/bloodhound.js" integrity="sha512-MUXDwKJLicyKwyUPcOd9hAyGHWVtyY0jOcRXWpiM4pnzaLy+OFP8gvKUphO0kIBP73zdH7uFVYmFRkbFkRbe7w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.10.3/bloodhound.min.js" integrity="sha512-EUtlYg5f2EEeLqFJLLhGybSRc3DgloT0Fe1yORZgkD4xuBmDpge7QeEiN84ph9YPmoyBAu1nPll2kQ/f4jdDHQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.10.3/typeahead.bundle.js" integrity="sha512-u9t+T+misQe2D1MANTtxl0yRGQ1BQKODwUU5Kc+57mtzdaA01cWFvBoXSsKBCQ8VCpjOku5pPzBGe+pRlJODMg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.10.3/typeahead.jquery.js" integrity="sha512-h6BgTelOAlxClugUkZwcBdOj4hzNi8+7DOMvQWuEmrUY0IO8XbAzSO22wfQSUSlFCBHy5kXfs/Cz1OiXr+LLNg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.10.3/typeahead.jquery.min.js" integrity="sha512-FoYDcEN8AC55Q46d/gra+GO1tD9Bw7ZTLBUDqaza5YQ+g2UGysVxBoVOkXB6RVVM8wFyPJxr3vcEz9wxbFKM6g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.10.3/dist/bloodhound.js" integrity="sha512-MUXDwKJLicyKwyUPcOd9hAyGHWVtyY0jOcRXWpiM4pnzaLy+OFP8gvKUphO0kIBP73zdH7uFVYmFRkbFkRbe7w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.10.3/dist/bloodhound.min.js" integrity="sha512-EUtlYg5f2EEeLqFJLLhGybSRc3DgloT0Fe1yORZgkD4xuBmDpge7QeEiN84ph9YPmoyBAu1nPll2kQ/f4jdDHQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.10.3/dist/typeahead.bundle.js" integrity="sha512-u9t+T+misQe2D1MANTtxl0yRGQ1BQKODwUU5Kc+57mtzdaA01cWFvBoXSsKBCQ8VCpjOku5pPzBGe+pRlJODMg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.10.3/dist/typeahead.bundle.min.js" integrity="sha512-E4rXB8fOORHVM/jZYNCX2rIY+FOvmTsWJ7OKZOG9x/0RmMAGyyzBqZG0OGKMpTyyuXVVoJsKKWYwbm7OU2klxA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.10.3/dist/typeahead.jquery.js" integrity="sha512-h6BgTelOAlxClugUkZwcBdOj4hzNi8+7DOMvQWuEmrUY0IO8XbAzSO22wfQSUSlFCBHy5kXfs/Cz1OiXr+LLNg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.10.3/dist/typeahead.jquery.min.js" integrity="sha512-FoYDcEN8AC55Q46d/gra+GO1tD9Bw7ZTLBUDqaza5YQ+g2UGysVxBoVOkXB6RVVM8wFyPJxr3vcEz9wxbFKM6g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!---======================= ICON LINK ========================= -->
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mixitup/3.3.1/mixitup.min.js" integrity="sha512-nKZDK+ztK6Ug+2B6DZx+QtgeyAmo9YThZob8O3xgjqhw2IVQdAITFasl/jqbyDwclMkLXFOZRiytnUrXk/PM6A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    
+
+    <script>
+        // Function to copy code to clipboard
+        function copyCode(event) {
+        const codeBlock = event.target.parentElement;
+        const codeText = codeBlock.innerText;
+        
+        navigator.clipboard.writeText(codeText).then(() => {
+            console.log('Code copied to clipboard');
+            // You can also show a success message to the user here
+        }).catch((error) => {
+            console.error('Failed to copy code:', error);
+            // You can show an error message to the user here
+        });
+        }
+
+        // Attach event listener to copy icons
+        const copyIcons = document.querySelectorAll('.copy-icon');
+        copyIcons.forEach((copyIcon) => {
+        copyIcon.addEventListener('click', copyCode);
+        });
+
+    </script>
+    <script>
+    
+
+      function updateDropdownOptions3(dropdownValues) {
+          const dropdownIdTheta = 'theta'; // ID of the dropdown related to 'theta'
+          const containerIdToHide = 'playground'; // ID of the container to hide
+          const disableStackonPro = 'toggle-checkbox'
+
+          const thetaEnabled = dropdownValues[dropdownIdTheta];
+          const containerToHide = document.getElementById(containerIdToHide);
+
+          if (containerToHide) {
+              containerToHide.style.display = thetaEnabled ? 'block' : 'none';
+              containerToHide.disabled = True
+
+          }
+
+          // Rest of the function code...
+      }
+
+
+      // Example dictionary with values indicating whether a dropdown option should be enabled
+      fetch('features_dict', {
+          method: 'GET',
+          headers: {
+              'Content-Type': 'application/json'
+          }
+          })
+          .then(response => response.json())
+          .then(data => {
+          // 'data' variable contains the feature_dict dictionary
+
+          // Perform further operations with the dictionary
+          updateDropdownOptions3(data);
+
+          })
+          .catch(error => {
+          console.error('Error:', error);
+          });
+
+      
+      
+          // Function to update the dropdown options based on the dictionary values
+
+
+      // Call the function initially to set the dropdown options based on the dictionary values
+      
+
+    </script>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        var toggleCheckbox = document.getElementById('toggle-checkbox');
+
+        if (window.location.href('/playground')) {
+          toggleCheckbox.checked = false;
+        } else {
+          toggleCheckbox.checked = true;
+        }
+
+  
+        toggleCheckbox.addEventListener('change', function() {
+          if (!toggleCheckbox.checked) {
+            // Redirect to the /playground URL
+            window.location.href = '/playground';
+          } else {
+            // Do nothing (stay on the current URL)
+          }
+        });
+  
+        // Optionally, you can check the current URL and update the toggle state accordingly
+        if (window.location.href.includes('/pro')) {
+          toggleCheckbox.checked = true;
+        }
+
+        if (window.location.href.includes('/playground')) {
+          toggleCheckbox.checked = false;
+        }
+      });
+    </script>
+    
+
+    <script>
+      const toggleButton = document.querySelector(".small-screen-toggle");
+      const menuBar = document.querySelector(".small-screen-menu");
+      const removeMenuBar = document.querySelector(".remove-menu-bar");
+
+      toggleButton.addEventListener("click", function () {
+        if (menuBar.classList.contains("active")) {
+          menuBar.classList.remove("active");
+        } else {
+          menuBar.classList.add("active");
+        }
+      });
+
+      
+      removeMenuBar.addEventListener("click", function () {
+        menuBar.classList.remove("active");
+      });
+
+    </script>
+
+    <script>
+      $(document).ready(function() {
+      $('.edit-asset-btn').on('click', function() {
+        var assetId = $(this).data('asset-id');
+        var assetValueElement = $('.asset-value[data-asset-id="' + assetId + '"]');
+        var saveButton = $('.save-asset-btn[data-asset-id="' + assetId + '"]');
+        var editButton = $('.edit-asset-btn[data-asset-id="' + assetId + '"]');
+
+        assetValueElement.attr('contenteditable', true);
+        assetValueElement.css('background-color', 'white');
+        assetValueElement.css('color', 'black');
+        assetValueElement.css('border', 'none');
+        saveButton.show();
+        editButton.hide();
+      });
+
+      $('.save-asset-btn').on('click', function() {
+        var assetId = $(this).data('asset-id');
+        var saveButton = $('.save-asset-btn[data-asset-id="' + assetId + '"]');
+        var editButton = $('.edit-asset-btn[data-asset-id="' + assetId + '"]');
+        var assetValueElement = $('.asset-value[data-asset-id="' + assetId + '"]');
+        assetValueElement.css('background-color', '');
+        assetValueElement.css('color', '');
+        assetValueElement.css('border', '');
+        saveButton.hide();
+        editButton.show();
+        var assetId = $(this).data('asset-id');
+        var assetValueElement = $('.asset-value[data-asset-id="' + assetId + '"]');
+        var editedValue = assetValueElement.text().trim();
+        var originalValue = assetValueElement.data('original-value');
+
+        if (editedValue !== originalValue) {
+          $.ajax({
+            url: 'update_asset_value',
+            method: 'POST',
+            data: { asset_id: assetId, asset_value: editedValue },
+            success: function(response) {
+              assetValueElement.attr('contenteditable', false);
+              $('.save-asset-btn[data-asset-id="' + assetId + '"]').hide();
+              // You can update the asset value in the DOM with the edited value here
+            },
+            error: function(xhr, status, error) {
+              // Handle errors
+            }
+          });
+        }
+      });
+
+      $('.delete-asset-btn').on('click', function() {
+        var assetId = $(this).data('asset-id');
+        var assetDelete = $('.delete-asset-btn[data-asset-id="' + assetId + '"]');
+        $.ajax({
+            url: 'delete_asset',
+            method: 'POST',
+            data: { asset_id: assetId},
+            success: function(response) {
+              $('.delete-asset-btn[data-asset-id="' + assetId + '"]').hide();
+              location.reload();
+              // You can update the asset value in the DOM with the edited value here
+            },
+            error: function(xhr, status, error) {
+              // Handle errors
+            }
+          });
+    });
+  });
+
+    </script>
+      
+    <script>
+      const filterButtons = document.querySelectorAll('.filter-button');
+      // Get the active button value from local storage or set it to null if it doesn't exist
+      let activeButton = localStorage.getItem('activeButton') || null;
+      // Set the active class on the appropriate button based on the stored value
+      let scrollPosition = 0; // initialize scroll position
+      if (activeButton) {
+          filterButtons.forEach(button => {
+              if (button.value === activeButton) {
+                  button.classList.add('active');
+                  
+              }
+          });
+      }
+
+      // Add event listener to each filter button
+      filterButtons.forEach(button => {
+          button.addEventListener('click', () => {
+              // Set the active class on the clicked button and remove it from all other buttons
+              filterButtons.forEach(button => {
+                  button.classList.remove('active');
+              });
+              button.classList.add('active');
+              // Update the stored active button value
+              activeButton = button.value;
+              localStorage.setItem('activeButton', activeButton);
+              // Submit the form and reload the page
+              // Get the current scroll position before the page reloads
+              // scrollPosition = window.scrollY;
+              button.form.submit();
+              // location.reload()
+          });
+      });
+
+      // Set the scroll position after the page reloads
+      window.onload = function() {
+        window.scrollTo(0, scrollPosition);
+      };
+
+
+    </script>
+
+    <script>
+      var swiper = new Swiper(".mySwiper", {
+        spaceBetween: 30,
+        centeredSlides: true,
+        autoplay: {
+          delay: 2500,
+          disableOnInteraction: false,
+        },
+        pagination: {
+          el: ".swiper-pagination",
+          clickable: true,
+        },
+
+      });
+
+     
+      var allswiper = new Swiper(".allSwiper", {
+        spaceBetween: 30,
+        centeredSlides: true,
+        pagination: {
+          el: ".swiper-pagination",
+          clickable: true,
+        },
+        navigation: {
+          nextEl: ".swiper-button-next",
+          prevEl: ".swiper-button-prev",
+        },
+      });
+        
+    </script>
+
+    <script>
+    $(document).ready(function() {
+      // Initialize the typeahead input
+      var engine = new Bloodhound({
+        remote: '/search?query=%QUERY',
+        datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
+        queryTokenizer: Bloodhound.tokenizers.whitespace
+      });
+      engine.initialize();
+      $('#search').typeahead({
+        hint: true,
+        highlight: true,
+        minLength: 1
+      }, {
+        displayKey: 'name',
+        source: engine.ttAdapter(),
+        templates: {
+          suggestion: function(data) {
+            return '<div class="dropdown" >' + data.name + '</div>';
+          }
+        }
+      });
+
+      // Handle the "Add Asset" button click event
+      $('#search-form').on('submit', function(event) {
+        event.preventDefault();
+        var selectedAsset = $('#search').typeahead('val');
+        $.ajax({
+          url: 'add_asset_to_stack',
+          type: 'POST',
+          data: {
+            'asset_name': selectedAsset
+          },
+          success: function(data) {
+              if (data.success) {
+                  location.reload(); // reload the page on success
+              } else {
+                $('#error-message').html('Failed to add asset to stack: ' + data.message);
+              }
+          },
+          error: function(xhr, textStatus, errorThrown) {
+            $('#error-message').html('Failed to add asset to stack: ' + errorThrown);
+          }
+        });
+      });
+    });
+
+  </script>
+
+</body>
+</html>
+{% endblock content %}
